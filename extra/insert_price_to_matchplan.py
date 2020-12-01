@@ -329,7 +329,7 @@ def insert_Price_To_Matchplan(league, season):
         pagenumber = 1
     print("whole page count", pagenumber)
     for page in range(1, pagenumber+1):
-        search_url = site_url + league + season + "/results/#/page/" + str(page)
+        search_url = page_url + "#/page/" + str(page)
         #print(search_url)
     
         print(f"----------------{league} - {season} {page}page start--------------------------------")
@@ -384,4 +384,8 @@ def insert_Price_To_Matchplan(league, season):
 # insert_Price_To_Matchplan("croatia/1-hnl", "")
 # insert_Price_To_Matchplan("hungary/otp-bank-liga", "")
 # insert_Price_To_Matchplan("serbia/super-liga", "")
-insert_Price_To_Matchplan("england/premier-league", "")
+insert_Price_To_Matchplan("england/premier-league", "2019-2020")
+insert_Price_To_Matchplan("england/premier-league", "2018-2019")
+insert_Price_To_Matchplan("england/premier-league", "2017-2018")
+insert_Price_To_Matchplan("england/premier-league", "2016-2017")
+insert_Price_To_Matchplan("england/premier-league", "2015-2016")
