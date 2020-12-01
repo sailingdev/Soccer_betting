@@ -97,7 +97,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
         
         ################################################################################################
         
-        print(f"     ------------team id {team_id} start ---------------")
+        print(f"     ------------{league} {season} team id {team_id} start ---------------")
         preSeasonId = 0
         if season_id in season_array1:
             nowSeasonIndex = season_array1.index(season_id)
@@ -272,7 +272,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
             print(f"                    match id {nowMatch_id} 's dynamic away ranking value is updated!")
             nIndex_Match_of_season += 1
         print(f"                ---------- away team info End -------------------")
-        print(f"     ------------team id {team_id} End ---------------")
+        print(f"     ------------{league} {season} team id {team_id} End ---------------")
         ####################################### One team process End ##########################################################
 
 
@@ -477,7 +477,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
     print(f"---------------{league}-{season}--End-----------------")
 
 def getRangeValue(RS):
-    print("   ---------------------------")
+    # print("   ---------------------------")
     if RS < 0:
         return 1
     if (RS >=0) & (RS < 1):

@@ -6,6 +6,7 @@ import certifi
 import urllib3
 from sportmonks import *
 import locale
+import time
 locale.setlocale( locale.LC_ALL, 'deu_deu') 
 
 sportmonks_token = "J8EKD6k0BAHIh1QJpr7K2YEPw4IhfpruZ6d63vZonQZX4GJOtkMf4Ml5cRfo"
@@ -30,10 +31,20 @@ mycursor = mydb.cursor()
 def switch_season(argument):
 	switcher = {
 
-	  "2019"		: 11,
-	  "2020"        : 64,
-	  "2020-2021"   : 799,
-	  "2019-2020"   : 12,
+        "2014": 6,
+        "2015": 7,
+        "2016": 8,
+        "2017": 9,
+        "2018": 10,
+	  	"2019"		: 11,
+		"2020"        : 64,
+  
+		"2020-2021"   : 799,
+		"2019-2020"   : 12,
+		"2018-2019": 5,
+		"2017-2018": 4,
+		"2016-2017": 3,
+		"2015-2016": 2,
 
 	}
 	return switcher.get(argument, "null")
@@ -153,15 +164,15 @@ def insert_bookmaker_odd(match_id, fixture_id, bookmaker_name):
 					if each_data['label'] == "1":				# value is Home
 						
 						home_value = each_data['value']
-						if "," in home_value:
+						if "," in str(home_value):
 							home_value = 0
 					if each_data['label'] == "X":				# value is Home
 						draw_value = each_data['value']
-						if "," in draw_value:
+						if "," in str(draw_value):
 							draw_value = 0
 					if each_data['label'] == "2":				# value is Home
 						away_value = each_data['value']
-						if "," in away_value:
+						if "," in str(away_value):
 							away_value = 0
 			if each_odd['id'] == 12:							# Over/Under odd
 				print("    - found Over/Under odd in API")
@@ -169,11 +180,11 @@ def insert_bookmaker_odd(match_id, fixture_id, bookmaker_name):
 				for each_data in bookmaker_data_array:
 					if (each_data['label'] == "Over") & (each_data['total'] == "2.5"):				# value is Home
 						over_value = each_data['value']
-						if "," in over_value:
+						if "," in str(over_value):
 							over_value = 0
 					if (each_data['label'] == "Under" ) & (each_data['total'] == "2.5"):			# value is Home
 						under_value = each_data['value']
-						if "," in under_value:
+						if "," in str(under_value):
 							under_value = 0
 		print(f'     Home: {home_value} , Darw: {draw_value}, Away: {away_value}, Over: {over_value} , Under: {under_value}')
 		
@@ -263,8 +274,8 @@ def insert_match_odd(match_id, league, match_date, home_team_name, away_team_nam
 			insert_bookmaker_odd(match_id, fixture_id, "Pncl")
 			insert_bookmaker_odd(match_id, fixture_id, "Sbo")
 			insert_bookmaker_odd(match_id, fixture_id, "Unibet")
+			#time.sleep(12)
 	
-		
 def insert_league_odd(league , season):
 	print(f"------------- start inserting odds for {league}, {season} ----------------")
 
@@ -280,6 +291,7 @@ def insert_league_odd(league , season):
 		match_date = eachMatch[1]
 		print(f"  ------------------- {league} {season} - {index} match processing start -------------------  ")
 		insert_match_odd(eachMatch[0], league, match_date, eachMatch[2], eachMatch[3])
+		
 		print(f"  ------------------- {league} {season} - {index} match processing end ---------------------  ")
 		index += 1
 		#break
@@ -309,26 +321,26 @@ def main():
 	insert_league_odd("hun-nb-i",				"2020-2021")
 	insert_league_odd("srb-super-liga",			"2020-2021")
 
-	#insert_league_odd("eng-premier-league",		"2019-2020")
-	#insert_league_odd("esp-primera-division",	"2019-2020")
-	#insert_league_odd("fra-ligue-1",			"2019-2020")
-	#insert_league_odd("ned-eredivisie",			"2019-2020")
-	#insert_league_odd("aut-bundesliga",			"2019-2020")
-	#insert_league_odd("bundesliga",				"2019-2020")
-	#insert_league_odd("ita-serie-a",			"2019-2020")
-	#insert_league_odd("por-primeira-liga",		"2019-2020")
-	#insert_league_odd("gre-super-league",		"2019-2020")
-	#insert_league_odd("tur-sueperlig",			"2019-2020")
-	#insert_league_odd("nor-eliteserien",		"2019")
-	#insert_league_odd("swe-allsvenskan",		"2019")
-	#insert_league_odd("sui-super-league",		"2019-2020")
-	#insert_league_odd("den-superliga",			"2019-2020")
-	#insert_league_odd("ukr-premyer-liga",		"2019-2020")
-	#insert_league_odd("bul-parva-liga",			"2019-2020")
-	#insert_league_odd("cze-1-fotbalova-liga",	"2019-2020")
-	#insert_league_odd("cro-1-hnl",				"2019-2020")
-	#insert_league_odd("hun-nb-i",				"2019-2020")
-	#insert_league_odd("srb-super-liga",			"2019-2020")
+	# insert_league_odd("eng-premier-league",		"2018-2019")
+	# insert_league_odd("esp-primera-division",	"2018-2019")
+	# insert_league_odd("fra-ligue-1",			"2018-2019")
+	# insert_league_odd("ned-eredivisie",			"2018-2019")
+	# insert_league_odd("aut-bundesliga",			"2018-2019")
+	# insert_league_odd("bundesliga",				"2018-2019")
+	# insert_league_odd("ita-serie-a",			"2018-2019")
+	# insert_league_odd("por-primeira-liga",		"2018-2019")
+	# insert_league_odd("gre-super-league",		"2018-2019")
+	# insert_league_odd("tur-sueperlig",			"2018-2019")
+	# insert_league_odd("nor-eliteserien",		"2018")
+	# insert_league_odd("swe-allsvenskan",		"2018")
+	# insert_league_odd("sui-super-league",		"2018-2019")
+	# insert_league_odd("den-superliga",			"2018-2019")
+	# insert_league_odd("ukr-premyer-liga",		"2018-2019")
+	# insert_league_odd("bul-parva-liga",			"2018-2019")
+	# insert_league_odd("cze-1-fotbalova-liga",	"2018-2019")
+	# insert_league_odd("cro-1-hnl",				"2018-2019")
+	# insert_league_odd("hun-nb-i",				"2018-2019")
+	# insert_league_odd("srb-super-liga",			"2018-2019")
 
 	print(f" ------------ not found match count in API : {NotFoundMatch_count} -----------")
 
