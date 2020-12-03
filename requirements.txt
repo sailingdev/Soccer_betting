@@ -16,7 +16,6 @@ certifi==2020.6.20
 cffi==1.14.2
 chardet==3.0.4
 click==7.1.2
-discord.py==1.4.1
 distlib==0.3.1
 Django==3.0.7
 Eel==0.12.4
@@ -65,9 +64,6 @@ pyasn1-modules==0.2.8
 pycparser==2.20
 pyinstaller==4.0
 pyinstaller-hooks-contrib==2020.7
-PyQt5==5.15.0
-PyQt5-sip==12.8.0
-pyqt5-tools==5.15.0.1.7.1
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 pytz==2020.1
@@ -86,8 +82,6 @@ splinter==0.13.0
 sqlparse==0.3.1
 tensorboard==2.4.0
 tensorboard-plugin-wit==1.7.0
-tensorflow==2.3.1
-tensorflow-estimator==2.3.0
 termcolor==1.1.0
 uritemplate==3.0.1
 urllib3==1.25.9

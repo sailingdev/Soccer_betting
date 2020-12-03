@@ -95,9 +95,9 @@ def switch_league(argument):
         "serbia/super-liga": 15    #Serbia
     }
     return switcher.get(argument, "null")
-
-def insert_odds(basic_match_href_url, match_date, team_text):
-
+total_added_count = 0
+def insert_odds(basic_match_href_url, match_date, team_text, current_season):
+    global total_added_count
     three_way_url = basic_match_href_url + "#1X2;2" 
     OU_url  =  basic_match_href_url + "#over-under;2"
     #AH_url = basic_match_href_url + "#ah;2"  
@@ -120,18 +120,24 @@ def insert_odds(basic_match_href_url, match_date, team_text):
             result = mycursor.fetchall()
             if result:
                 print("         # No need to insert")
+                return "No update"
             else:
                 odd_price = get_odds(three_way_url, OU_url)
                 print("        " , odd_price)
                 sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5 ) " \
-				f"VALUES ({match_id}, 10, {odd_price['3way']['aver'][0]}, {odd_price['3way']['aver'][1]}, {odd_price['3way']['aver'][2]}, {odd_price['O/U']['aver'][0]}, {odd_price['O/U']['aver'][1]})"
+				        f"VALUES ({match_id}, 10, {odd_price['3way']['aver'][0]}, {odd_price['3way']['aver'][1]}, {odd_price['3way']['aver'][2]}, {odd_price['O/U']['aver'][0]}, {odd_price['O/U']['aver'][1]})"
                 mycursor.execute(sql)
                 mydb.commit()
                 sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5 ) " \
-				f"VALUES ({match_id}, 11, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]})"
+				        f"VALUES ({match_id}, 11, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]})"
                 mycursor.execute(sql)
                 mydb.commit()
+                total_added_count += 1
                 print("        # insert successful! ")
+                return "update"
+        else:
+            print("        # Can't find match id in season_match_plan table")
+    
 def get_odds(turl, OU_url):
     odd_price = {"3way": {}, "O/U": {}}
     average_list = []
@@ -157,15 +163,22 @@ def get_odds(turl, OU_url):
     if aver_element:
        av_values = aver_element.find_elements_by_class_name("right")
        if len(av_values) > 2:
-            average_list.append(av_values[0].text)
-            average_list.append(av_values[1].text)
-            average_list.append(av_values[2].text)
+          for i in  range(0, 3):
+            if av_values[i].text == "-":
+                average_list.append("0")
+            else:
+                average_list.append(av_values[i].text)
+            
+            
     if high_elemnet:
         av_values = high_elemnet.find_elements_by_class_name("right")
         if len(av_values) > 2:
-          highest_list.append(av_values[0].text)
-          highest_list.append(av_values[1].text)
-          highest_list.append(av_values[2].text)
+          for i in range(0, 3):
+            if av_values[i].text == "-":
+              highest_list.append("0")
+            else: 
+              highest_list.append(av_values[i].text)
+          
 
     three_way = {"aver": average_list , "highest": highest_list}
     odd_price['3way'] = three_way
@@ -189,14 +202,20 @@ def get_odds(turl, OU_url):
         high_elemnet = tfoot[0].find_element_by_class_name("highest")
         if aver_element:
             av_values = aver_element.find_elements_by_class_name("right")
-            if len(av_values) > 2:
-                aver_list.append(av_values[1].text)
-                aver_list.append(av_values[2].text)     
+            if len(av_values) > 1:
+                for i in  range(0, 2):
+                  if av_values[i+1].text == "-":
+                    aver_list.append("0")
+                  else:
+                    aver_list.append(av_values[i+1].text)     
         if high_elemnet:
             av_values = high_elemnet.find_elements_by_class_name("right")
-            if len(av_values) > 2:
-                highest_list.append(av_values[1].text)
-                highest_list.append(av_values[2].text)
+            if len(av_values) > 1:
+                for i in  range(0, 2):
+                  if av_values[i+1].text == "-":
+                    highest_list.append("0")
+                  else:
+                    highest_list.append(av_values[i+1].text)
         
       
     O_U = {"aver": aver_list , "highest": highest_list}
@@ -317,8 +336,10 @@ def getDate_from_trTxt(date_txt):
 
 def insert_Price_To_Matchplan(league, season):
     driver = webdriver.Chrome(driverpath,options=chrome_options)
+    current_season = False
     if season == "":
         page_url = site_url + league + season + "/results/"
+        current_season = True
     else:
         page_url = site_url + league + "-" + season + "/results/"
     driver.get(page_url)
@@ -354,10 +375,14 @@ def insert_Price_To_Matchplan(league, season):
                 print(f"    --- {league} {season} {page} page {index}th match start---")
                 team_text = each_tr.find_elements_by_tag_name("a")[0].text
                 score_field = each_tr.find_elements_by_tag_name('td')[2].text
-                if (" - " in team_text) & (':' in score_field):
+                if (" - " in team_text) & ( ':' in score_field ):
                     print(f"        {match_date} , {team_text} ")
                     hrefUrl = each_tr.find_elements_by_tag_name("a")[0].get_attribute('href')
-                    insert_odds(hrefUrl, match_date, team_text)                                  # get every match information
+                    #print(hrefUrl)
+                    status = insert_odds(hrefUrl, match_date, team_text, current_season)              # get every match information
+                    if current_season & (status == "No update"):
+                          print("     * No need to update , this is already inserted!")
+                          break
                     #print(f"    --- {page} page {index}th match End---")
                     index += 1
                 else:
@@ -383,9 +408,12 @@ def insert_Price_To_Matchplan(league, season):
 # insert_Price_To_Matchplan("czech-republic/1-liga", "")
 # insert_Price_To_Matchplan("croatia/1-hnl", "")
 # insert_Price_To_Matchplan("hungary/otp-bank-liga", "")
-# insert_Price_To_Matchplan("serbia/super-liga", "")
-insert_Price_To_Matchplan("england/premier-league", "2019-2020")
-insert_Price_To_Matchplan("england/premier-league", "2018-2019")
-insert_Price_To_Matchplan("england/premier-league", "2017-2018")
-insert_Price_To_Matchplan("england/premier-league", "2016-2017")
-insert_Price_To_Matchplan("england/premier-league", "2015-2016")
+#insert_Price_To_Matchplan("serbia/super-liga", "")
+
+# insert_Price_To_Matchplan("spain/laliga", "2019-2020")
+# insert_Price_To_Matchplan("spain/laliga", "2018-2019")
+# insert_Price_To_Matchplan("spain/laliga", "2017-2018")
+# insert_Price_To_Matchplan("spain/laliga", "2016-2017")
+#insert_Price_To_Matchplan("spain/primera-division", "2015-2016")
+
+print("Total added count is : ", total_added_count)
