@@ -26,46 +26,26 @@ def fetch_table_data(table_name):
     "a.`home_team_strength` AS Home_strength," \
     "c.`team_name` AS Away_team_name," \
     "a.`Away_TGPR` AS Away_TGPR," \
-    "f.`S_A_ranking` AS Static_ARank," \
+    "g.`S_A_ranking` AS Static_ARank," \
     "a.`D_Away_RS_8` AS Dynamic_ARS_8," \
     "a.`D_Away_ranking_8` AS Dynamic_ARank_8," \
     "a.`D_Away_RS_6` AS Dynamic_ARS_6," \
     "a.`D_Away_ranking_6` AS Dynamic_ARank_6," \
     "a.`Away_team_score` AS Away_score," \
     "a.`Away_team_strength` AS Away_strength," \
-    "CONCAT(f.`S_H_ranking`, ' v ' , f.`S_A_ranking`) AS staticRank," \
+    "CONCAT(f.`S_H_ranking`, ' v ' , g.`S_A_ranking`) AS staticRank," \
     "CONCAT (a.`D_Home_ranking_8`, ' v ', a.`D_Away_ranking_8`) AS DynamicRank_8," \
     "CONCAT (a.`D_Home_ranking_6`, ' v ', a.`D_Away_ranking_6`) AS DynamicRank_6," \
-    "h1.Home AS bet365_Home," \
-    "h1.Draw AS bet365_Draw, " \
-    "h1.Away AS bet365_Away, " \
-    "   h1.Over2d5 AS bet365_Over, " \
-    "  h1.Under2d5 AS bet365_Under," \
-    "   h2.Home AS Betfair_Home," \
-    "   h2.Draw AS Betfair_Draw, " \
-    "   h2.Away AS Betfair_Away, " \
-    "   h2.Over2d5 AS Betfair_Over, " \
-    "  h2.Under2d5 AS Betfair_Under," \
-    "   h3.Home AS Dafabet_Home," \
-    "   h3.Draw AS Dafabet_Draw, " \
-    "   h3.Away AS Dafabet_Away, " \
-    "   h3.Over2d5 AS Dafabet_Over, " \
-    "   h3.Under2d5 AS Dafabet_Under," \
-    "  h4.Home AS Pncl_Home," \
-    "   h4.Draw AS Pncl_Draw, " \
-    "   h4.Away AS Pncl_Away, " \
-    "   h4.Over2d5 AS Pncl_Over, " \
-    "  h4.Under2d5 AS Pncl_Under," \
-    "    h5.Home AS Sbo_Home," \
-    "   h5.Draw AS Sbo_Draw, " \
-    "   h5.Away AS Sbo_Away, " \
-    "   h5.Over2d5 AS Sbo_Over, " \
-    "   h5.Under2d5 AS Sbo_Under," \
-    "   h6.Home AS Unibet_Home," \
-    "   h6.Draw AS Unibet_Draw, " \
-    "   h6.Away AS Unibet_Away, " \
-    "   h6.Over2d5 AS Unibet_Over, " \
-    "   h6.Under2d5 AS Unibet_Under" \
+    "   h7.Home AS Aver_Home," \
+    "   h7.Draw AS Aver_Draw, " \
+    "   h7.Away AS Aver_Away, " \
+    "   h7.Over2d5 AS Aver_Over, " \
+    "   h7.Under2d5 AS Aver_Under , " \
+    "   h8.Home AS Highest_Home," \
+    "   h8.Draw AS Highest_Draw, " \
+    "   h8.Away AS Highest_Away, " \
+    "   h8.Over2d5 AS Highest_Over, " \
+    "   h8.Under2d5 AS Highest_Under" \
     "   FROM season_match_plan AS a" \
     "   INNER JOIN team_list AS b ON a.`home_team_id` = b.`team_id`" \
     "   INNER JOIN team_list AS c ON a.`away_team_id` = c.`team_id`" \
@@ -73,14 +53,10 @@ def fetch_table_data(table_name):
     "    INNER JOIN league AS e ON a.`league_id` = e.`league_id`" \
     "   INNER JOIN season_league_team_info AS f ON a.`season_id` = f.`season_id` AND a.`home_team_id` = f.`team_id`" \
     "  INNER JOIN season_league_team_info AS g ON a.`season_id` = g.`season_id` AND a.`away_team_id` = g.`team_id`" \
-    "   LEFT JOIN odds AS h1 ON a.`match_id` = h1.`match_id` AND h1.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'bet365')" \
-    "  LEFT JOIN odds AS h2 ON a.`match_id` = h2.`match_id` AND h2.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Betfair')" \
-    "   LEFT JOIN odds AS h3 ON a.`match_id` = h3.`match_id` AND h3.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Dafabet')" \
-    "  LEFT JOIN odds AS h4 ON a.`match_id` = h4.`match_id` AND h4.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Pncl')" \
-    "  LEFT JOIN odds AS h5 ON a.`match_id` = h5.`match_id` AND h5.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Sbo')" \
-    "  LEFT JOIN odds AS h6 ON a.`match_id` = h6.`match_id` AND h6.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Unibet')" \
+    "  LEFT JOIN odds AS h7 ON a.`match_id` = h7.`match_id` AND h7.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Average')" \
+    "  LEFT JOIN odds AS h8 ON a.`match_id` = h8.`match_id` AND h8.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Highest')" \
     "WHERE   (a.league_id = 1 OR a.league_id = 2 OR a.league_id = 3 OR a.league_id = 4 OR a.league_id = 5 OR a.league_id = 6 OR a.league_id = 7 OR a.league_id = 8 OR a.league_id = 9 OR a.league_id = 10 OR a.league_id = 11 OR a.league_id = 12 OR a.league_id = 13 OR a.league_id = 14" \
-    " OR a.league_id = 15 OR a.league_id = 16 OR a.league_id = 17 OR a.league_id = 18 OR a.league_id = 19 OR a.league_id =20) AND  a.status = 'END' ORDER BY a.`date`"
+    " OR a.league_id = 15 OR a.league_id = 16 OR a.league_id = 17 OR a.league_id = 18 OR a.league_id = 19 OR a.league_id =20) AND a.status = 'END' ORDER BY a.`date`"
 
     cursor.execute(sql)
 
@@ -127,4 +103,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('Full_ranking')
+export('Full_ranking_aver_highest_added')

@@ -136,7 +136,9 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
                 print("        # insert successful! ")
                 return "update"
         else:
-            print("        # Can't find match id in season_match_plan table")
+            print("        # Can't find match id in season_match_plan table.")
+    else:
+        print("        # Can't find team_id in team_list.")
     
 def get_odds(turl, OU_url):
     odd_price = {"3way": {}, "O/U": {}}
@@ -154,7 +156,7 @@ def get_odds(turl, OU_url):
     
     time.sleep(2.5)
     driver1.execute_script("changeOddsFormat(1);")
-    time.sleep(2.5)
+    time.sleep(3)
 
     #################################################################################
     tfoot = driver1.find_elements_by_tag_name('tfoot')
@@ -188,18 +190,23 @@ def get_odds(turl, OU_url):
     print("        * start scraping Over Under data --------------------")
     driver1.execute_script("uid(5)._onClick();")
     
-    time.sleep(1.5)
+    time.sleep(2)
     # wait = WebDriverWait(driver1, 20)
     # wait.until(EC.presence_of_element_located((By.ID, 'odds-data-table')))
     aver_list = []
     highest_list = []
+    tfoot_OU = []
+    element_OU = driver1.find_elements_by_xpath("//a[text()='Over/Under +2.5 ']")
+    if len(element_OU) == 0:
+        print("    Couldn't find Over 2.5 values !")
+    else:
+        driver1.execute_script("page.togleTableContent('P-2.50-0-0',this)")
+        time.sleep(1)
+        tfoot_OU = driver1.find_elements_by_tag_name('tfoot')
 
-    driver1.execute_script("page.togleTableContent('P-2.50-0-0',this)")
-    time.sleep(0.5)
-    tfoot = driver1.find_elements_by_tag_name('tfoot')
-    if len(tfoot):
-        aver_element = tfoot[0].find_element_by_class_name("aver")
-        high_elemnet = tfoot[0].find_element_by_class_name("highest")
+    if len(tfoot_OU):
+        aver_element = tfoot_OU[0].find_element_by_class_name("aver")
+        high_elemnet = tfoot_OU[0].find_element_by_class_name("highest")
         if aver_element:
             av_values = aver_element.find_elements_by_class_name("right")
             if len(av_values) > 1:
@@ -216,6 +223,9 @@ def get_odds(turl, OU_url):
                     highest_list.append("0")
                   else:
                     highest_list.append(av_values[i+1].text)
+    else:
+       aver_list = ['0', '0']
+       highest_list = ['0', '0']
         
       
     O_U = {"aver": aver_list , "highest": highest_list}
@@ -375,45 +385,46 @@ def insert_Price_To_Matchplan(league, season):
                 print(f"    --- {league} {season} {page} page {index}th match start---")
                 team_text = each_tr.find_elements_by_tag_name("a")[0].text
                 score_field = each_tr.find_elements_by_tag_name('td')[2].text
-                if (" - " in team_text) & ( ':' in score_field ):
+                #if (" - " in team_text) & ( ':' in score_field ):
+                if (" - " in team_text):
                     print(f"        {match_date} , {team_text} ")
                     hrefUrl = each_tr.find_elements_by_tag_name("a")[0].get_attribute('href')
-                    #print(hrefUrl)
+                    
                     status = insert_odds(hrefUrl, match_date, team_text, current_season)              # get every match information
                     if current_season & (status == "No update"):
                           print("     * No need to update , this is already inserted!")
                           break
-                    #print(f"    --- {page} page {index}th match End---")
+                    
                     index += 1
                 else:
                     print("        * not correct Ended match")
         print(f"---------------- {league} - {season} {page}page End--------------------------------")
 
-# insert_Price_To_Matchplan("england/premier-league", "")
-# insert_Price_To_Matchplan("spain/laliga", "")
-# insert_Price_To_Matchplan("germany/bundesliga", "")
-# insert_Price_To_Matchplan("italy/serie-a", "")
-# insert_Price_To_Matchplan("france/ligue-1", "")
-# insert_Price_To_Matchplan("netherlands/eredivisie", "")
-# insert_Price_To_Matchplan("austria/tipico-bundesliga", "")
-# insert_Price_To_Matchplan("portugal/primeira-liga", "")
-# insert_Price_To_Matchplan("greece/super-league", "")
-# insert_Price_To_Matchplan("turkey/super-lig", "")
-# insert_Price_To_Matchplan("norway/eliteserien", "")
-# insert_Price_To_Matchplan("sweden/allsvenskan", "")
-# insert_Price_To_Matchplan("switzerland/super-league", "")
-# insert_Price_To_Matchplan("denmark/superliga", "")
-# insert_Price_To_Matchplan("ukraine/premier-league", "")
-# insert_Price_To_Matchplan("bulgaria/parva-liga", "")
-# insert_Price_To_Matchplan("czech-republic/1-liga", "")
-# insert_Price_To_Matchplan("croatia/1-hnl", "")
-# insert_Price_To_Matchplan("hungary/otp-bank-liga", "")
-#insert_Price_To_Matchplan("serbia/super-liga", "")
+insert_Price_To_Matchplan("england/premier-league",   "")
+insert_Price_To_Matchplan("spain/laliga",             "")
+insert_Price_To_Matchplan("germany/bundesliga",       "")
+insert_Price_To_Matchplan("italy/serie-a", "")
+insert_Price_To_Matchplan("france/ligue-1", "")
+insert_Price_To_Matchplan("netherlands/eredivisie", "")
+insert_Price_To_Matchplan("austria/tipico-bundesliga", "")
+insert_Price_To_Matchplan("portugal/primeira-liga", "")
+insert_Price_To_Matchplan("greece/super-league", "")
+insert_Price_To_Matchplan("turkey/super-lig", "")
+insert_Price_To_Matchplan("norway/eliteserien", "")
+insert_Price_To_Matchplan("sweden/allsvenskan", "")
+insert_Price_To_Matchplan("switzerland/super-league", "")
+insert_Price_To_Matchplan("denmark/superliga", "")
+insert_Price_To_Matchplan("ukraine/premier-league", "")
+insert_Price_To_Matchplan("bulgaria/parva-liga", "")
+insert_Price_To_Matchplan("czech-republic/1-liga", "")
+insert_Price_To_Matchplan("croatia/1-hnl", "")
+insert_Price_To_Matchplan("hungary/otp-bank-liga", "")
+insert_Price_To_Matchplan("serbia/super-liga", "")
 
-# insert_Price_To_Matchplan("spain/laliga", "2019-2020")
-# insert_Price_To_Matchplan("spain/laliga", "2018-2019")
-# insert_Price_To_Matchplan("spain/laliga", "2017-2018")
-# insert_Price_To_Matchplan("spain/laliga", "2016-2017")
-#insert_Price_To_Matchplan("spain/primera-division", "2015-2016")
+# insert_Price_To_Matchplan("ukraine/premier-league", "2019-2020")
+# insert_Price_To_Matchplan("ukraine/premier-league", "2018-2019")
+# insert_Price_To_Matchplan("ukraine/premier-league", "2017-2018")
+# insert_Price_To_Matchplan("ukraine/pari-match-league", "2016-2017")
+# insert_Price_To_Matchplan("ukraine/pari-match-league", "2015-2016")
 
-print("Total added count is : ", total_added_count)
+print(" Total added count is : ", total_added_count)
