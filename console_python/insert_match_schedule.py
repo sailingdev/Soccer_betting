@@ -219,7 +219,8 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 							if len(result):
 								print("    No need to update")
 							else:
-								sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = ''"
+								#sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = ''"
+								sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status != 'END'"
 								mycursor.execute(sql)
 								result = mycursor.fetchall()
 								if len(result):

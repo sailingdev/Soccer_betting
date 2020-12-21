@@ -103,4 +103,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('Full_ranking_aver_highest_added')
+export('Final_ranking_20201215')
