@@ -1,12 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
+import datetime
 import argparse
 import mysql.connector
 import certifi
 import urllib3
-
-http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
-
+from collections import defaultdict
 ################################################################
 # Inserting Reference of Dynamic with Strength and league column in season_match_plan table
 #################################################################
@@ -159,7 +157,129 @@ def insert_pricetable():
 			mycursor.execute(sub_sql);
 			mydb.commit();
 			print(f'inserted id  - {id}')
-				
 
-#insert_DSLReferColumn();
-insert_pricetable();
+def get_Team_Cream_text(team_id , season_title):
+	season_title = season_title.replace('/', '-')
+	sql = f"SELECT `{season_title}` from cream_team_list where team_id = {team_id}"
+	mycursor.execute(sql)
+	result = mycursor.fetchone()
+	if result:
+		if result[0] =="":
+			return 'Non-Cream'
+		else:
+			return result[0]
+	else:
+		return 'Non-Cream'
+
+def get_dcl_source_list(limit_date):
+	sql = f"SELECT b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND a.season_id < 19 OR ((a.season_id = 799 OR a.season_id = 64 ) AND DATE < '{limit_date}' AND STATUS = 'END')"
+	mycursor.execute(sql)
+	matches = mycursor.fetchall()
+	source_list = []
+	for match in matches:
+		league_title = match[0]
+		home_cream_text = get_Team_Cream_text(match[1], match[7])
+		away_cream_text = get_Team_Cream_text(match[2], match[7])
+
+		dcl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text + str(match[3]) + ' v ' + str(match[4])
+		elem_list = []
+		
+		if match[5] > match[6]:
+			val = "H"
+			elem_list = [dcl_refer_txt, 1, 0 ,0]
+		elif match[5] == match[6]:
+			val = "D"
+			elem_list = [dcl_refer_txt, 0, 1 ,0]
+		else:
+			val = "A"
+			elem_list = [dcl_refer_txt, 0, 0 ,1]
+		print(elem_list)
+		source_list.append(elem_list)
+
+	print("-----length of source list is ", len(source_list))
+	return source_list
+
+def insert_real_prcie_to_realpriceTable( season , year , week_number):
+	season_id = switch_season(season)
+	##################### get limit date for selecting matches before week ##################
+	if week_number == 0:
+		limit_date = "2020-06-08"
+	elif week_number == 53:
+		limit_date = "2021-01-01"
+	else:
+		d = year + "-W" +str(week_number)
+		limit_date = datetime.datetime.strptime(d + '-1', "%Y-W%W-%w")
+		limit_date = str(limit_date).split(' ')[0]
+		
+	##################### get all Dynamic Cream League combination################################
+	source_list = get_dcl_source_list(limit_date)
+
+	##################### get merged dcl combination ###########################
+	merged = defaultdict(lambda: [0, 0, 0])
+	for refer_text, *values in source_list:               
+		merged[refer_text] = [sum(i) for i in zip(values, merged[refer_text])]
+	print("-----length of grouped list is ", len(merged))
+	
+	##################### inset dcl table ######################################
+	count= 0
+	for item in merged.items():
+		refer = item[0]
+		elem = item[1]
+		total = elem[0] + elem[1] + elem[2]
+		if total > 9:
+			sql = f"insert into real_price_dcl (refer, season_id, year, week_number, total, H, D, A, H_price, D_price, A_price) " \
+				f"values('{refer}', {season_id}, {year} , {week_number}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
+			mycursor.execute(sql);
+			mydb.commit();
+			count += 1
+			print(f"       {season}-week{week_number} insert item - {refer}")
+	print(f" - {season}-week{week_number} inserted count is {count}")
+	############################################################################
+	
+def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
+    
+	if week_number == 1:					# if 2021-W1 : we need to query from pirce table 2020-W53
+		query_weeknumber = 53
+		query_year = str(int(year) - 1)
+	elif week_number == 24:					# 2020-W24 is first week, so query week = 0
+		query_weeknumber = 0
+		query_year = year
+	else:
+		query_weeknumber = week_number -1
+		query_year = year
+	
+	print(f" -- {season}- {year}-W{week_number} start !")
+	count = 0
+	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND WN = {week_number} AND YEAR(a.`date`) = '{year}' AND (c.`season_title` = '2020/2021' OR c.`season_title` = '2020')"
+	mycursor.execute(sql)
+	results = mycursor.fetchall()
+	for result in results:
+		league_title = result[1]
+		match_id = result[0]
+		home_cream_text = get_Team_Cream_text(result[2], result[6])
+		away_cream_text = get_Team_Cream_text(result[3], result[6])
+		dcl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text + str(result[4]) + ' v ' + str(result[5])
+
+		query_sql = f"select id from real_price_dcl where refer = '{dcl_refer_txt}' and year = {query_year} and week_number = {query_weeknumber}"
+		
+		mycursor.execute(query_sql)
+		price_id = mycursor.fetchone()
+
+		if price_id:
+			update_sql = f"update season_match_plan set DCL_refer_id = {price_id[0]} where match_id = {match_id}"
+			mycursor.execute(update_sql)
+			mydb.commit()
+			print(f"     - update one match id {match_id}")
+			count += 1
+
+	print(f" -- {season}- {year}-W{week_number} - updated {count} : END !")
+
+def main():
+	#insert_DSLReferColumn();
+    #insert_pricetable();
+	#for i in range(25, 54):
+	insert_real_prcie_to_realpriceTable("2020-2021", '2021', 2)  				# 0 means start of this season so if 2020-w0 means 2020-06-14
+	#insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 1)		# will insert price id of WN -1 's week price data  eg:  2020-W26 have 2020-W25 data's id.
+if __name__ == "__main__":
+	main()
+

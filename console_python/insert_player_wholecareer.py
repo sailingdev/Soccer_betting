@@ -78,7 +78,7 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
 		   
 			player_id = get_player_id(player_name, player_href, team_id)
 
-			print(f"-------------{season}-{pageNumber}-{i}th player : id- {player_id} data handling start!-----------")
+			print(f"------------{league}-{season}-{pageNumber}-{i}th player : id- {player_id} data handling start!-----------")
 			sql = f'SELECT * FROM player_career WHERE player_id ="{player_id}"'
 			mycursor.execute(sql)
 			myresult = mycursor.fetchall()
@@ -179,7 +179,7 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
 					tr_index = tr_index +1
 						
 			
-			print(f"-------------{season}-{pageNumber}-{i}th player : id- {player_id} : name: {player_name}'s data handling End !-----------")
+			print(f"------------{league}-{season}-{pageNumber}-{i}th player : id- {player_id} : name: {player_name}'s data handling End !-----------")
 			i = i+1
 
 def fn_filter_value(str):
@@ -454,13 +454,40 @@ def get_totalPageCount_onPlayerPage(season, league):
 
 
 def main():
-	season = "2020-2021"
-	league = "srb-super-liga" 
+	#season = "2020-2021"
+	season = "2020"
 	
-	startPageNumber = 1
-	totalpageCount = get_totalPageCount_onPlayerPage(season, league ) + 1
-	for x in range(startPageNumber, totalpageCount):
-		insert_player_wholecareer(season,league,x)
+	league_list_1 = [
+		#"esp-primera-division" ,
+		"eng-premier-league",  		 	#England
+		"bundesliga",   					#Germany
+		"ita-serie-a" , 				 #italy
+		"fra-ligue-1",  				 #france
+		"ned-eredivisie",  				#Netherland
+		"aut-bundesliga",  				#Austria
+		"por-primeira-liga", 			 #portugal
+		"gre-super-league" ,   			#Greece
+		"tur-sueperlig" ,   				#Turkey
+		#"nor-eliteserien" ,  			#Norway
+		#"swe-allsvenskan" ,  			#Sweden
+		"sui-super-league" ,  			 #Swiztland
+		"den-superliga" ,     			#Denmark
+		"ukr-premyer-liga" ,    			 #Ukraine
+		"bul-parva-liga" ,      			#bulgaria	
+		"cze-1-fotbalova-liga" ,      	#Chezch
+		"cro-1-hnl"  ,         			 #Croatia
+		"hun-nb-i" ,     				#Hungary
+		"srb-super-liga"    
+		 ]
+	league_list_2 = [
+		"nor-eliteserien" ,  			#Norway
+		"swe-allsvenskan"   			#Sweden
+	]
+	for league in league_list_2:
+		startPageNumber = 1
+		totalpageCount = get_totalPageCount_onPlayerPage(season, league ) + 1
+		for x in range(startPageNumber, totalpageCount):
+			insert_player_wholecareer(season,league,x)
 
 
 if '__main__' == __name__:

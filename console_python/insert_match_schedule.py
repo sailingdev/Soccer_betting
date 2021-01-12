@@ -81,7 +81,6 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 		return
 	
 	page = requests.get(URL)
-	
 	soup = BeautifulSoup(page.content, "html.parser")
 	results = soup.find('table', class_="standard_tabelle")
 	
@@ -111,6 +110,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 			match_status = all_td[6]
 			sql = f'SELECT team_id FROM team_list WHERE team_name = "{all_td[2].text}" UNION ' \
 				  f'SELECT team_id FROM team_list WHERE team_name = "{all_td[4].text}"'
+			#print(sql)
 			mycursor.execute(sql)
 			myresult = mycursor.fetchall()
 			home_team_id = myresult[0][0]
@@ -155,6 +155,11 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 							
 							mycursor.execute(sql)
 							mydb.commit()
+
+							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 where match_id = {current_match_id}"
+							mycursor.execute(sql)
+							mydb.commit()
+
 							print("    1 completed game updated, ID: ", current_match_id, " in match_plan")
 
 							if all_td[5].find("a"):
@@ -168,6 +173,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 							if len (match_status.find_all("img")):
 								status = "LIVE"
 							sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
+							mycursor.execute(sql)
+							mydb.commit()
+							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
 							mycursor.execute(sql)
 							mydb.commit()
 							print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
@@ -201,6 +209,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 								
 								mycursor.execute(sql)
 								mydb.commit()
+								sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+								mycursor.execute(sql)
+								mydb.commit()
 								print("    1 completed game updated, ID: ", current_match_id, " in match_plan")
 
 								if all_td[5].find("a"):
@@ -229,6 +240,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
+									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+									mycursor.execute(sql)
+									mydb.commit()
 									print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
 
 						if len (match_status.find_all("img")):
@@ -245,6 +259,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									current_match_id = result[0][0]
 									status = "LIVE"
 									sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
+									mycursor.execute(sql)
+									mydb.commit()
+									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
 									print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
