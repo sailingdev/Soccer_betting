@@ -250,7 +250,8 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 	
 	print(f" -- {season}- {year}-W{week_number} start !")
 	count = 0
-	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND WN = {week_number} AND YEAR(a.`date`) = '{year}' AND (c.`season_title` = '2020/2021' OR c.`season_title` = '2020')"
+	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
+ 			f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND WN = {week_number} AND YEAR(a.`date`) = '{year}' AND (c.`season_title` = '2020/2021' OR c.`season_title` = '2020')"
 	mycursor.execute(sql)
 	results = mycursor.fetchall()
 	for result in results:
@@ -261,7 +262,7 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 		dcl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text + str(result[4]) + ' v ' + str(result[5])
 
 		query_sql = f"select id from real_price_dcl where refer = '{dcl_refer_txt}' and year = {query_year} and week_number = {query_weeknumber}"
-		
+		#print(query_sql)
 		mycursor.execute(query_sql)
 		price_id = mycursor.fetchone()
 
@@ -277,9 +278,10 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 def main():
 	#insert_DSLReferColumn();
     #insert_pricetable();
-	#for i in range(25, 54):
-	insert_real_prcie_to_realpriceTable("2020-2021", '2021', 2)  				# 0 means start of this season so if 2020-w0 means 2020-06-14
-	#insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 1)		# will insert price id of WN -1 's week price data  eg:  2020-W26 have 2020-W25 data's id.
+	#for i in range(24, 54):
+	
+	#insert_real_prcie_to_realpriceTable("2020-2021", '2021', 2)  			# arg3 will be last weeknumber. 0 means start of this season so if 2020-w0 means 2020-06-14
+	insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 3)		# arg3 will be current weeknumber. will insert price id of WN -1 's week price data  eg:  2020-W26 have 2020-W25 data's id.
 if __name__ == "__main__":
 	main()
 

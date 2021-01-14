@@ -207,7 +207,7 @@ def get_odds(turl, OU_url , AH_url):
     print("        * start scraping 1X2 data --------------------")
     
     driver1.get(turl)
-    time.sleep(0.5)
+    time.sleep(0.7)
     #################################################################################
     tfoot = driver1.find_elements_by_tag_name('tfoot')
    

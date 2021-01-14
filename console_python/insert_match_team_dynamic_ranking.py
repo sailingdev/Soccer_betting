@@ -80,11 +80,12 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-def insert_match_team_dynamic_ranking_8(league, season, moving_num):
+def insert_match_team_dynamic_ranking_8(league, season, target_status):
     #sql = f"SELECT  * FROM ranking_range_table"
     #mycursor.execute(sql)
     #rangeVal = mycursor.fetchall()
-    print(f"---------------{league}-{season}-{moving_num}-start-----------------")
+    moving_num = 8
+    print(f"---------------{league}-{season}-{target_status} games - {moving_num}-start-----------------")
     league_id = switch_league(league)
     season_id = switch_season(season)
     
@@ -120,10 +121,15 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
         ############### get promote status ###########################################
         
         print(f"                ---------- home team info start -------------------")
-        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = 'END'"
+        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = '{target_status}'  ORDER BY date ASC"
         mycursor.execute(sql)
         matchResult = mycursor.fetchall()                     # home team array
-        nIndex_Match_of_season = 0
+        if  target_status == "END":
+            nIndex_Match_of_season = 0
+        else:
+            sql = f"SELECT count(*) from season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = 'END'  "
+            mycursor.execute(sql)
+            nIndex_Match_of_season = mycursor.fetchone()[0]
         HPPG = ""
         HGDPG = ""
         D_Home_RS = ""
@@ -146,7 +152,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                       #  D_Home_RS = str(sum_HRS)
                       D_Home_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       HRS = 0
@@ -165,7 +171,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -176,7 +182,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                     D_Home_RS = str(HRS)
                     D_Home_ranking = str(getRangeValue(HRS))
                 else:
-                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     HRS = 0
@@ -191,15 +197,21 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
             mydb.commit()
             print(f"                    match id {nowMatch_id} 's dynamic home ranking value is updated!")
 
-            nIndex_Match_of_season += 1  
+            if target_status == "END":
+                nIndex_Match_of_season += 1  
         print(f"                ---------- home team info End -------------------")
 
         ###################################### home ranking process end ####################
         print(f"                ---------- away team info start -------------------")
-        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id}  and status = 'END'"
+        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id}  and status = '{target_status}' ORDER BY date ASC"
         mycursor.execute(sql)
         matchResult = mycursor.fetchall()     # home team array
-        nIndex_Match_of_season = 0
+        if  target_status == "END":
+            nIndex_Match_of_season = 0
+        else:
+            sql = f"SELECT count(*) from season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and status = 'END'  "
+            mycursor.execute(sql)
+            nIndex_Match_of_season = mycursor.fetchone()[0]
         sum_ARS = 0
         APPG = ""
         AGDPG = ""
@@ -223,7 +235,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                       #  D_Away_RS = str(sum_ARS)
                       D_Away_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       ARS = 0
@@ -243,7 +255,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             ARS +=(int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -254,7 +266,7 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
                     D_Away_RS = str(ARS)
                     D_Away_ranking = str(getRangeValue(ARS))
                 else:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     ARS = 0
@@ -270,7 +282,8 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
             mycursor.execute(sql)
             mydb.commit()
             print(f"                    match id {nowMatch_id} 's dynamic away ranking value is updated!")
-            nIndex_Match_of_season += 1
+            if target_status == "END":
+                nIndex_Match_of_season += 1 
         print(f"                ---------- away team info End -------------------")
         print(f"     ------------{league} {season} {moving_num} team id {team_id} End ---------------")
         ####################################### One team process End ##########################################################
@@ -278,11 +291,13 @@ def insert_match_team_dynamic_ranking_8(league, season, moving_num):
 
     print(f"---------------{league}-{season}-{moving_num}-End-----------------")
 
-def insert_match_team_dynamic_ranking_6(league, season, moving_num):
+def insert_match_team_dynamic_ranking_6(league, season, target_status):
     #sql = f"SELECT  * FROM ranking_range_table"
     #mycursor.execute(sql)
     #rangeVal = mycursor.fetchall()
-    print(f"---------------{league}-{season}-{moving_num}-start-----------------")
+    moving_num = 6
+    print(f"---------------{league}-{season}- {target_status} game-{moving_num}-start-----------------")
+    
     league_id = switch_league(league)
     season_id = switch_season(season)
     
@@ -318,10 +333,15 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
         ############### get promote status ###########################################
         
         print(f"                ---------- home team info start -------------------")
-        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = 'END'"
+        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = '{target_status}'  ORDER BY date ASC"
         mycursor.execute(sql)
         matchResult = mycursor.fetchall()                     # home team array
-        nIndex_Match_of_season = 0
+        if  target_status == "END":
+            nIndex_Match_of_season = 0
+        else:
+            sql = f"SELECT count(*) from season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and status = 'END'  "
+            mycursor.execute(sql)
+            nIndex_Match_of_season = mycursor.fetchone()[0]
         HPPG = ""
         HGDPG = ""
         D_Home_RS = ""
@@ -344,7 +364,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                       #  D_Home_RS = str(sum_HRS)
                       D_Home_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       HRS = 0
@@ -363,7 +383,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -374,7 +394,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                     D_Home_RS = str(HRS)
                     D_Home_ranking = str(getRangeValue(HRS))
                 else:
-                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     HRS = 0
@@ -389,15 +409,21 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
             mydb.commit()
             print(f"                    match id {nowMatch_id} 's dynamic home ranking value is updated!")
 
-            nIndex_Match_of_season += 1  
+            if target_status == "END":
+                nIndex_Match_of_season += 1   
         print(f"                ---------- home team info End -------------------")
 
         ###################################### home ranking process end ####################
         print(f"                ---------- away team info start -------------------")
-        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id}  and status = 'END'"
+        sql = f"SELECT * FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id}  and status = '{target_status}'  ORDER BY date ASC"
         mycursor.execute(sql)
         matchResult = mycursor.fetchall()     # home team array
-        nIndex_Match_of_season = 0
+        if  target_status == "END":
+            nIndex_Match_of_season = 0
+        else:
+            sql = f"SELECT count(*) from season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and status = 'END'  "
+            mycursor.execute(sql)
+            nIndex_Match_of_season = mycursor.fetchone()[0]
         sum_ARS = 0
         APPG = ""
         AGDPG = ""
@@ -421,7 +447,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                       #  D_Away_RS = str(sum_ARS)
                       D_Away_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       ARS = 0
@@ -441,7 +467,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             ARS +=(int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -452,7 +478,7 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
                     D_Away_RS = str(ARS)
                     D_Away_ranking = str(getRangeValue(ARS))
                 else:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id < {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     ARS = 0
@@ -468,7 +494,8 @@ def insert_match_team_dynamic_ranking_6(league, season, moving_num):
             mycursor.execute(sql)
             mydb.commit()
             print(f"                    match id {nowMatch_id} 's dynamic away ranking value is updated!")
-            nIndex_Match_of_season += 1
+            if target_status == "END":
+                nIndex_Match_of_season += 1 
         print(f"                ---------- away team info End -------------------")
         print(f"     ------------ {league} - {season} - {moving_num} team id {team_id} End ---------------")
         ####################################### One team process End ##########################################################
@@ -499,300 +526,629 @@ def main():
     #result = mycursor.fetchone()
     #moving_num = result[1]
 
-    insert_match_team_dynamic_ranking_8("england/premier-league",   "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("esp-primera-division",     "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("bundesliga",               "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("ita-serie-a",              "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("fra-ligue-1",              "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("gre-superleague",          "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      8)
-    insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      8)
-    insert_match_team_dynamic_ranking_8("sui-super-league",         "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("den-superliga",            "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("bul-a-grupa",              "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga",     "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("cro-1-hnl",                "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("hun-nb-i",                 "2020-2021", 8)
-    insert_match_team_dynamic_ranking_8("srb-super-liga",           "2020-2021", 8)
+    insert_match_team_dynamic_ranking_8("england/premier-league",   "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("esp-primera-division",     "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("bundesliga",               "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("ita-serie-a",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("fra-ligue-1",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("gre-superleague",          "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "END")
+    insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "END")
+    insert_match_team_dynamic_ranking_8("sui-super-league",         "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("den-superliga",            "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("bul-a-grupa",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga",     "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("cro-1-hnl",                "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("hun-nb-i",                 "2020-2021", "END")
+    insert_match_team_dynamic_ranking_8("srb-super-liga",           "2020-2021", "END")
     
-    insert_match_team_dynamic_ranking_6("england/premier-league",   "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("esp-primera-division",     "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("bundesliga",               "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("ita-serie-a",              "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("fra-ligue-1",              "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("gre-superleague",          "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      6)
-    insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      6)
-    insert_match_team_dynamic_ranking_6("sui-super-league",         "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("den-superliga",            "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("cro-1-hnl",                "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("hun-nb-i",                 "2020-2021", 6)
-    insert_match_team_dynamic_ranking_6("srb-super-liga",           "2020-2021", 6)
+    insert_match_team_dynamic_ranking_6("england/premier-league",   "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("esp-primera-division",     "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("bundesliga",               "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("ita-serie-a",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("fra-ligue-1",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("gre-superleague",          "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "END")
+    insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "END")
+    insert_match_team_dynamic_ranking_6("sui-super-league",         "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("den-superliga",            "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("cro-1-hnl",                "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("hun-nb-i",                 "2020-2021", "END")
+    insert_match_team_dynamic_ranking_6("srb-super-liga",           "2020-2021", "END")
+
+    insert_match_team_dynamic_ranking_8("england/premier-league",   "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("esp-primera-division",     "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("bundesliga",               "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("ita-serie-a",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("fra-ligue-1",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("gre-superleague",          "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "LIVE")
+    insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "LIVE")
+    insert_match_team_dynamic_ranking_8("sui-super-league",         "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("den-superliga",            "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("bul-a-grupa",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga",     "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("cro-1-hnl",                "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("hun-nb-i",                 "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_8("srb-super-liga",           "2020-2021", "LIVE")
+    
+    insert_match_team_dynamic_ranking_6("england/premier-league",   "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("esp-primera-division",     "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("bundesliga",               "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("ita-serie-a",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("fra-ligue-1",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("gre-superleague",          "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "LIVE")
+    insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "LIVE")
+    insert_match_team_dynamic_ranking_6("sui-super-league",         "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("den-superliga",            "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("cro-1-hnl",                "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("hun-nb-i",                 "2020-2021", "LIVE")
+    insert_match_team_dynamic_ranking_6("srb-super-liga",           "2020-2021", "LIVE")
     
     ########################################################################################################################
-
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_8("england/premier-league", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_8("england/premier-league", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_8("england/premier-league", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_8("england/premier-league", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_8("england/premier-league", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("england/premier-league", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("england/premier-league", "2020-2021", "LIVE")
     
     
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("esp-primera-division", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("bundesliga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("bundesliga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("ita-serie-a", "2020-2021", "LIVE")
 
     # ##################################################################################
 
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("aut-bundesliga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("por-primeira-liga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("gre-superleague", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("gre-superleague", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("tur-sueperlig", "2020-2021", "LIVE")
 
     # #################################################################################
 
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("fra-ligue-1", "2020-2021", "LIVE")
     
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("ned-eredivisie", "2020-2021", "LIVE")
 
 
 
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2010", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2011", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2012", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2013", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2014", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2015", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2016", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2017", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2018", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2019", 8)
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2020", 8)
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2010", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2011", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2012", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2013", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2014", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2015", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2016", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2017", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2018", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2019", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2020", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2020", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2010", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2011", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2012", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2013", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2014", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2015", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2016", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2017", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2018", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2019", 8)
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2020", 8)
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2010", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2011", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2012", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2013", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2014", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2015", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2016", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2017", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2018", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2019", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2020", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2020", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("sui-super-league", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("sui-super-league", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("den-superliga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("den-superliga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("ukr-premyer-liga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("bul-a-grupa", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("cro-1-hnl", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("hun-nb-i", "2020-2021", "LIVE")
 
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2010-2011", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2011-2012", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2012-2013", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2013-2014", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2014-2015", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2015-2016", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2016-2017", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2017-2018", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2018-2019", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2019-2020", 8)
-    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2020-2021", 8)
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_8("srb-super-liga", "2020-2021", "LIVE")
+    
+
+    #######################################################################################
+    #######################################################################################
+
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("england/premier-league", "2020-2021", "LIVE")
+    
+    
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("esp-primera-division", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("bundesliga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("ita-serie-a", "2020-2021", "LIVE")
+
+    # ##################################################################################
+
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("aut-bundesliga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("por-primeira-liga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("gre-superleague", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("tur-sueperlig", "2020-2021", "LIVE")
+
+    # #################################################################################
+
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("fra-ligue-1", "2020-2021", "LIVE")
+    
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("ned-eredivisie", "2020-2021", "LIVE")
 
 
 
-       
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2010", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2011", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2012", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2013", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2014", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2015", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2016", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2017", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2018", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2019", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2020", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2020", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2010", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2011", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2012", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2013", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2014", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2015", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2016", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2017", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2018", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2019", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2020", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2020", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("sui-super-league", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("den-superliga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("bul-a-grupa", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("cro-1-hnl", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("hun-nb-i", "2020-2021", "LIVE")
+
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2010-2011", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2011-2012", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2012-2013", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2013-2014", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2014-2015", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2015-2016", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2016-2017", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2017-2018", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2018-2019", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2019-2020", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2020-2021", "END")
+    # insert_match_team_dynamic_ranking_6("srb-super-liga", "2020-2021", "LIVE")
+
 
 if __name__ == "__main__":
     main()
