@@ -170,7 +170,7 @@ def export(table_name):
 
     row_index = 0
     column_index = 0
-
+    print(" - Starting writing Excel.")
     for column_name in header:
         worksheet.write(row_index, column_index, column_name, header_cell_format)
         column_index += 1
@@ -178,6 +178,7 @@ def export(table_name):
     row_index += 1
     for row in rows:
         column_index = 0
+        print(f"    -- {row_index} row handled !")
         for column in row:
             worksheet.write(row_index, column_index, column, body_cell_format)
             column_index += 1
@@ -190,4 +191,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('historic_data_20210112_MO')
+export('historic_data_2021_01_15_02_MO')

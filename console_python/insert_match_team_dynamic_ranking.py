@@ -137,6 +137,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
         sum_HRS = 0
         for eachMatch in matchResult:                         # loop home matches array with team_id to get Dynamic home rankings
             nowMatch_id = eachMatch[0]
+            nowDate = eachMatch[3]
             if eachMatch[7] > eachMatch[9] :
                 HPPG = "3"
             elif eachMatch[7] == eachMatch[9] :
@@ -152,7 +153,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                       #  D_Home_RS = str(sum_HRS)
                       D_Home_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       HRS = 0
@@ -171,7 +172,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -182,7 +183,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                     D_Home_RS = str(HRS)
                     D_Home_ranking = str(getRangeValue(HRS))
                 else:
-                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     HRS = 0
@@ -219,6 +220,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
         D_Away_ranking = ""
         for eachMatch in matchResult:                       # loop away matches array with team_id to get Dynamic away rankings
             nowMatch_id = eachMatch[0]
+            nowDate = eachMatch[3]
             if eachMatch[7] < eachMatch[9] :
                 APPG = "3"
             elif eachMatch[7] == eachMatch[9] :
@@ -235,7 +237,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                       #  D_Away_RS = str(sum_ARS)
                       D_Away_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       ARS = 0
@@ -255,7 +257,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             ARS +=(int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'   and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -266,7 +268,7 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
                     D_Away_RS = str(ARS)
                     D_Away_ranking = str(getRangeValue(ARS))
                 else:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     ARS = 0
@@ -349,6 +351,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
         sum_HRS = 0
         for eachMatch in matchResult:                         # loop home matches array with team_id to get Dynamic home rankings
             nowMatch_id = eachMatch[0]
+            nowDate = eachMatch[3]
             if eachMatch[7] > eachMatch[9] :
                 HPPG = "3"
             elif eachMatch[7] == eachMatch[9] :
@@ -364,7 +367,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                       #  D_Home_RS = str(sum_HRS)
                       D_Home_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       HRS = 0
@@ -383,7 +386,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -394,7 +397,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                     D_Home_RS = str(HRS)
                     D_Home_ranking = str(getRangeValue(HRS))
                 else:
-                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT  HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     HRS = 0
@@ -431,6 +434,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
         D_Away_ranking = ""
         for eachMatch in matchResult:                       # loop away matches array with team_id to get Dynamic away rankings
             nowMatch_id = eachMatch[0]
+            nowDate = eachMatch[3]
             if eachMatch[7] < eachMatch[9] :
                 APPG = "3"
             elif eachMatch[7] == eachMatch[9] :
@@ -447,7 +451,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                       #  D_Away_RS = str(sum_ARS)
                       D_Away_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                       mycursor.execute(sql)
                       previous_num_Match_Results = mycursor.fetchall()
                       ARS = 0
@@ -467,7 +471,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
                         if eachMatch[0] != "":
                             ARS +=(int(eachMatch[0]) + int(eachMatch[1]))
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {nIndex_Match_of_season}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
@@ -478,7 +482,7 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
                     D_Away_RS = str(ARS)
                     D_Away_ranking = str(getRangeValue(ARS))
                 else:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and match_id != {nowMatch_id}  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
                     mycursor.execute(sql)
                     previous_num_Match_Results = mycursor.fetchall()
                     ARS = 0
@@ -879,8 +883,8 @@ def main():
     # insert_match_team_dynamic_ranking_8("srb-super-liga", "2020-2021", "LIVE")
     
 
-    #######################################################################################
-    #######################################################################################
+    ######################################################################################
+    ######################################################################################
 
     # insert_match_team_dynamic_ranking_6("england/premier-league", "2010-2011", "END")
     # insert_match_team_dynamic_ranking_6("england/premier-league", "2011-2012", "END")
