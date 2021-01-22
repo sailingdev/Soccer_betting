@@ -156,7 +156,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 							mycursor.execute(sql)
 							mydb.commit()
 
-							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 where match_id = {current_match_id}"
+							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 , c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
 							mycursor.execute(sql)
 							mydb.commit()
 
@@ -175,12 +175,12 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 							sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
 							mycursor.execute(sql)
 							mydb.commit()
-							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+							sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 ,c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
 							mycursor.execute(sql)
 							mydb.commit()
 							print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
 				
-				if count_of_match > 1 :										# if the match is repeated game,
+				if count_of_match > 1 :										# if the match is repeated game,eg: Croatia, Hungary
 					print("    there are many same matches in this league, so will check the fixture carefully")
 					if "(" in match_total_result:							# if the match is ended game
 						sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'END' and date = '{match_date}'"
@@ -209,7 +209,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 								
 								mycursor.execute(sql)
 								mydb.commit()
-								sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+								sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 ,c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
 								mycursor.execute(sql)
 								mydb.commit()
 								print("    1 completed game updated, ID: ", current_match_id, " in match_plan")
@@ -240,19 +240,19 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
-									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 ,c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
 									print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
 
-						if len (match_status.find_all("img")):
+						if len (match_status.find_all("img")):				# Live Match
 							sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'LIVE' and date ='{match_date}'"
 							mycursor.execute(sql)
 							result = mycursor.fetchall()
 							if len(result):
 								print("    No need to update")
 							else:
-								sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = ''"
+								sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status != 'END'"
 								mycursor.execute(sql)
 								result = mycursor.fetchall()
 								if len(result):
@@ -261,7 +261,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
-									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1  where match_id = {current_match_id}"
+									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 ,c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
 									print("    1 planned game updated, ID: ", current_match_id, " in match_plan")
@@ -269,7 +269,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 			if newInsertFlag:                                               # if this is option for new inserting, then we must insert the game into DB
 				print("This is new game for this season and league, so we will insert this!")
 				status = ""
-				if "(" in match_total_result:                           # if the match was finished
+				if "(" in match_total_result:                           	# if the match was finished
 					print("   Match was finished ")
 					total = match_total_result.split(" ")[0]
 					half = match_total_result.split(" ")[1]
@@ -291,6 +291,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 					print("    1 completed game inserted, ID: ", mycursor.lastrowid, " in match_plan")
 					#print("    1 completed game inserted, ID:  in match_plan")
 					last_match_id = mycursor.lastrowid
+					sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 , c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {last_match_id}"
+					mycursor.execute(sql)
+					mydb.commit()
 
 					if all_td[5].find("a"):
 						href_info = all_td[5].find("a")['href']
@@ -303,6 +306,9 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 
 					if len (match_status.find_all("img")):
 						status = "LIVE"
+
+					if "resch" in match_total_result :
+						status = "resch"
 
 					sql = "INSERT INTO season_match_plan (season_id, league_id , date, time,home_team_id , away_team_id , " \
 						"total_home_score, half_home_score, total_away_score, half_away_score, status)" \
@@ -769,8 +775,8 @@ doing_scraping_match_plan("2020-2021","ita-serie-a")			# maximum 380 -  10 * 38
 doing_scraping_match_plan("2020-2021","por-primeira-liga")	
 doing_scraping_match_plan("2020-2021","gre-super-league")
 doing_scraping_match_plan("2020-2021","tur-sueperlig")
-doing_scraping_match_plan("2020","nor-eliteserien")
-doing_scraping_match_plan("2020","swe-allsvenskan")
+doing_scraping_match_plan("2020",	  "nor-eliteserien")
+doing_scraping_match_plan("2020",	  "swe-allsvenskan")
 doing_scraping_match_plan("2020-2021","sui-super-league")
 doing_scraping_match_plan("2020-2021","den-superliga")
 doing_scraping_match_plan("2020-2021","ukr-premyer-liga")

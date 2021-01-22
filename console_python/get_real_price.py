@@ -171,8 +171,8 @@ def get_Team_Cream_text(team_id , season_title):
 	else:
 		return 'Non-Cream'
 
-def get_dcl_source_list(limit_date):
-	sql = f"SELECT b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND a.season_id < 19 OR ((a.season_id = 799 OR a.season_id = 64 ) AND DATE < '{limit_date}' AND STATUS = 'END')"
+def get_dcl_source_list(c_weeknumber):
+	sql = f"SELECT b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64) AND a.c_WN < {c_weeknumber}"
 	mycursor.execute(sql)
 	matches = mycursor.fetchall()
 	source_list = []
@@ -199,20 +199,10 @@ def get_dcl_source_list(limit_date):
 	print("-----length of source list is ", len(source_list))
 	return source_list
 
-def insert_real_prcie_to_realpriceTable( season , year , week_number):
-	season_id = switch_season(season)
-	##################### get limit date for selecting matches before week ##################
-	if week_number == 0:
-		limit_date = "2020-06-08"
-	elif week_number == 53:
-		limit_date = "2021-01-01"
-	else:
-		d = year + "-W" +str(week_number)
-		limit_date = datetime.datetime.strptime(d + '-1', "%Y-W%W-%w")
-		limit_date = str(limit_date).split(' ')[0]
-		
+def insert_real_prcie_to_realpriceTable( C_weeknumber):
+	
 	##################### get all Dynamic Cream League combination################################
-	source_list = get_dcl_source_list(limit_date)
+	source_list = get_dcl_source_list(C_weeknumber)
 
 	##################### get merged dcl combination ###########################
 	merged = defaultdict(lambda: [0, 0, 0])
@@ -227,31 +217,26 @@ def insert_real_prcie_to_realpriceTable( season , year , week_number):
 		elem = item[1]
 		total = elem[0] + elem[1] + elem[2]
 		if total > 9:
-			sql = f"insert into real_price_dcl (refer, season_id, year, week_number, total, H, D, A, H_price, D_price, A_price) " \
-				f"values('{refer}', {season_id}, {year} , {week_number}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
+			sql = f"insert into real_price_dcl (refer,c_week_number, total, H, D, A, H_price, D_price, A_price) " \
+				f"values('{refer}',  {C_weeknumber}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
 			mycursor.execute(sql);
 			mydb.commit();
 			count += 1
-			print(f"       {season}-week{week_number} insert item - {refer}")
-	print(f" - {season}-week{week_number} inserted count is {count}")
+			print(f"       -week {C_weeknumber} insert item - {refer}")
+	print(f" -week {C_weeknumber} inserted count is {count}")
 	############################################################################
 	
-def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
+def insert_real_price_id_toSeasonMatchPlanTable(week_number):
     
-	if week_number == 1:					# if 2021-W1 : we need to query from pirce table 2020-W53
-		query_weeknumber = 53
-		query_year = str(int(year) - 1)
-	elif week_number == 24:					# 2020-W24 is first week, so query week = 0
-		query_weeknumber = 0
-		query_year = year
-	else:
-		query_weeknumber = week_number -1
-		query_year = year
 	
-	print(f" -- {season}- {year}-W{week_number} start !")
+	
+	print(f" - W{week_number} start !")
 	count = 0
-	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
- 		f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND WN = {week_number} AND YEAR(a.`date`) = '{year}' AND (c.`season_title` = '2020/2021' OR c.`season_title` = '2020')"
+	# sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
+    # f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
+
+	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND c_WN = {week_number}"
+
 	mycursor.execute(sql)
 	results = mycursor.fetchall()
 	if len(results) == 0:
@@ -263,7 +248,7 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 		away_cream_text = get_Team_Cream_text(result[3], result[6])
 		dcl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text + str(result[4]) + ' v ' + str(result[5])
 
-		query_sql = f"select id from real_price_dcl where refer = '{dcl_refer_txt}' and year = {query_year} and week_number = {query_weeknumber}"
+		query_sql = f"select id from real_price_dcl where refer = '{dcl_refer_txt}' and c_week_number = {week_number}"
 		#print(query_sql)
 		mycursor.execute(query_sql)
 		price_id = mycursor.fetchone()
@@ -272,25 +257,21 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 			update_sql = f"update season_match_plan set DCL_refer_id = {price_id[0]} where match_id = {match_id}"
 			mycursor.execute(update_sql)
 			mydb.commit()
-			print(f"     - update one match id {match_id}")
+			print(f"  W{week_number} - update one match id {match_id}")
 			count += 1
 
-	print(f" -- {season}- {year}-W{week_number} - updated {count} : END !")
+	print(f" - W{week_number} - updated {count} : END !")
 
 def get_realprice_toRealPriceTable_perweek():
-	# insert_real_prcie_to_realpriceTable("2020-2021", '2020', 0)
-	# for i in range(24, 54):														# 24 is the first week of 2020-2021. 2020 season.
-	# 	insert_real_prcie_to_realpriceTable("2020-2021", '2020', i)  			# arg3 will be last weeknumber. 0 means start of this season so if 2020-w0 means 2020-06-14
-	# insert_real_prcie_to_realpriceTable("2020-2021", '2021', 1)
-	insert_real_prcie_to_realpriceTable("2020-2021", '2021', 3)
+	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
+	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
+    insert_real_prcie_to_realpriceTable(579)
+
 
 def matching_realpriceid_toSeasonMatchPlanColumn():
-	for i in range(24, 54):
-		insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2020', i)		# arg3 will be current weeknumber. will insert price id of WN -1 's week price data  eg:  2020-W26 have 2020-W25 data's id.
-	insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 1)
-	insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 2)
-	insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 3)
-	insert_real_price_id_toSeasonMatchPlanTable("2020-2021", '2021', 4)
+	for C_weeknumber in range(331, 546):
+		insert_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    # param = current continuous week
+	# insert_real_price_id_toSeasonMatchPlanTable(579)
 
 def main():
 	#get_realprice_toRealPriceTable_perweek()

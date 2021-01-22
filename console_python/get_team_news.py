@@ -469,9 +469,9 @@ def add_extra_player(player_name, player_adding_info, team_id):
 
 def get_last_dynamic_ranking(team_id, home_flag):
 	if home_flag:     # if true get home team ranking
-		sql = f'SELECT D_Home_ranking_8 FROM season_match_plan WHERE home_team_id = {team_id} AND D_Home_ranking_8 != "" ORDER BY match_id DESC LIMIT 1'
+		sql = f'SELECT D_Home_ranking_8 FROM season_match_plan WHERE home_team_id = {team_id} AND D_Home_ranking_8 != "" ORDER BY date DESC LIMIT 1'
 	else :			  # get away team ranking
-		sql = f'SELECT D_Away_ranking_8 FROM season_match_plan WHERE away_team_id = {team_id} AND D_Away_ranking_8 != "" ORDER BY match_id DESC LIMIT 1'
+		sql = f'SELECT D_Away_ranking_8 FROM season_match_plan WHERE away_team_id = {team_id} AND D_Away_ranking_8 != "" ORDER BY date DESC LIMIT 1'
 
 	mycursor.execute(sql)
 	result = mycursor.fetchall()
