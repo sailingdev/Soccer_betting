@@ -227,15 +227,12 @@ def insert_real_prcie_to_realpriceTable( C_weeknumber):
 	############################################################################
 	
 def insert_real_price_id_toSeasonMatchPlanTable(week_number):
-    
-	
-	
 	print(f" - W{week_number} start !")
 	count = 0
-	# sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
-    # f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
+	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
+    f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
 
-	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND c_WN = {week_number}"
+	#sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND c_WN = {week_number}"
 
 	mycursor.execute(sql)
 	results = mycursor.fetchall()
@@ -265,16 +262,16 @@ def insert_real_price_id_toSeasonMatchPlanTable(week_number):
 def get_realprice_toRealPriceTable_perweek():
 	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
 	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
-    insert_real_prcie_to_realpriceTable(579)
+    insert_real_prcie_to_realpriceTable(579)								# completed by 578 . param shoulb be current continuous week.
 
 
 def matching_realpriceid_toSeasonMatchPlanColumn():
-	for C_weeknumber in range(331, 546):
-		insert_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    # param = current continuous week
-	# insert_real_price_id_toSeasonMatchPlanTable(579)
+	# for C_weeknumber in range(478, 546):
+	# 	insert_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
+	insert_real_price_id_toSeasonMatchPlanTable(579)						# completed by 578 . param shoulb be current continuous week.
 
 def main():
-	#get_realprice_toRealPriceTable_perweek()
+	# get_realprice_toRealPriceTable_perweek()
 	matching_realpriceid_toSeasonMatchPlanColumn()
 	
 	

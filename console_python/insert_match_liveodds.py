@@ -26,6 +26,7 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
+PROXY = "193.149.225.224:80"
 driverpath = "C:\Soccer_betting\chromedriver.exe"
 chrome_options = Options()
 chrome_options.add_argument('headless')
@@ -35,6 +36,7 @@ chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--blink-settings=imagesEnabled=false')
 chrome_options.add_argument("--disable-extensions")
 chrome_options.page_load_strategy = 'eager'
+# chrome_options.add_argument('--proxy-server=%s' % PROXY)
 #chrome_options.add_argument("--proxy-server=xxx.xxx.xxx.xxx");
 chrome_options.add_argument('--blink-settings=imagesEnabled=false')
 chrome_options.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
