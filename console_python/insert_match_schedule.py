@@ -410,6 +410,7 @@ def get_player_id(player_name, player_href, team_id):
 	url = "https://www.worldfootball.net" + player_href	
 	player_adding_info = get_more_player_info(url , player_name)
 	player_birthday = player_adding_info[1]
+	
 	player_number  = player_adding_info[5]
 	img_src_flag = 0
 
@@ -533,6 +534,7 @@ def get_more_player_info(url , player_name):
 	if results.find(string="Born:"):
 		player_birthday = results.find(string="Born:").findNext("td").text.strip()
 		player_birthday = player_birthday.replace('.', '/')
+		player_birthday = player_birthday.split(" ")[0]
 		if player_birthday  == "":
 			player_birthday = "???"
 	################## get player's number of team ##########################

@@ -218,7 +218,7 @@ def doing_team_news(season, league_id, date, time, home_team_name_id, away_team_
 		cur_home_team_id = myresult[0][0]
 		cur_away_team_id = myresult[1][0]
 		#print(f'   {type(match_date)} = {type(date)} , {type(start_time)} = {type(time)} , {type(home_team_name_id)} = {type(cur_home_team_id)}')
-		if (match_date == date) & ( start_time == time) & (home_team_name_id ==  cur_home_team_id) & (away_team_name_id ==  cur_away_team_id):
+		if (match_date == date) & (home_team_name_id ==  cur_home_team_id) & (away_team_name_id ==  cur_away_team_id):
 			a_results =  all_td[5].find_all('a')
 			
 			if len(a_results):
@@ -582,8 +582,31 @@ def get_team_strength_threading(match_id):
 		season_title = season_title_result.replace('/', '-')
 		news_result = doing_team_news(season_title, result[2], str(result[3]), result[4], result[5], result[6])
 		print("      # team news result :" , news_result)
-		if len(news_result) < 4:                      # team news is not available
-			print("          # team news is still not available")
+		if news_result != None:
+			if len(news_result) < 4:                      # team news is not available
+				print("          # team news is still not available")
+				now = dt.datetime.now()
+				now_hour = int(now.hour)
+				match_time = result[4]
+				
+				
+				(match_hour, min) = match_time.split(':')
+				match_hour = int(match_hour)
+				if now_hour <= match_hour:
+					threading.Timer(600,get_team_strength_threading, [match_id]).start()
+				else:
+					print("          # available time passed, so not repeated !")
+			else:
+		
+				home_team_strength = news_result['home_team_strength']
+			
+				away_team_strength = news_result['away_team_strength']
+
+				sql = f"UPDATE season_match_plan set  home_team_strength = '{home_team_strength}', away_team_strength = '{away_team_strength}' where match_id = {match_id}"
+				nes_status = mysql_pool.execute(sql, None, True)
+				print("          # team news inserted : ", nes_status)
+		else:
+			print("          # team news info is wrong or something go away!")
 			now = dt.datetime.now()
 			now_hour = int(now.hour)
 			match_time = result[4]
@@ -595,15 +618,6 @@ def get_team_strength_threading(match_id):
 				threading.Timer(600,get_team_strength_threading, [match_id]).start()
 			else:
 				print("          # available time passed, so not repeated !")
-		else:
-			#home_total_score = news_result['home_total_score']
-			home_team_strength = news_result['home_team_strength']
-			#away_total_score = news_result['away_total_score']
-			away_team_strength = news_result['away_team_strength']
-
-			sql = f"UPDATE season_match_plan set  home_team_strength = '{home_team_strength}', away_team_strength = '{away_team_strength}' where match_id = {match_id}"
-			nes_status = mysql_pool.execute(sql, None, True)
-			print("          # team news inserted : ", nes_status)
 
 def make_schedule_ofToday():
     # get match list of today
@@ -637,7 +651,5 @@ def main():
     
     make_schedule_ofToday()
     
-
-
 if __name__ == "__main__":
 	main()

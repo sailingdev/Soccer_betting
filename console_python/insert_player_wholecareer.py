@@ -104,8 +104,8 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
 							league_id = fn_Get_LeagueId(all_td[1].text, all_td[1].find('a')['href'])
 							season_id = fn_Get_SeasonId(all_td[2].text)
 
-							if "2018" in all_td[2].text:          # 2018 lower season no updated and will break 
-								print("    now season is lower than 2018 , so break")
+							if "2019" in all_td[2].text:          # 2019 lower season no updated and will break 
+								print("    now season is lower than 2019 , so break")
 								break
 							team_id = fn_Get_TeamId(all_td[3].text)
 							sql = f'SELECT * from player_career where player_id = {player_id} and league_id = {league_id} and season_id = {season_id} and team_id = {team_id}'
@@ -271,6 +271,7 @@ def get_player_id(player_name, player_href, team_id):
 	url = "https://www.worldfootball.net" + player_href	
 	player_adding_info = get_more_player_info(url , player_name)
 	player_birthday = player_adding_info[1]
+
 	player_number  = player_adding_info[5]
 	img_src_flag = 0
 
@@ -291,6 +292,7 @@ def get_player_id(player_name, player_href, team_id):
 			if len(player_existing_result):            # name or birthday match..so will check availabe 
 				now_player_name = player_existing_result[0][1]
 				now_player_birthday = player_existing_result[0][2]
+				
 				now_player_id = player_existing_result[0][0]
 				
 				if (player_birthday ==  now_player_birthday) | (player_name == now_player_name):
@@ -353,6 +355,7 @@ def get_player_id(player_name, player_href, team_id):
 			img_src_flag = 1
 			player_id = player_existing_result[0][0]
 			player_birthday = player_adding_info[1]
+			
 			#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 			now_pNumber = player_adding_info[5]
 			if now_pNumber == "":
@@ -393,6 +396,7 @@ def get_more_player_info(url , player_name):
 	if results.find(string="Born:"):
 		player_birthday = results.find(string="Born:").findNext("td").text.strip()
 		player_birthday = player_birthday.replace('.', '/')
+		player_birthday = player_birthday.split(" ")[0]
 		if player_birthday  == "":
 			player_birthday = "???"
 	################## get player's number of team ##########################
@@ -454,36 +458,36 @@ def get_totalPageCount_onPlayerPage(season, league):
 
 
 def main():
-	#season = "2020-2021"
-	season = "2020"
+	season = "2020-2021"
+	# season = "2020"
 	
 	league_list_1 = [
-		#"esp-primera-division" ,
-		"eng-premier-league",  		 	#England
-		"bundesliga",   					#Germany
-		"ita-serie-a" , 				 #italy
-		"fra-ligue-1",  				 #france
-		"ned-eredivisie",  				#Netherland
-		"aut-bundesliga",  				#Austria
-		"por-primeira-liga", 			 #portugal
+		# "esp-primera-division" ,
+		# "eng-premier-league",  		 	#England
+		# "bundesliga",   					#Germany
+		# "ita-serie-a" , 				 #italy
+		# "fra-ligue-1",  				 #france
+		# "ned-eredivisie",  				#Netherland
+		# "aut-bundesliga",  				#Austria
+		# "por-primeira-liga", 			 #portugal
 		"gre-super-league" ,   			#Greece
-		"tur-sueperlig" ,   				#Turkey
-		#"nor-eliteserien" ,  			#Norway
-		#"swe-allsvenskan" ,  			#Sweden
-		"sui-super-league" ,  			 #Swiztland
-		"den-superliga" ,     			#Denmark
-		"ukr-premyer-liga" ,    			 #Ukraine
-		"bul-parva-liga" ,      			#bulgaria	
-		"cze-1-fotbalova-liga" ,      	#Chezch
-		"cro-1-hnl"  ,         			 #Croatia
-		"hun-nb-i" ,     				#Hungary
-		"srb-super-liga"    
+		# "tur-sueperlig" ,   				#Turkey
+		# #"nor-eliteserien" ,  			#Norway
+		# #"swe-allsvenskan" ,  			#Sweden
+		# "sui-super-league" ,  			 #Swiztland
+		# "den-superliga" ,     			#Denmark
+		# "ukr-premyer-liga" ,    			 #Ukraine
+		# "bul-parva-liga" ,      			#bulgaria	
+		# "cze-1-fotbalova-liga" ,      	#Chezch
+		# "cro-1-hnl"  ,         			 #Croatia
+		# "hun-nb-i" ,     				#Hungary
+		# "srb-super-liga"    
 		 ]
 	league_list_2 = [
 		"nor-eliteserien" ,  			#Norway
 		"swe-allsvenskan"   			#Sweden
 	]
-	for league in league_list_2:
+	for league in league_list_1:
 		startPageNumber = 1
 		totalpageCount = get_totalPageCount_onPlayerPage(season, league ) + 1
 		for x in range(startPageNumber, totalpageCount):
