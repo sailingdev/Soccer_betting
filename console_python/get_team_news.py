@@ -113,11 +113,12 @@ def doing_team_news(season, league_id, date, time, home_team_name_id, away_team_
 		myresult = mycursor.fetchall()
 		cur_home_team_id = str(myresult[0][0])
 		cur_away_team_id = str(myresult[1][0])
-
-		if (match_date == date) & ( start_time == time) & (home_team_name_id ==  cur_home_team_id) & (away_team_name_id ==  cur_away_team_id):
+#		print(f'   {match_date} = {date} , {type(start_time)} = {type(time)} , {type(home_team_name_id)} = {type(cur_home_team_id)}')
+		if (match_date == date) & (home_team_name_id ==  cur_home_team_id) & (away_team_name_id ==  cur_away_team_id):
 			a_results =  all_td[5].find_all('a')
 			if len(a_results):
 				url = "https://www.worldfootball.net" + a_results[0]['href']
+				#print(url)
 				return get_team_score_strength(url, home_team_name_id, away_team_name_id, switch_season(season))
 			
 		i += 1
@@ -139,7 +140,8 @@ def get_team_score_strength(url, home_team_id, away_team_id, season_id):
 
 	hometeam_data = get_data_from_hometeam(home_team_info, home_team_id, season_id)
 	awayteam_data = get_data_from_awayteam(away_team_info, away_team_id, season_id)
-
+	#print(hometeam_data)
+	#print(awayteam_data)
 	return {**hometeam_data, **awayteam_data}
 
 def get_data_from_hometeam(team_info, team_id, season_id):
@@ -517,7 +519,7 @@ def main():
 	else:
 		print("Need full arguments!")
 
-	#text = doing_team_news('2020-2021', '16' ,'2020-10-17', "20:00",'38', '37');
+	#text = doing_team_news("2020-2021", '4', '2021-01-27',' 15:00', '401' ,'399');
 	#text = json.dumps(text)
 	#text = text.encode('utf8');
 	#print(text);

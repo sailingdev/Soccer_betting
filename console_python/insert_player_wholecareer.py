@@ -462,26 +462,26 @@ def main():
 	# season = "2020"
 	
 	league_list_1 = [
-		# "esp-primera-division" ,
-		# "eng-premier-league",  		 	#England
-		# "bundesliga",   					#Germany
-		# "ita-serie-a" , 				 #italy
-		# "fra-ligue-1",  				 #france
-		# "ned-eredivisie",  				#Netherland
-		# "aut-bundesliga",  				#Austria
-		# "por-primeira-liga", 			 #portugal
+		"esp-primera-division" ,
+		"eng-premier-league",  		 	#England
+		"bundesliga",   					#Germany
+		"ita-serie-a" , 				 #italy
+		"fra-ligue-1",  				 #france
+		"ned-eredivisie",  				#Netherland
+		"aut-bundesliga",  				#Austria
+		"por-primeira-liga", 			 #portugal
 		"gre-super-league" ,   			#Greece
-		# "tur-sueperlig" ,   				#Turkey
-		# #"nor-eliteserien" ,  			#Norway
-		# #"swe-allsvenskan" ,  			#Sweden
-		# "sui-super-league" ,  			 #Swiztland
-		# "den-superliga" ,     			#Denmark
-		# "ukr-premyer-liga" ,    			 #Ukraine
-		# "bul-parva-liga" ,      			#bulgaria	
-		# "cze-1-fotbalova-liga" ,      	#Chezch
-		# "cro-1-hnl"  ,         			 #Croatia
-		# "hun-nb-i" ,     				#Hungary
-		# "srb-super-liga"    
+		"tur-sueperlig" ,   				#Turkey
+		#"nor-eliteserien" ,  			#Norway
+		#"swe-allsvenskan" ,  			#Sweden
+		"sui-super-league" ,  			 #Swiztland
+		"den-superliga" ,     			#Denmark
+		"ukr-premyer-liga" ,    			 #Ukraine
+		"bul-parva-liga" ,      			#bulgaria	
+		"cze-1-fotbalova-liga" ,      	#Chezch
+		"cro-1-hnl"  ,         			 #Croatia
+		"hun-nb-i" ,     				#Hungary
+		"srb-super-liga"    
 		 ]
 	league_list_2 = [
 		"nor-eliteserien" ,  			#Norway
