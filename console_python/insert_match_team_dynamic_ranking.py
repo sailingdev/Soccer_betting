@@ -525,11 +525,7 @@ def getRangeValue(RS):
         return 7
 
 def main():
-    #sql = f"SELECT  * FROM moving_average_setting"
-    #mycursor.execute(sql)
-    #result = mycursor.fetchone()
-    #moving_num = result[1]
-
+    
     insert_match_team_dynamic_ranking_8("england/premier-league",   "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("esp-primera-division",     "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("bundesliga",               "2020-2021", "END")

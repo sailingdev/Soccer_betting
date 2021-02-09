@@ -209,7 +209,7 @@ def get_odds(turl, OU_url , AH_url):
     print("        * start scraping 1X2 data --------------------")
     
     driver1.get(turl)
-    time.sleep(0.7)
+    time.sleep(1)
     #################################################################################
     tfoot = driver1.find_elements_by_tag_name('tfoot')
    
@@ -337,7 +337,7 @@ def get_odds(turl, OU_url , AH_url):
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
             driver1.execute_script("page.togleTableContent('P--1.25-0-0',this)")
-            #time.sleep(0.2)
+            
             tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
             AH = get_various_AsianHandicap(tfoot_OU)
             AH_odds["AH_1.25"] = AH
@@ -354,7 +354,7 @@ def get_odds(turl, OU_url , AH_url):
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
             driver1.execute_script("page.togleTableContent('P--1.00-0-0',this)")
-            #time.sleep(0.2)
+            
             tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
             AH = get_various_AsianHandicap(tfoot_OU)
             AH_odds["AH_1"] = AH
@@ -371,7 +371,7 @@ def get_odds(turl, OU_url , AH_url):
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
             driver1.execute_script("page.togleTableContent('P--0.75-0-0',this)")
-            #time.sleep(0.2)
+            
             tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
             AH = get_various_AsianHandicap(tfoot_OU)
             AH_odds["AH_0.75"] = AH
@@ -718,7 +718,7 @@ def insert_Price_To_Matchplan(league, season):
     print(f"----------------{league}  start--------------------------------")
   
      
-    time.sleep(1.5)
+    time.sleep(2)
     tbody = driver.find_element_by_tag_name('tbody')                # get tobody of all matches
     #print(tbody.text)
     index = 0
