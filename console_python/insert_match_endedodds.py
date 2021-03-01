@@ -78,9 +78,9 @@ def switch_month(argument):
 
 def switch_season(argument):
     switcher = {
-      "2019-2020": 12,
-      "2020" : 64,
-       
+        "2019-2020": 12,
+        "2020" : 64,
+        "2021" : 844
     }
     return switcher.get(argument, "null")
 def switch_league(argument):
@@ -137,14 +137,21 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
             mycursor.execute(sql)
             result = mycursor.fetchall()
             ################## inserting new odds data #######################################################################
-            if result:
+           
+            if (result and result[0][3] != 0) and (result and str(result[0][42]) >= match_date):                # that wasnt resch game's odd
                 print("         # No need to insert")
                 return "No update"
             else:
+                if result:
+                        sql = f"delete from odds where match_id = {match_id} and bookmaker_id = 11"
+                        mycursor.execute(sql)
+                        mydb.commit()
+                        print("        * deleted existing one row !")
                 odd_price = get_odds(three_way_url, OU_url, AH_url)
                 print("        " , odd_price)
-
-                sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5, AH2_1, AH2_2, AH1d75_1, AH1d75_2, AH1d5_1, AH1d5_2 , AH1d25_1, AH1d25_2, AH1_1, AH1_2, AH0d75_1, AH0d75_2, AH0d5_1, AH0d5_2, AH0d25_1, AH0d25_2, AH0_1, AH0_2 , AH_p0d25_1 , AH_p0d25_2, AH_p0d5_1, AH_p0d5_2, AH_p0d75_1 , AH_p0d75_2, AH_p1_1, AH_p1_2, AH_p1d25_1, AH_p1d25_2, AH_p1d5_1, AH_p1d5_2, AH_p1d75_1, AH_p1d75_2, AH_p2_1, AH_p2_2 )"  \
+                updated_at = datetime.today().strftime('%Y-%m-%d')
+                print(f"       inserted at {updated_at}")
+                sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5, AH2_1, AH2_2, AH1d75_1, AH1d75_2, AH1d5_1, AH1d5_2 , AH1d25_1, AH1d25_2, AH1_1, AH1_2, AH0d75_1, AH0d75_2, AH0d5_1, AH0d5_2, AH0d25_1, AH0d25_2, AH0_1, AH0_2 , AH_p0d25_1 , AH_p0d25_2, AH_p0d5_1, AH_p0d5_2, AH_p0d75_1 , AH_p0d75_2, AH_p1_1, AH_p1_2, AH_p1d25_1, AH_p1d25_2, AH_p1d5_1, AH_p1d5_2, AH_p1d75_1, AH_p1d75_2, AH_p2_1, AH_p2_2 , updated_at)"  \
 			    f"VALUES ({match_id}, 11, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]}, " \
                 f"{odd_price['AH']['AH_2']['highest'][0]} , {odd_price['AH']['AH_2']['highest'][1]} ,{odd_price['AH']['AH_1.75']['highest'][0]} , {odd_price['AH']['AH_1.75']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_1.5']['highest'][0]} , {odd_price['AH']['AH_1.5']['highest'][1]} ,{odd_price['AH']['AH_1.25']['highest'][0]} , {odd_price['AH']['AH_1.25']['highest'][1]} , " \
@@ -154,7 +161,7 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
                 f"{odd_price['AH']['AH_p0.5']['highest'][0]} , {odd_price['AH']['AH_p0.5']['highest'][1]},{odd_price['AH']['AH_p0.75']['highest'][0]} , {odd_price['AH']['AH_p0.75']['highest'][1]} , "  \
                 f"{odd_price['AH']['AH_p1']['highest'][0]} , {odd_price['AH']['AH_p1']['highest'][1]},{odd_price['AH']['AH_p1.25']['highest'][0]} , {odd_price['AH']['AH_p1.25']['highest'][1]} , "  \
                 f"{odd_price['AH']['AH_p1.5']['highest'][0]} , {odd_price['AH']['AH_p1.5']['highest'][1]},{odd_price['AH']['AH_p1.75']['highest'][0]} , {odd_price['AH']['AH_p1.75']['highest'][1]} , "  \
-                f"{odd_price['AH']['AH_p2']['highest'][0]} , {odd_price['AH']['AH_p2']['highest'][1]} ) "
+                f"{odd_price['AH']['AH_p2']['highest'][0]} , {odd_price['AH']['AH_p2']['highest'][1]} , '{updated_at}') "
                 mycursor.execute(sql)
                 mydb.commit()
 
@@ -609,19 +616,18 @@ def get_various_AsianHandicap(tfoot_OU):
     return AH
 
 def getDate_from_trTxt(date_txt):
-  if 'Today' in date_txt:
-      return datetime.today().strftime('%Y-%m-%d')
-  elif 'Yesterday' in date_txt:
-      yesterday = datetime.now() - timedelta(1)
-      return datetime.strftime(yesterday, '%Y-%m-%d')
-  else:
-     date_part = date_txt.split(' ');
-     return date_part[2] + "-" +switch_month(date_part[1]) + '-' + date_part[0]
+    if 'Today' in date_txt:
+        return datetime.today().strftime('%Y-%m-%d')
+    elif 'Yesterday' in date_txt:
+        yesterday = datetime.now() - timedelta(1)
+        return datetime.strftime(yesterday, '%Y-%m-%d')
+    else:
+        date_part = date_txt.split(' ');
+        return date_part[2] + "-" +switch_month(date_part[1]) + '-' + date_part[0]
 
 def insert_Price_To_Matchplan(league, season, startPage = None):
       
-    driver = webdriver.Chrome(driverpath,options=chrome_options)
-    #driver = webdriver.Firefox(firefox_profile=profile,executable_path=gecko_path)
+    driver = webdriver.Chrome(driverpath, options=chrome_options)
     current_season = False
     
     
@@ -677,7 +683,7 @@ def insert_Price_To_Matchplan(league, season, startPage = None):
                     if current_season & (status == "No update"):
                           print("     * No need to update , this is already inserted!")
                           breakflag = 1
-                          break
+                        #   break
                     
                     index += 1
                 else:
@@ -686,6 +692,7 @@ def insert_Price_To_Matchplan(league, season, startPage = None):
             breakflag = 0
             break
         print(f"---------------- {league} - {season} {page}page End--------------------------------")
+    driver.quit()
 
 insert_Price_To_Matchplan("england/premier-league",   "")
 insert_Price_To_Matchplan("spain/laliga",             "")

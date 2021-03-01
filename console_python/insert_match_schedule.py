@@ -23,14 +23,10 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 def switch_season(argument):
 	switcher = {
-	  "2019-2020": 12,
-	  "2019-2020-qualifikationsgruppe": 567,
-	  "2019-2020-meistergruppe": 145,
-	  "2019-2020-abstieg" : 86,
-	  "2019-2020-meisterschaft": 234, 
-	  "2020": 64,
-	  "2020-2021" : 799,
-
+	  
+		"2020": 64,
+		"2020-2021" : 799,
+		"2021"		: 844,
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):
@@ -287,10 +283,11 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 					val = (switch_season(season), switch_league(league),match_date, start_time,home_team_id, away_team_id,total_home_score , \
 						half_home_score,total_away_score , half_away_score, status)
 					mycursor.execute(sql, val)
+					last_match_id = mycursor.lastrowid
 					mydb.commit()
 					print("    1 completed game inserted, ID: ", mycursor.lastrowid, " in match_plan")
-					#print("    1 completed game inserted, ID:  in match_plan")
-					last_match_id = mycursor.lastrowid
+					
+					
 					sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 , c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {last_match_id}"
 					mycursor.execute(sql)
 					mydb.commit()
@@ -318,7 +315,10 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 					mycursor.execute(sql, val)
 					mydb.commit()
 					print("    1 planned game inserted, ID: ", mycursor.lastrowid, " in match_plan")
-					#print("    1 planned game inserted, ID:  in match_plan")
+					last_match_id = mycursor.lastrowid
+					sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 , c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {last_match_id}"
+					mycursor.execute(sql)
+					mydb.commit()
 
 			
 			print(f"------------------{season}-{league}- {i + 1}th Match process end --------------------")
@@ -778,8 +778,8 @@ def main():
 	doing_scraping_match_plan("2020-2021","por-primeira-liga")	
 	doing_scraping_match_plan("2020-2021","gre-super-league")
 	doing_scraping_match_plan("2020-2021","tur-sueperlig")
-	doing_scraping_match_plan("2020",	  "nor-eliteserien")
-	doing_scraping_match_plan("2020",	  "swe-allsvenskan")
+	# doing_scraping_match_plan("2021",	  "nor-eliteserien")
+	# doing_scraping_match_plan("2021",	  "swe-allsvenskan")
 	doing_scraping_match_plan("2020-2021","sui-super-league")
 	doing_scraping_match_plan("2020-2021","den-superliga")
 	doing_scraping_match_plan("2020-2021","ukr-premyer-liga")

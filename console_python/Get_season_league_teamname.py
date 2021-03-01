@@ -23,7 +23,8 @@ def switch_season(argument):
     switcher = {
       "2019-2020": 12,
       "2020": 795,
-      "2020-2021" : 799
+      "2020-2021" : 799,
+      "2021"    : 844
     }
     return switcher.get(argument, "null")
 def switch_league(argument):
@@ -40,7 +41,7 @@ def switch_league(argument):
         "por-liga-zon-sagres":14,
         "gre-super-league": 9,   #Greece
         "tur-sueperlig": 19,   #Turkey
-        "nor-eliteserien": 13,  #Norway
+        "nor-eliteserien": 13,  #Norway from 2020
         "nor-tippeligaen":13,
         "swe-allsvenskan": 17,  #Sweden
         "sui-super-league": 18,   #Swiztland
@@ -127,7 +128,8 @@ def insert_teamList(season=None, league=None):
         mydb.commit()
         print("insert season_league_team end!")
 
-insert_teamList("2020-2021","gre-super-league")
+insert_teamList("2021","nor-eliteserien")
+insert_teamList("2021","swe-allsvenskan")
 
 
 

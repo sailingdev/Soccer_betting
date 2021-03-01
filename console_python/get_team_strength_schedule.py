@@ -104,14 +104,9 @@ class MySQLPool(object):
 
 def switch_season(argument):
 	switcher = {
-	  "2019-2020": 12,
-	  "2019-2020-qualifikationsgruppe": 567,
-	  "2019-2020-meistergruppe": 145,
-	  "2019-2020-abstieg" : 86,
-	  "2019-2020-meisterschaft": 234, 
-	  "2020": 64,
-	  "2020-2021" : 799,
-
+		"2020": 64,
+		"2020-2021" : 799,
+		"2021" : 844
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):
