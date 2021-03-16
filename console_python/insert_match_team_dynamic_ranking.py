@@ -11,6 +11,7 @@ import json
 
 def switch_season(argument):
     switcher = {
+        "2021" : 844,
      "2020-2021": 799,
      "2019-2020": 12,
      "2020" : 64, 
@@ -536,8 +537,8 @@ def main():
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("gre-superleague",          "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2020-2021", "END")
-    insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "END")
-    insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "END")
     insert_match_team_dynamic_ranking_8("sui-super-league",         "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("den-superliga",            "2020-2021", "END")
     insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2020-2021", "END")
@@ -557,8 +558,8 @@ def main():
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2020-2021", "END")
     insert_match_team_dynamic_ranking_6("gre-superleague",          "2020-2021", "END")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2020-2021", "END")
-    insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "END")
-    insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "END")
     insert_match_team_dynamic_ranking_6("sui-super-league",         "2020-2021", "END")
     insert_match_team_dynamic_ranking_6("den-superliga",            "2020-2021", "END")
     insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2020-2021", "END")
@@ -578,8 +579,8 @@ def main():
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_8("gre-superleague",          "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2020-2021", "LIVE")
-    insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "LIVE")
-    insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "LIVE")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2020",      "LIVE")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2020",      "LIVE")
     insert_match_team_dynamic_ranking_8("sui-super-league",         "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_8("den-superliga",            "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2020-2021", "LIVE")
@@ -599,8 +600,8 @@ def main():
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_6("gre-superleague",          "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2020-2021", "LIVE")
-    insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "LIVE")
-    insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "LIVE")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2020",      "LIVE")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2020",      "LIVE")
     insert_match_team_dynamic_ranking_6("sui-super-league",         "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_6("den-superliga",            "2020-2021", "LIVE")
     insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2020-2021", "LIVE")

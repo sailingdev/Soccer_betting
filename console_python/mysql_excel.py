@@ -50,8 +50,7 @@ def fetch_historic_data_MO(table_name):
     "   INNER JOIN season_league_team_info AS g ON a.`season_id` = g.`season_id` AND a.`away_team_id` = g.`team_id`" \
     "   inner join date_week_map as h on a.date = h.date" \
     "   LEFT JOIN odds AS h8 ON a.`match_id` = h8.`match_id` AND h8.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Highest')" \
-    "   WHERE   (a.league_id = 1 OR a.league_id = 2 OR a.league_id = 3 OR a.league_id = 4 OR a.league_id = 5 OR a.league_id = 6 OR a.league_id = 7 OR a.league_id = 8 OR a.league_id = 9 OR a.league_id = 10 OR a.league_id = 11 OR a.league_id = 12 OR a.league_id = 13 OR a.league_id = 14" \
-    "   OR a.league_id = 15 OR a.league_id = 16 OR a.league_id = 17 OR a.league_id = 18 OR a.league_id = 19 OR a.league_id =20) AND a.status = 'END' ORDER BY a.`date`"
+    "   WHERE   (a.league_id <=20) AND a.status = 'END' ORDER BY a.`date`"
     #print(sql)
     cursor.execute(sql)
 
@@ -191,4 +190,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('historic_data_2021_01_15_02_MO')
+export('historic_data_2021_03_10_02_MO')

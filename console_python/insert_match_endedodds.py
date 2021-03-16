@@ -625,7 +625,7 @@ def getDate_from_trTxt(date_txt):
         date_part = date_txt.split(' ');
         return date_part[2] + "-" +switch_month(date_part[1]) + '-' + date_part[0]
 
-def insert_Price_To_Matchplan(league, season, startPage = None):
+def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None):
       
     driver = webdriver.Chrome(driverpath, options=chrome_options)
     current_season = False
@@ -681,9 +681,10 @@ def insert_Price_To_Matchplan(league, season, startPage = None):
                     
                     status = insert_odds(hrefUrl, match_date, team_text, current_season)              # get every match information
                     if current_season & (status == "No update"):
-                          print("     * No need to update , this is already inserted!")
-                          breakflag = 1
-                        #   break
+                            print("     * No need to update , this is already inserted!")
+                            breakflag = 1
+                            if breakFlag:
+                                break
                     
                     index += 1
                 else:
@@ -704,8 +705,10 @@ insert_Price_To_Matchplan("austria/tipico-bundesliga","")
 insert_Price_To_Matchplan("portugal/primeira-liga",   "")
 insert_Price_To_Matchplan("greece/super-league",      "")
 insert_Price_To_Matchplan("turkey/super-lig",         "")
-insert_Price_To_Matchplan("norway/eliteserien",       "")
-insert_Price_To_Matchplan("sweden/allsvenskan",       "")
+
+# insert_Price_To_Matchplan("norway/eliteserien",       "")
+# insert_Price_To_Matchplan("sweden/allsvenskan",       "")
+
 insert_Price_To_Matchplan("switzerland/super-league", "")
 insert_Price_To_Matchplan("denmark/superliga",        "")
 insert_Price_To_Matchplan("ukraine/premier-league",   "")

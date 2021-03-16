@@ -765,8 +765,10 @@ insert_Price_To_Matchplan("austria/tipico-bundesliga",  "")
 insert_Price_To_Matchplan("portugal/primeira-liga",     "")
 insert_Price_To_Matchplan("greece/super-league",        "")
 insert_Price_To_Matchplan("turkey/super-lig",           "")
-insert_Price_To_Matchplan("norway/eliteserien",         "")
-insert_Price_To_Matchplan("sweden/allsvenskan",         "")
+
+# insert_Price_To_Matchplan("norway/eliteserien",         "")
+# insert_Price_To_Matchplan("sweden/allsvenskan",         "")
+
 insert_Price_To_Matchplan("switzerland/super-league",   "")
 insert_Price_To_Matchplan("denmark/superliga",          "")
 insert_Price_To_Matchplan("ukraine/premier-league",     "")
