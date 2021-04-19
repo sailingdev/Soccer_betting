@@ -634,13 +634,13 @@ def make_schedule_ofToday():
 		(hour, min) = match_time.split(':')
 		hour = int(hour) - 1
 		min = int(min)
+		
 		time_tuple = (year, month, day , hour, min, 0, 0, 0 , 0)
 
 		schedule_time = time.mktime(time_tuple)
 		scheduler.enterabs(schedule_time , 1 , get_team_strength_threading, (match_id, ));
 		print("# Schedule created for ", match_time, match_id)
 	scheduler.run()
-
 
 def main():
     

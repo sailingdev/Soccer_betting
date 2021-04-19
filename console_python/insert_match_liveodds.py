@@ -754,6 +754,7 @@ def insert_Price_To_Matchplan(league, season):
             else:
                 print("        * Cant find match")
     print(f"---------------- {league} -  End--------------------------------")
+    driver.quit()
 
 insert_Price_To_Matchplan("england/premier-league",     "")
 insert_Price_To_Matchplan("spain/laliga",               "")
@@ -761,16 +762,14 @@ insert_Price_To_Matchplan("germany/bundesliga",         "")
 insert_Price_To_Matchplan("italy/serie-a",              "")
 insert_Price_To_Matchplan("france/ligue-1",             "")
 insert_Price_To_Matchplan("netherlands/eredivisie",     "")
-insert_Price_To_Matchplan("austria/tipico-bundesliga",  "")
+# insert_Price_To_Matchplan("austria/tipico-bundesliga",  "")
 insert_Price_To_Matchplan("portugal/primeira-liga",     "")
-insert_Price_To_Matchplan("greece/super-league",        "")
+# insert_Price_To_Matchplan("greece/super-league",        "")
 insert_Price_To_Matchplan("turkey/super-lig",           "")
-
 # insert_Price_To_Matchplan("norway/eliteserien",         "")
-# insert_Price_To_Matchplan("sweden/allsvenskan",         "")
-
+insert_Price_To_Matchplan("sweden/allsvenskan",         "")
 insert_Price_To_Matchplan("switzerland/super-league",   "")
-insert_Price_To_Matchplan("denmark/superliga",          "")
+# insert_Price_To_Matchplan("denmark/superliga",          "")
 insert_Price_To_Matchplan("ukraine/premier-league",     "")
 insert_Price_To_Matchplan("bulgaria/parva-liga",        "")
 insert_Price_To_Matchplan("czech-republic/1-liga",      "")
