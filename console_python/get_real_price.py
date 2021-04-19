@@ -161,6 +161,7 @@ def insert_pricetable():
 def get_Team_Cream_text(team_id , season_title):
 	season_title = season_title.replace('/', '-')
 	sql = f"SELECT `{season_title}` from cream_team_list where team_id = {team_id}"
+	
 	mycursor.execute(sql)
 	result = mycursor.fetchone()
 	if result:
@@ -226,7 +227,7 @@ def insert_real_prcie_to_realpriceTable( C_weeknumber):
 	print(f" -week {C_weeknumber} inserted count is {count}")
 	############################################################################
 	
-def insert_real_price_id_toSeasonMatchPlanTable(week_number):
+def update_real_price_id_toSeasonMatchPlanTable(week_number):
 	print(f" - W{week_number} start !")
 	count = 0
 	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
@@ -259,20 +260,21 @@ def insert_real_price_id_toSeasonMatchPlanTable(week_number):
 
 	print(f" - W{week_number} - updated {count} : END !")
 
-def get_realprice_toRealPriceTable_perweek():
+def get_realprice_toRealPriceTable_perweek(weeknumber):
 	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
 	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
-    insert_real_prcie_to_realpriceTable(586)								# completed by 585 . param shoulb be current continuous week.
+    insert_real_prcie_to_realpriceTable(weeknumber)								#  param shoulb be current continuous week.
 
 
-def matching_realpriceid_toSeasonMatchPlanColumn():
+def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
 	# for C_weeknumber in range(478, 546):
 	# 	insert_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
-	insert_real_price_id_toSeasonMatchPlanTable(586)						# completed by 585 . param shoulb be current continuous week.
+	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
 
 def main():
-	get_realprice_toRealPriceTable_perweek()
-	matching_realpriceid_toSeasonMatchPlanColumn()
+	weeknumber = 591
+	get_realprice_toRealPriceTable_perweek(weeknumber)							# completed by 591 .
+	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	
 if __name__ == "__main__":
 	main()
