@@ -75,7 +75,6 @@ def switch_month(argument):
        
     }
     return switcher.get(argument, "null")
-
 def switch_season(argument):
     switcher = {
         "2019-2020": 12,

@@ -247,7 +247,7 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 		dcl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text + str(result[4]) + ' v ' + str(result[5])
 
 		query_sql = f"select id from real_price_dcl where refer = '{dcl_refer_txt}' and c_week_number = {week_number}"
-		#print(query_sql)
+		# print(query_sql)
 		mycursor.execute(query_sql)
 		price_id = mycursor.fetchone()
 
@@ -267,13 +267,13 @@ def get_realprice_toRealPriceTable_perweek(weeknumber):
 
 
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
-	# for C_weeknumber in range(478, 546):
-	# 	insert_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
+	# for C_weeknumber in range(275, 592):
+	# 	update_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 591
-	get_realprice_toRealPriceTable_perweek(weeknumber)							# completed by 591 .
+	weeknumber = 594
+	get_realprice_toRealPriceTable_perweek(weeknumber)							# completed by 594 - 2021-05-04 .
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	
 if __name__ == "__main__":

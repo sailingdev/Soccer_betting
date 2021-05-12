@@ -25,6 +25,7 @@ def switch_season(argument):
 	  "2020-2021" : 799,
 	  "2019-2020": 12,
 	  "2020" : 64, 
+	  "2021" : 844,
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):
@@ -459,7 +460,7 @@ def get_totalPageCount_onPlayerPage(season, league):
 
 def main():
 	season = "2020-2021"
-	# season = "2020"
+	# season = "2021"
 	
 	league_list_1 = [
 		"esp-primera-division" ,
@@ -484,7 +485,7 @@ def main():
 		"srb-super-liga"    
 		 ]
 	league_list_2 = [
-		"nor-eliteserien" ,  			#Norway
+		# "nor-eliteserien" ,  			#Norway
 		"swe-allsvenskan"   			#Sweden
 	]
 	for league in league_list_1:
