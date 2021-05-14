@@ -27,6 +27,7 @@ def switch_season(argument):
 		"2020": 64,
 		"2020-2021" : 799,
 		"2021"		: 844,
+		'2021-2022' : 857,
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):

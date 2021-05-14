@@ -140,9 +140,8 @@ def fetch_historic_data_AH(table_name):
     "   INNER JOIN season_league_team_info AS f ON a.`season_id` = f.`season_id` AND a.`home_team_id` = f.`team_id`" \
     "  INNER JOIN season_league_team_info AS g ON a.`season_id` = g.`season_id` AND a.`away_team_id` = g.`team_id`" \
     "  LEFT JOIN odds AS h2 ON a.`match_id` = h2.`match_id` AND h2.`bookmaker_id` = (SELECT id FROM bookmakers WHERE bookmaker_name = 'Highest')" \
-    "   inner join date_week_map as h on a.date = h.date" \
-    "WHERE   (a.league_id = 1 OR a.league_id = 2 OR a.league_id = 3 OR a.league_id = 4 OR a.league_id = 5 OR a.league_id = 6 OR a.league_id = 7 OR a.league_id = 8 OR a.league_id = 9 OR a.league_id = 10 OR a.league_id = 11 OR a.league_id = 12 OR a.league_id = 13 OR a.league_id = 14" \
-    " OR a.league_id = 15 OR a.league_id = 16 OR a.league_id = 17 OR a.league_id = 18 OR a.league_id = 19 OR a.league_id =20) AND a.status = 'END' ORDER BY a.`date`"
+    "   INNER JOIN date_week_map as h on a.date = h.date" \
+    "   WHERE   (a.league_id <=20) AND a.status = 'END' ORDER BY a.`date`"
 
     cursor.execute(sql)
 
@@ -165,7 +164,7 @@ def export(table_name):
     header_cell_format = workbook.add_format({'bold': True, 'border': True, 'bg_color': 'green'})
     body_cell_format = workbook.add_format({'border': True})
 
-    header, rows = fetch_historic_data_MO(table_name)
+    header, rows = fetch_historic_data_AH(table_name)
 
     row_index = 0
     column_index = 0
@@ -190,4 +189,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('historic_data_2021_04_23_MO')
+export('historic_data_2021_05_13_AH')

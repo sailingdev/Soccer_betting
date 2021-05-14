@@ -12,6 +12,7 @@ import json
 def switch_season(argument):
     switcher = {
     "2021" : 844,
+    '2021-2022' : 857,
      "2020-2021": 799,
      "2019-2020": 12,
      "2020" : 64, 

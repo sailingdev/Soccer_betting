@@ -106,7 +106,8 @@ def switch_season(argument):
 	switcher = {
 		"2020": 64,
 		"2020-2021" : 799,
-		"2021" : 844
+		"2021" : 844 ,
+		'2021-2022' : 857,
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):
@@ -377,7 +378,6 @@ def get_strength(score):
 	if (score >= 21100):
 		return "Strong"
  
-
 def get_player_id(player_name, player_href, team_id):
 	url = "https://www.worldfootball.net" + player_href	
 	player_adding_info = get_more_player_info(url , player_name)
@@ -551,7 +551,6 @@ def add_extra_player(player_name, player_adding_info, team_id):
 	mydb.commit()
 	#print("new player added - soccer ", player_name, player_birthday)
 	return mycursor.lastrowid
-
 
 def convert_strDate_sqlDateFormat(str_date):
 	#  23/10/2020  - > 2020-10-23

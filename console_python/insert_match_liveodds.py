@@ -65,7 +65,8 @@ def switch_season(argument):
     switcher = {
         "2019-2020": 12,
         "2020" : 64,
-        "2021" : 844
+        "2021" : 844 ,
+        '2021-2022' : 857,
     }
     return switcher.get(argument, "null")
 def switch_league(argument):
@@ -196,25 +197,20 @@ def insert_update_odds(basic_match_href_url, match_date, team_text):
     else:
         print("        # Can't find team_id in team_list.")
     
+# function for scraping MO, O/U, AH odds of following matches    
 def get_odds(turl, OU_url , AH_url):
-    odd_price = {"3way": {}, "O/U": {} , "AH": {}}
-   
-    highest_list = [] 
-   
+    odd_price = {"3way": {}, "O/U": {} , "AH": {}} 
+    highest_list = []   
     ################################ driver setting part start############################
     driver1 = webdriver.Chrome(driverpath,options=chrome_options)
     
-   
     ################################ driver setting part End #############################`
     print("        * start scraping 1X2 data --------------------")
-    
     driver1.get(turl)
     time.sleep(1)
     #################################################################################
     tfoot = driver1.find_elements_by_tag_name('tfoot')
-   
     high_elemnet = tfoot[0].find_element_by_class_name("highest")
-     
     if high_elemnet:
         av_values = high_elemnet.find_elements_by_class_name("right")
         if len(av_values) > 2:
