@@ -76,7 +76,7 @@ updated_count = 0
 def insert_match_team_socre_strength_TPGR():
 	global updated_count
 	
-	sql = f"SELECT  * FROM season_match_plan where match_id BETWEEN 53859 and 59579"
+	sql = f"SELECT  * FROM season_match_plan where match_id BETWEEN 53859 and 62000"
 	
 	mycursor.execute(sql)
 	wholeMatchResult = mycursor.fetchall()
