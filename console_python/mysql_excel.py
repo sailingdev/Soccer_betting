@@ -14,6 +14,7 @@ def fetch_historic_data_MO(table_name):
     cursor = cnx.cursor()
     sql = "SELECT e.`league_title` AS League,d.`season_title`AS Season, DATE_FORMAT(a.`date`, '%Y-%m-%d') AS DATE , h.week as WN , " \
     " CONCAT(b.`team_name` , ' :: ', c.`team_name` ) AS Game ,  " \
+    " CONCAT ( (SELECT IF ((SELECT cream_status FROM cream_team_list  WHERE team_id = a.home_team_id and season_id = a.season_id) != 'Non-Cream',(SELECT cream_status FROM cream_team_list WHERE team_id = a.home_team_id and season_id = a.season_id) ,'Non-Cream' )), ' v ' , (SELECT IF ((SELECT cream_status FROM cream_team_list WHERE team_id = a.away_team_id and season_id = a.season_id) != 'Non-Cream',(SELECT cream_status FROM cream_team_list WHERE team_id = a.away_team_id and season_id = a.season_id ) ,'Non-Cream' ))) AS cream_status ," \
     "CONCAT(a.`total_home_score` , ' :: ', a.`total_away_score`) AS Score, " \
     "b.`team_name` AS Home_team_name, " \
     "a.`Home_TGPR` AS Home_TGPR, " \
@@ -76,6 +77,7 @@ def fetch_historic_data_AH(table_name):
     cursor = cnx.cursor()
     sql = "SELECT e.`league_title` AS League,d.`season_title`AS Season, DATE_FORMAT(a.`date`, '%Y-%m-%d') AS DATE , h.week as WN  ," \
     " CONCAT(b.`team_name` , ' :: ', c.`team_name` ) AS Game ,  " \
+    " CONCAT ( (SELECT IF ((SELECT cream_status FROM cream_team_list  WHERE team_id = a.home_team_id and season_id = a.season_id) != 'Non-Cream',(SELECT cream_status FROM cream_team_list WHERE team_id = a.home_team_id and season_id = a.season_id) ,'Non-Cream' )), ' v ' , (SELECT IF ((SELECT cream_status FROM cream_team_list WHERE team_id = a.away_team_id and season_id = a.season_id) != 'Non-Cream',(SELECT cream_status FROM cream_team_list WHERE team_id = a.away_team_id and season_id = a.season_id ) ,'Non-Cream' ))) AS cream_status ," \
     "CONCAT(a.`total_home_score` , ' :: ', a.`total_away_score`) AS Score, " \
     "b.`team_name` AS Home_team_name, " \
     "a.`Home_TGPR` AS Home_TGPR, " \
@@ -164,7 +166,7 @@ def export(table_name):
     header_cell_format = workbook.add_format({'bold': True, 'border': True, 'bg_color': 'green'})
     body_cell_format = workbook.add_format({'border': True})
 
-    header, rows = fetch_historic_data_AH(table_name)
+    header, rows = fetch_historic_data_MO(table_name)
 
     row_index = 0
     column_index = 0
@@ -189,4 +191,4 @@ def export(table_name):
 
 
 # Tables to be exported
-export('historic_data_2021_05_13_AH')
+export('historic_data_2021_05_17_MO')
