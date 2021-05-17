@@ -158,9 +158,8 @@ def insert_pricetable():
 			mydb.commit();
 			print(f'inserted id  - {id}')
 
-def get_Team_Cream_text(team_id , season_title):
-	season_title = season_title.replace('/', '-')
-	sql = f"SELECT `{season_title}` from cream_team_list where team_id = {team_id}"
+def get_Team_Cream_text(team_id , season_id):
+	sql = f"SELECT cream_status from cream_team_list where team_id = {team_id} and season_id = {season_id}"
 	
 	mycursor.execute(sql)
 	result = mycursor.fetchone()
@@ -173,7 +172,7 @@ def get_Team_Cream_text(team_id , season_title):
 		return 'Non-Cream'
 
 def get_dcl_source_list(c_weeknumber):
-	sql = f"SELECT b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64) AND a.c_WN < {c_weeknumber}"
+	sql = f"SELECT b.league_title, home_team_id, away_team_id, D_Home_ranking_8, D_Away_ranking_8, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64) AND a.c_WN < {c_weeknumber}"
 	mycursor.execute(sql)
 	matches = mycursor.fetchall()
 	source_list = []
@@ -231,7 +230,7 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 	print(f" - W{week_number} start !")
 	count = 0
 	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, " \
-    f"a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
+    f"a.D_Away_ranking_8 , season_id FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
 
 	#sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id, a.D_Home_ranking_8, a.D_Away_ranking_8 , c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE STATUS = 'END' AND c_WN = {week_number}"
 
@@ -272,7 +271,7 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 594
+	weeknumber = 595
 	get_realprice_toRealPriceTable_perweek(weeknumber)							# completed by 594 - 2021-05-04 .
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	

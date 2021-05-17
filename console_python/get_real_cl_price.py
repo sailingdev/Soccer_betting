@@ -158,9 +158,9 @@ def insert_pricetable():
 			mydb.commit();
 			print(f'inserted id  - {id}')
 
-def get_Team_Cream_text(team_id , season_title):
-	season_title = season_title.replace('/', '-')
-	sql = f"SELECT `{season_title}` from cream_team_list where team_id = {team_id}"
+def get_Team_Cream_text(team_id , season_id):
+	
+	sql = f"SELECT cream_status from cream_team_list where team_id = {team_id} and season_id = {season_id}"
 	
 	mycursor.execute(sql)
 	result = mycursor.fetchone()
@@ -174,7 +174,7 @@ def get_Team_Cream_text(team_id , season_title):
 
 # MO Cream League combination list of matches from start to cweeknumber
 def get_CreamLeague_MO_source_list(c_weeknumber):
-	sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
+	sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id  WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
 	mycursor.execute(sql)
 	matches = mycursor.fetchall()
 	source_list = []
@@ -205,7 +205,7 @@ def get_CreamLeague_MO_source_list(c_weeknumber):
 # AH Cream League combination list of matches
 def get_CreamLeague_AH_source_list(c_weeknumber):
     # {'-2' : [['refer_text', win, lose,flat, half_win, half_lose],['refer_text', win, lose, flat,half_win, half_lose]], '-1.75':[]}
-    sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, c.season_title FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id INNER JOIN season as c on a.season_id = c.season_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
+    sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
     mycursor.execute(sql)
     matches = mycursor.fetchall()
     result_list = {'-2': [], '-1.75':[]}
@@ -239,6 +239,173 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
             elem_list = [cl_refer_txt, 1, 0, 0 ,0, 0]
         print("    -1.75 market: ", elem_list)
         result_list['-1.75'].append(elem_list)
+
+         # getting -1.5 Market list
+        AH_1d5_check_value = match[3] - match[4] - 1.5
+        if AH_1d5_check_value > 0:             #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_1d5_check_value < 0:            # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]  
+        else:                                       # flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]
+        print("    -1.5 market: ", elem_list)
+        result_list['-1.5'].append(elem_list)
+
+        # getting -1.25 Market list
+        AH_1d25_check_value = match[3] - match[4] - 1.25
+        if AH_1d25_check_value > 0:             #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_1d25_check_value  ==  -0.25:            # half lose
+            elem_list = [cl_refer_txt, 0, 0, 0 ,0 , 1]  
+        else:                                       # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    -1.25 market: ", elem_list)
+        result_list['-1.25'].append(elem_list)
+
+        # getting -1 Market list
+        AH_1_check_value = match[3] - match[4] - 1
+        if AH_1_check_value > 0:             #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_1_check_value  ==  0:            #  lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0 , 0]  
+        else:                                       # flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]
+        print("    -1 market: ", elem_list)
+        result_list['-1'].append(elem_list)
+
+        # getting -0.75 Market list
+        AH_0d75_check_value = match[3] - match[4] - 0.75
+        if AH_0d75_check_value > 0.25:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_0d75_check_value  ==  0.25:                #  half win
+            elem_list = [cl_refer_txt, 0, 0, 0 ,1, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    -0.75 market: ", elem_list)
+        result_list['-0.75'].append(elem_list)
+
+         # getting -0.5 Market list
+        AH_0d5_check_value = match[3] - match[4] - 0.5
+        if AH_0d5_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_0d5_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    -0.5 market: ", elem_list)
+        result_list['-0.5'].append(elem_list)
+
+        # getting -0.25 Market list
+        AH_0d25_check_value = match[3] - match[4] - 0.25
+        if AH_0d25_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_0d25_check_value  ==  -0.25:                #  half lose
+            elem_list = [cl_refer_txt, 0, 0, 0 ,0, 1]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    -0.25 market: ", elem_list)
+        result_list['-0.25'].append(elem_list)
+
+        # getting 0 Market list
+        AH_0_check_value = match[3] - match[4]
+        if AH_0_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_0_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    0 market: ", elem_list)
+        result_list['0'].append(elem_list)
+
+        # getting +0.25 Market list
+        AH_p0d25_check_value = match[3] - match[4] + 0.25
+        if AH_p0d25_check_value > 0.25:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p0d25_check_value  ==  0.25:                #  half win
+            elem_list = [cl_refer_txt, 0, 0, 0 ,1, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +0.25 market: ", elem_list)
+        result_list['+0.25'].append(elem_list)
+
+        # getting +0.5 Market list
+        AH_p0d5_check_value = match[3] - match[4] + 0.5
+        if AH_p0d5_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p0d5_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +0.5 market: ", elem_list)
+        result_list['+0.5'].append(elem_list)
+
+        # getting +0.75 Market list
+        AH_p0d75_check_value = match[3] - match[4] + 0.75
+        if AH_p0d75_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p0d75_check_value  ==  -0.25:                #  hlaf lose
+            elem_list = [cl_refer_txt, 0, 0, 0 ,0, 1]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +0.75 market: ", elem_list)
+        result_list['+0.75'].append(elem_list)
+
+        # getting +1 Market list
+        AH_p1_check_value = match[3] - match[4] + 1
+        if AH_p1_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p1_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +1 market: ", elem_list)
+        result_list['+1'].append(elem_list)
+
+        # getting +1.25 Market list
+        AH_p1d25_check_value = match[3] - match[4] + 1.25
+        if AH_p1d25_check_value > 0.25:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p1d25_check_value  ==  0.25:                #  half win
+            elem_list = [cl_refer_txt, 0, 0, 0 ,1, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +1.25 market: ", elem_list)
+        result_list['+1.25'].append(elem_list)
+
+        # getting +1.5 Market list
+        AH_p1d5_check_value = match[3] - match[4] + 1.5
+        if AH_p1d5_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p1d5_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +1.5 market: ", elem_list)
+        result_list['+1.5'].append(elem_list)
+
+        # getting +1.75 Market list
+        AH_p1d75_check_value = match[3] - match[4] + 1.75
+        if AH_p1d75_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p1d75_check_value  ==  -0.25:                #  hlaf lose
+            elem_list = [cl_refer_txt, 0, 0, 0 ,0, 1]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +1.75 market: ", elem_list)
+        result_list['+1.75'].append(elem_list)
+
+        # getting +2 Market list
+        AH_p1d5_check_value = match[3] - match[4] + 2
+        if AH_p1d5_check_value > 0:                     #  win
+            elem_list = [cl_refer_txt, 1, 0, 0 , 0, 0]
+        elif AH_p1d5_check_value  ==  0:                #  flat
+            elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]  
+        else:                                           # lose
+            elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
+        print("    +2 market: ", elem_list)
+        result_list['+2'].append(elem_list)
+
+        print(" ")
         
         
 
@@ -265,10 +432,10 @@ def insert_real_prcie_to_MO_realpriceTable( C_weeknumber):
 		elem = item[1]
 		total = elem[0] + elem[1] + elem[2]
 		if total > 9:
-			# sql = f"insert into real_price_cl (refer,c_week_number, total, H, D, A, H_price, D_price, A_price) " \
-			# 	f"values('{refer}',  {C_weeknumber}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
-			# mycursor.execute(sql);
-			# mydb.commit();
+			sql = f"insert into real_mo_price_cl (refer,c_week_number, total, H, D, A, H_price, D_price, A_price) " \
+				f"values('{refer}',  {C_weeknumber}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
+			mycursor.execute(sql);
+			mydb.commit();
 			count += 1
 			print(f"       -week {C_weeknumber} insert item - {refer}, H: {elem[0]}, D: {elem[1]}, A: {elem[2]}, Total: {total}")
 	print(f" -week {C_weeknumber} inserted count is {count}")
@@ -278,41 +445,47 @@ def insert_real_prcie_to_MO_realpriceTable( C_weeknumber):
 def insert_real_prcie_to_AH_realpriceTable(weeknumber):
     source_list = get_CreamLeague_AH_source_list(weeknumber)
     
-    AH_2_source_list = source_list['-2']
-    # get merged cl AH combination 
-    merged = defaultdict(lambda: [0, 0, 0,  0, 0])
-    for refer_text, *values in AH_2_source_list:               
-        merged[refer_text] = [sum(i) for i in zip(values, merged[refer_text])]
-    print("-----length of grouped list is ", len(merged))
+    for market, each_AH_source_list in source_list.items():
+        
+        merged = defaultdict(lambda: [0, 0, 0,  0, 0])
+        for refer_text, *values in each_AH_source_list:               
+            merged[refer_text] = [sum(i) for i in zip(values, merged[refer_text])]
+        print("-----length of grouped list is ", len(merged))
 
-    # merge format: [['refer_text': [10, 200, 300],['refer_text': [10, 200, 300]]
-    # insert real_price_cl table
-    count= 0
-    for item in merged.items(): 
-        refer = item[0]
-        elem = item[1]
-        total_win = elem[0] + elem[3] /2
-        total_lose = elem[1] + elem[4] /2
-        total = (sum(i) for i in elem)
-        if total > 9:
-            # sql = f"insert into real_price_cl (refer,c_week_number, total, H, D, A, H_price, D_price, A_price) " \
-            # 	f"values('{refer}',  {weeknumber}, {total} , {elem[0]}, {elem[1]}, {elem[2]}, {round(total / elem[0] , 2) if elem[0] > 0 else 0} ,{round(total / elem[1] , 2) if elem[1] > 0 else 0},{round(total / elem[2] , 2) if elem[2] > 0 else 0} )"
-            # mycursor.execute(sql);
-            # mydb.commit();
+        # merge format: [['refer_text': [10, 200, 300],['refer_text': [10, 200, 300]]
+        # insert real_price_cl table
+        count= 0
+        for item in merged.items(): 
+            refer = item[0]
+            elem = item[1]
+            total_win = elem[0] + elem[3] /2
+            total_lose = elem[1] + elem[4] /2
+            total = elem[0] + elem[1] + elem[2] + elem[3] + elem[4]
+
+            if len(market) < 3:             # -2, -1, 0 , +1, +2 grand_total = win + lose
+                grand_total = elem[0] + elem[1]
+            else:                           # -1.75, -1.5 ... grand_total = win + lose + half_win or half_lose
+                grand_total = total
+
+            if total > 9:
+                sql = f"insert into real_ah_price_cl (refer,c_week_number, market , win,lose, flat, half_win, half_lose, total_win, total_lose, grand_total, home_prob, home_price, away_prob, away_price) " \
+                	f"values('{refer}',  {weeknumber}, {market}, {elem[0]}, {elem[1]}, {elem[2]}, {elem[3]}, {elem[4]}, {total_win}, {total_lose}, {grand_total}, " \
+                    f"{round(total_win * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_win , 2) if total_win> 0 else 0},{round(total_lose * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_lose , 2) if total_win> 0 else 0})"
+                mycursor.execute(sql);
+                mydb.commit();
             count += 1
-            print(f"       -week {weeknumber} insert item - {refer}, win: {elem[0]}, lose: {elem[1]}, flat: {elem[2]}, half_win: {elem[3]}, half_lose: {elem[4]}, total: {total}")
-    print(f" -week {weeknumber} inserted count is {count}")
-
-
+            print(f"       -week {weeknumber} AH {market} insert item - {refer}, win: {elem[0]}, lose: {elem[1]}, flat: {elem[2]}, half_win: {elem[3]}, half_lose: {elem[4]}, total: {total}")
+        
+        print(f" -week {weeknumber} inserted count is {count}")
 
 #update real_price_cl id of each match in season_match_plan
-def update_real_price_id_toSeasonMatchPlanTable(week_number):
+def update_real_mo_price_id_toSeasonMatchPlanTable(week_number):
 	print(f" - W{week_number} start !")
 	count = 0
 
     # getting the matches of this week
 	sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id,  " \
-    f" c.season_title FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id INNER JOIN season AS c ON a.season_id = c.season_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
+    f" season_id FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
 	mycursor.execute(sql)
 	results = mycursor.fetchall()
     
@@ -326,12 +499,12 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 		away_cream_text = get_Team_Cream_text(result[3], result[4])
 		cl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text
 
-		query_sql = f"select id from real_price_cl where refer = '{cl_refer_txt}' and c_week_number = {week_number}"
+		query_sql = f"select id from real_mo_price_cl where refer = '{cl_refer_txt}' and c_week_number = {week_number}"
 		mycursor.execute(query_sql)
 		price_id = mycursor.fetchone()
 
 		if price_id:
-			update_sql = f"update season_match_plan set CL_refer_id = {price_id[0]} where match_id = {match_id}"
+			update_sql = f"update season_match_plan set CL_mo_refer_id = {price_id[0]} where match_id = {match_id}"
 			mycursor.execute(update_sql)
 			mydb.commit()
 			print(f"  W{week_number} - update one match id {match_id}")
@@ -339,27 +512,62 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 
 	print(f" - W{week_number} - updated {count} : END !")
 
-# real price data (refer, H D, A) into real price table
+
+def update_real_AH_price_id_toSeasonMatchPlanTable(week_number):
+    print(f" - W{week_number} start !")
+    count = 0
+
+    # getting the matches of this week
+    sql = f"SELECT match_id, b.league_title, home_team_id, away_team_id,  " \
+    f" season_id FROM season_match_plan AS a INNER JOIN league AS b ON a.league_id = b.league_id WHERE (STATUS = 'END' or STATUS = 'LIVE') AND c_WN = {week_number}"
+    mycursor.execute(sql)
+    results = mycursor.fetchall()
+
+
+    if len(results) == 0:
+        print(f"  There are not available games in {week_number} week!")
+    for result in results:
+        league_title = result[1]
+        match_id = result[0]
+        home_cream_text = get_Team_Cream_text(result[2], result[4])
+        away_cream_text = get_Team_Cream_text(result[3], result[4])
+        cl_refer_txt = league_title + home_cream_text + ' v ' + away_cream_text
+
+        query_sql = f"select id from real_ah_price_cl where refer = '{cl_refer_txt}' and c_week_number = {week_number}"
+        mycursor.execute(query_sql)
+        price_id = mycursor.fetchone()
+
+        if price_id:
+            update_sql = f"update season_match_plan set CL_ah_refer_id = {price_id[0]} where match_id = {match_id}"
+            mycursor.execute(update_sql)
+            mydb.commit()
+            print(f"  W{week_number} - update one match id {match_id}")
+            count += 1
+
+    print(f" - W{week_number} - updated {count} : END !")
+
+# real price data of MO and AH into real price table
 def get_realprice_toRealPriceTable_perweek(weeknumber):
-	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
-	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
-    
-    # insert refer MO data into real_price_cl table, param should be current continuous week.
+	for C_weeknumber in range(555, 596):                                  # 275 = 2015-04-01 546 = 2020-06-14 , 578 = 2021-01-21
+	    insert_real_prcie_to_MO_realpriceTable(C_weeknumber)
+        # insert_real_prcie_to_MO_realpriceTable(C_weeknumber)
+        
     # insert_real_prcie_to_MO_realpriceTable(weeknumber)	
 
-    # insert refer  AH data into real_price_cl table, param should be current continuous week.
-    insert_real_prcie_to_AH_realpriceTable(weeknumber)							
+    # insert_real_prcie_to_AH_realpriceTable(weeknumber)							
 
 # insert real_price id of each match into season_match_plan
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
-	# for C_weeknumber in range(275, 592):
-	# 	update_real_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
-	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
+	for C_weeknumber in range(555, 596):
+		update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
+        # update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)
+        
+	# update_real_mo_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 591
+	weeknumber = 595
 	get_realprice_toRealPriceTable_perweek(weeknumber)							
-	# matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
+	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	
 if __name__ == "__main__":
 	main()
