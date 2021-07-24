@@ -870,7 +870,7 @@ def main():
 	doing_scraping_match_plan("2020-2021","esp-primera-division")   # maximum 380 - 10 * 38
 	doing_scraping_match_plan("2020-2021","aut-bundesliga")			# maximum 132 - 6 * 22
 	doing_scraping_match_plan("2020-2021","eng-premier-league")		# maximum 380 - 10 * 38
-	doing_scraping_match_plan("2020-2021","bul-parva-liga")			# maximum 182 - 7 * 26 
+	# doing_scraping_match_plan("2020-2021","bul-parva-liga")			# maximum 182 - 7 * 26 
 	doing_scraping_match_plan("2020-2021","fra-ligue-1")			# maximum 380 -  38 * 10
 	doing_scraping_match_plan("2020-2021","ned-eredivisie")			# maximum 306 -  9 * 34
 	doing_scraping_match_plan("2020-2021","bundesliga")				# maximum 306 -  9 * 34

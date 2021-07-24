@@ -174,7 +174,7 @@ def get_Team_Cream_text(team_id , season_id):
 
 # MO Cream League combination list of matches from start to cweeknumber
 def get_CreamLeague_MO_source_list(c_weeknumber):
-	sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id  WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
+	sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id  WHERE STATUS = 'END' and (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
 	mycursor.execute(sql)
 	matches = mycursor.fetchall()
 	source_list = []
@@ -208,7 +208,7 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
     sql = f"SELECT b.league_title, home_team_id, away_team_id, total_home_score, total_away_score, season_id FROM season_match_plan as a INNER JOIN league as b on a.league_id = b.league_id WHERE STATUS = 'END' AND (a.season_id < 19 OR a.season_id = 799 OR a.season_id = 64 or a.season_id = 844 or a.season_id = 857) AND a.c_WN < {c_weeknumber} AND a.status = 'END'"
     mycursor.execute(sql)
     matches = mycursor.fetchall()
-    result_list = {'-2': [], '-1.75':[]}
+    result_list = {'-2': [] ,'-1.75':[] ,'-1.5':[] ,'-1.25':[] ,'-1':[] ,'-0.75':[] ,'-0.5':[] ,'-0.25':[] ,'0':[] ,'+0.25':[] ,'+0.5':[] ,'+0.75':[] ,'+1':[] ,'+1.25':[] ,'+1.5':[] ,'+1.75':[] ,'+2':[] }
     for match in matches:
         league_title = match[0]
         home_cream_text = get_Team_Cream_text(match[1], match[5])
@@ -226,7 +226,7 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
             elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
         else:                                       # flat
             elem_list = [cl_refer_txt, 0, 0, 1, 0, 0]
-        print("    -2 market: ", elem_list)
+        print("    -2 market:       ", elem_list)
         result_list['-2'].append(elem_list)
 
         # getting -1.75 Market list
@@ -237,7 +237,7 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
             elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]  
         else:                                       # win
             elem_list = [cl_refer_txt, 1, 0, 0 ,0, 0]
-        print("    -1.75 market: ", elem_list)
+        print("    -1.75 market:   ", elem_list)
         result_list['-1.75'].append(elem_list)
 
          # getting -1.5 Market list
@@ -248,7 +248,7 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
             elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]  
         else:                                       # flat
             elem_list = [cl_refer_txt, 0, 0, 1 ,0, 0]
-        print("    -1.5 market: ", elem_list)
+        print("    -1.5 market:   ", elem_list)
         result_list['-1.5'].append(elem_list)
 
         # getting -1.25 Market list
@@ -259,7 +259,7 @@ def get_CreamLeague_AH_source_list(c_weeknumber):
             elem_list = [cl_refer_txt, 0, 0, 0 ,0 , 1]  
         else:                                       # lose
             elem_list = [cl_refer_txt, 0, 1, 0 ,0, 0]
-        print("    -1.25 market: ", elem_list)
+        print("    -1.25 market:  ", elem_list)
         result_list['-1.25'].append(elem_list)
 
         # getting -1 Market list
@@ -440,11 +440,10 @@ def insert_real_prcie_to_MO_realpriceTable( C_weeknumber):
 			print(f"       -week {C_weeknumber} insert item - {refer}, H: {elem[0]}, D: {elem[1]}, A: {elem[2]}, Total: {total}")
 	print(f" -week {C_weeknumber} inserted count is {count}")
 	
-	
 # AH real price data into real_ah_price table
 def insert_real_prcie_to_AH_realpriceTable(weeknumber):
-    source_list = get_CreamLeague_AH_source_list(weeknumber)
     
+    source_list = get_CreamLeague_AH_source_list(weeknumber)
     for market, each_AH_source_list in source_list.items():
         
         merged = defaultdict(lambda: [0, 0, 0,  0, 0])
@@ -469,8 +468,8 @@ def insert_real_prcie_to_AH_realpriceTable(weeknumber):
 
             if total > 9:
                 sql = f"insert into real_ah_price_cl (refer,c_week_number, market , win,lose, flat, half_win, half_lose, total_win, total_lose, grand_total, home_prob, home_price, away_prob, away_price) " \
-                	f"values('{refer}',  {weeknumber}, {market}, {elem[0]}, {elem[1]}, {elem[2]}, {elem[3]}, {elem[4]}, {total_win}, {total_lose}, {grand_total}, " \
-                    f"{round(total_win * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_win , 2) if total_win> 0 else 0},{round(total_lose * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_lose , 2) if total_win> 0 else 0})"
+                	f"values('{refer}',  {weeknumber}, '{market}', {elem[0]}, {elem[1]}, {elem[2]}, {elem[3]}, {elem[4]}, {total_win}, {total_lose}, {grand_total}, " \
+                    f"{round(total_win * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_win , 2) if total_win> 0 else 0},{round(total_lose * 100 / grand_total , 2) if grand_total > 0 else 0} ,{round(grand_total / total_lose , 2) if total_lose > 0 else 0})"
                 mycursor.execute(sql);
                 mydb.commit();
             count += 1
@@ -514,7 +513,8 @@ def update_real_mo_price_id_toSeasonMatchPlanTable(week_number):
 
 
 def update_real_AH_price_id_toSeasonMatchPlanTable(week_number):
-    print(f" - W{week_number} start !")
+    #no need this function, because too much markets for each cream status
+    print(f" - W{week_number} updating season_match_plan start !")
     count = 0
 
     # getting the matches of this week
@@ -548,24 +548,21 @@ def update_real_AH_price_id_toSeasonMatchPlanTable(week_number):
 
 # real price data of MO and AH into real price table
 def get_realprice_toRealPriceTable_perweek(weeknumber):
-	for C_weeknumber in range(555, 596):                                  # 275 = 2015-04-01 546 = 2020-06-14 , 578 = 2021-01-21
-	    insert_real_prcie_to_MO_realpriceTable(C_weeknumber)
-        # insert_real_prcie_to_MO_realpriceTable(C_weeknumber)
-        
-    # insert_real_prcie_to_MO_realpriceTable(weeknumber)	
-
-    # insert_real_prcie_to_AH_realpriceTable(weeknumber)							
+	# for C_weeknumber in range(434, 596):                                  # 275 = 2015-04-01 546 = 2020-06-14 , 578 = 2021-01-21
+	#     insert_real_prcie_to_AH_realpriceTable(C_weeknumber)
+    #     insert_real_prcie_to_MO_realpriceTable(C_weeknumber)       
+    insert_real_prcie_to_MO_realpriceTable(weeknumber)	
+    insert_real_prcie_to_AH_realpriceTable(weeknumber)							
 
 # insert real_price id of each match into season_match_plan
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
-	for C_weeknumber in range(555, 596):
-		update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
-        # update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)
-        
-	# update_real_mo_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
-
+	# for C_weeknumber in range(275, 596):
+	#  	update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
+	update_real_mo_price_id_toSeasonMatchPlanTable(weeknumber)						#  param should be current continuous week.
+    
+    
 def main():
-	weeknumber = 595
+	weeknumber = 600
 	get_realprice_toRealPriceTable_perweek(weeknumber)							
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	
