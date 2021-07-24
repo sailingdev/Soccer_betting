@@ -8,7 +8,7 @@ import urllib3
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
-# This is the sample instructions to insert the team info(team_list and season_league_team into) into database.
+# This is the sample instructions to insert the team info(team_list and season_league_team info) into database.
 # python3 Get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
 #################################################################
 
@@ -22,41 +22,40 @@ mycursor = mydb.cursor()
 def switch_season(argument):
     switcher = {
       "2019-2020": 12,
-      "2020": 795,
+      "2020": 64, #795
       "2020-2021" : 799,
       "2021"    : 844
     }
     return switcher.get(argument, "null")
 def switch_league(argument):
-    switcher = {
-        "esp-primera-division": 16,  #spain
-        "eng-premier-league": 6,   #England
-        "bundesliga": 8,   #Germany
-        "ita-serie-a" : 11,  #italy
-        "fra-ligue-1" : 7,   #france
-        "ned-eredivisie": 12,  #Netherland
-        "aut-bundesliga": 1,  #Austria
-        "por-primeira-liga": 14,  #portugal
-        "por-liga-sagres": 14,
-        "por-liga-zon-sagres":14,
-        "gre-super-league": 9,   #Greece
-        "tur-sueperlig": 19,   #Turkey
-        "nor-eliteserien": 13,  #Norway from 2020
-        "nor-tippeligaen":13,
-        "swe-allsvenskan": 17,  #Sweden
-        "sui-super-league": 18,   #Swiztland
-        "den-superliga": 5,     #Denmark
-        "den-sas-ligaen":5,
-        "ukr-premyer-liga": 20,     #Ukraine
-        "bul-a-grupa": 2,       #bulgaria
-        "bul-parva-liga" : 2 ,
-        "cze-1-fotbalova-liga": 3,      #Chezch
-        "cze-gambrinus-liga": 3,
-        "cro-1-hnl": 4 ,          #Croatia
-        "hun-nb-i": 10,     #Hungary
-        "hun-nb1": 10,
-        "hun-otp-liga":10,
-        "srb-super-liga": 15    #Serbia
+    switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		# "bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        # "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superliga": 5,                   # Denmark
+        # "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        # "hun-nb1": 10,
+        # "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        #"nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        # "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "swi-super-league": 18,               # Swiztland
+		"tur-superlig": 19,                   # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
     }
     return switcher.get(argument, "null")
 
@@ -115,7 +114,7 @@ def insert_teamList(season=None, league=None):
             mydb.commit()
             print(mycursor.rowcount, "record inserted.")
 
-         #insert teamlist end
+        # insert teamlist end
 
         sql = f"SELECT team_id FROM team_list WHERE team_name = '{teamname}'"
         mycursor.execute(sql)
@@ -128,8 +127,8 @@ def insert_teamList(season=None, league=None):
         mydb.commit()
         print("insert season_league_team end!")
 
-insert_teamList("2021","nor-eliteserien")
-insert_teamList("2021","swe-allsvenskan")
+# insert_teamList("2021", "nor-eliteserien")
+# insert_teamList("2021", "swe-allsvenskan")
 
 
 
