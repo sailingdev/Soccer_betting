@@ -19,12 +19,14 @@ mydb = mysql.connector.connect(
   database="soccer"
 )
 mycursor = mydb.cursor()
+
 def switch_season(argument):
     switcher = {
       "2019-2020": 12,
       "2020": 64, #795
       "2020-2021" : 799,
-      "2021"    : 844
+      "2021"    : 844,
+      "2021-2022": 857
     }
     return switcher.get(argument, "null")
 def switch_league(argument):
@@ -127,8 +129,26 @@ def insert_teamList(season=None, league=None):
         mydb.commit()
         print("insert season_league_team end!")
 
-# insert_teamList("2021", "nor-eliteserien")
-# insert_teamList("2021", "swe-allsvenskan")
+insert_teamList("2021-2022", "aut-bundesliga")
+insert_teamList("2021-2022", "bul-parva-liga")
+insert_teamList("2021-2022", "cze-1-fotbalova-liga")
+insert_teamList("2021-2022", "cro-1-hnl")
+# insert_teamList("2021-2022", "den-superliga")
+insert_teamList("2021-2022", "eng-premier-league")
+insert_teamList("2021-2022", "fra-ligue-1")
+insert_teamList("2021-2022", "bundesliga")
+# insert_teamList("2021-2022", "gre-super-league")
+insert_teamList("2021-2022", "hun-nb-i")
+insert_teamList("2021-2022", "ita-serie-a")
+insert_teamList("2021-2022", "ned-eredivisie")
+insert_teamList("2021", "nor-eliteserien")
+insert_teamList("2021-2022", "por-primeira-liga")
+insert_teamList("2021-2022", "srb-super-liga")
+insert_teamList("2021-2022", "esp-primera-division")
+insert_teamList("2021", "swe-allsvenskan")
+# insert_teamList("2021-2022", "swi-super-league")
+# insert_teamList("2021-2022", "tur-superlig")
+insert_teamList("2021-2022", "ukr-premyer-liga")
 
 
 
