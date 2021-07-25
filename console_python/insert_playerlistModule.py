@@ -22,10 +22,12 @@ mycursor = mydb.cursor()
 
 def switch_season(argument):
 	switcher = {
-	  "2019-2020": 12,
-	  "2020": 64,
-	  "2020-2021" : 799,
-	}
+        "2019-2020": 12,
+        "2020": 64, #795
+        "2020-2021" : 799,
+        "2021"    : 844,
+        "2021-2022": 857
+    }
 	return switcher.get(argument, "null")
 def switch_league(argument):
 	switcher = {
@@ -173,7 +175,7 @@ def get_player_id(player_name, player_href, team_id):
 			if len(player_existing_result):   # its img_src, pnumber, team_id update
 				player_id = player_existing_result[0][0]
 				print(f"   There is already in playerlist - {player_name} : {player_birthday}")
-				sql = f'UPDATE playerlist set img_src = "{player_adding_info[0]}", now_pNumber = {player_number}, now_team_id = {team_id} where player_id = {player_id}'
+				sql = f"UPDATE playerlist set img_src = '{player_adding_info[0]}', now_pNumber = '{player_number}', now_team_id = '{team_id}' where player_id = {player_id}"
 				mycursor.execute(sql)
 				mydb.commit()
 				print(mycursor.rowcount, "record Updated. its img_src or pnumber, team id updated, have its own imag")
@@ -293,21 +295,23 @@ def Insert_Update_Players(season, league):
 
 	print(f" added new player count is {new_added_playercount}");
 	
-Insert_Update_Players("2020-2021", "esp-primera-division")
-#Insert_Update_Players("2020-2021", "eng-premier-league")
-#Insert_Update_Players("2020-2021", "bundesliga")
-#Insert_Update_Players("2020-2021", "ita-serie-a")
-#Insert_Update_Players("2020-2021", "fra-ligue-1")
-#Insert_Update_Players("2020-2021", "ned-eredivisie")
-#Insert_Update_Players("2020-2021", "aut-bundesliga")
-#Insert_Update_Players("2020-2021", "por-primeira-liga")
-#Insert_Update_Players("2020-2021", "gre-super-league")
-#Insert_Update_Players("2020-2021", "tur-sueperlig")
-#Insert_Update_Players("2020-2021", "sui-super-league")
-#Insert_Update_Players("2020-2021", "den-superliga")
-#Insert_Update_Players("2020-2021", "ukr-premyer-liga")
-#Insert_Update_Players("2020-2021", "bul-parva-liga")
-#Insert_Update_Players("2020-2021", "cze-1-fotbalova-liga")
-#Insert_Update_Players("2020-2021", "cro-1-hnl")
-#Insert_Update_Players("2020-2021", "hun-nb-i")
-#Insert_Update_Players("2020-2021", "srb-super-liga")
+Insert_Update_Players("2021-2022", "aut-bundesliga")
+Insert_Update_Players("2021-2022", "bul-parva-liga")
+Insert_Update_Players("2021-2022", "cze-1-fotbalova-liga")
+Insert_Update_Players("2021-2022", "cro-1-hnl")
+#Insert_Update_Players("2021-2022", "den-superliga")
+Insert_Update_Players("2021-2022", "eng-premier-league")
+Insert_Update_Players("2021-2022", "fra-ligue-1")
+Insert_Update_Players("2021-2022", "bundesliga")
+#Insert_Update_Players("2021-2022", "gre-super-league")
+Insert_Update_Players("2021-2022", "hun-nb-i")
+Insert_Update_Players("2021-2022", "ita-serie-a")
+Insert_Update_Players("2021-2022", "ned-eredivisie")
+Insert_Update_Players("2021", "nor-eliteserien")
+Insert_Update_Players("2021-2022", "por-primeira-liga")
+Insert_Update_Players("2021-2022", "srb-super-liga")
+Insert_Update_Players("2021-2022", "esp-primera-division")
+Insert_Update_Players("2021", "swe-allsvenskan")
+#Insert_Update_Players("2021-2022", "tur-superlig")
+#Insert_Update_Players("2021-2022", "srb-super-liga")
+Insert_Update_Players("2021-2022", "ukr-premyer-liga")
