@@ -20,56 +20,60 @@ def switch_season(argument):
 	"2016-2017": 3,
 	"2017-2018": 4,
 	"2018-2019": 5,
-		"2010": 20,
-		"2011": 18,
-		"2012": 16,
-		"2013": 14,
-		"2014": 6,
-		"2015": 7,
-		"2016": 8,
-		"2017": 9,
-		"2018": 10,
-		"2019": 11, 
+	"2019-2020": 12,
+	"2020-2021": 799,
+	"2021-2022": 857,	
+	"2010": 20,
+	"2011": 18,
+	"2012": 16,
+	"2013": 14,
+	"2014": 6,
+	"2015": 7,
+	"2016": 8,
+	"2017": 9,
+	"2018": 10,
+	"2019": 11,
+	"2020": 64,
+	"2021": 844
 	}
 	return switcher.get(argument, "null")
 def switch_league(argument):
-	switcher = {
-	  
-	  "england/premier-league": 6,   #England
-	  "esp-primera-division": 16,  #spain
-	  "bundesliga": 8,   #Germany
-	  "ita-serie-a" : 11,  #italy
-	  "fra-ligue-1" : 7,   #france
-	  "ned-eredivisie": 12,  #Netherland
-	  "aut-bundesliga": 1,  #Austria
-		"por-primeira-liga": 14,  #portugal
-		"por-liga-sagres": 14,
-		"por-liga-zon-sagres":14,
-		"gre-superleague": 9,   #Greece
-		"tur-sueperlig": 19,   #Turkey
-		"nor-eliteserien": 13,  #Norway
-		"nor-tippeligaen":13,
-		"swe-allsvenskan": 17,  #Sweden
-		"sui-super-league": 18,   #Swiztland
-		"den-superliga": 5,     #Denmark
-		"den-sas-ligaen":5,
-		"ukr-premyer-liga": 20,     #Ukraine
-		"bul-a-grupa": 2,       #bulgaria
-		"cze-1-fotbalova-liga": 3,      #Chezch
-		"cze-gambrinus-liga": 3,
-		"cro-1-hnl": 4 ,          #Croatia
-		"hun-nb-i": 10,     #Hungary
-		"hun-nb1": 10,
-		"hun-otp-liga":10,
-		"srb-super-liga": 15    #Serbia
-	}
-	return switcher.get(argument, "null")
+    switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		# "bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        # "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superliga": 5,                   # Denmark
+        # "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        # "hun-nb1": 10,
+        # "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        #"nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        # "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "swi-super-league": 18,               # Swiztland
+		"tur-superlig": 19,                   # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
+    }
+    return switcher.get(argument, "null")
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+	host="localhost",
+	user="root",
+	passwd="",
+	database="soccer"
 )
 mycursor = mydb.cursor()
 updated_count = 0
@@ -114,7 +118,7 @@ def insert_match_team_socre_strength_TPGR():
 				print("     Successfully Inserted!")
 				updated_count += 1
 			else:
-			 	print("     already added before")
+				print("     already added before")
 						
 		else:
 			print("    not ended yet")
@@ -262,7 +266,7 @@ def get_strength(score):
 def main():
 	insert_match_team_socre_strength_TPGR()
 	print (f"--------------- updated count number is : {updated_count} --------------------")
-   
+
 if __name__ == "__main__":
 	main()
 

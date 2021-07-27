@@ -67,7 +67,6 @@ added_matches_count = 0
 added_player_count = 0
 
 def doing_scraping_match_plan(season=None , league=None, firstMatch = None, lastMatch = None, newInsertFlag = False ):
-	 
 	#global added_matches_count
 	print(f"---------------------------------{season}-{league}- start-----------------------------------------")
 	if season:
@@ -106,7 +105,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 			start_time = all_td[1].text
 			match_status = all_td[6]
 			sql = f'SELECT team_id FROM team_list WHERE team_name = "{all_td[2].text}" UNION ' \
-				  f'SELECT team_id FROM team_list WHERE team_name = "{all_td[4].text}"'
+				f'SELECT team_id FROM team_list WHERE team_name = "{all_td[4].text}"'
 			#print(sql)
 			mycursor.execute(sql)
 			myresult = mycursor.fetchall()
@@ -481,8 +480,8 @@ def insert_match_team_player_info(url , last_match_id, home_team_id, away_team_i
 			assists = assist_player_id_list.count(id)
 
 			sql = "INSERT INTO match_team_player_info ( match_id, team_id , player_id , " \
-				  "goals, assists)" \
-				  "VALUES (%s, %s , %s, %s, %s)"
+				"goals, assists)" \
+				"VALUES (%s, %s , %s, %s, %s)"
 			val = (last_match_id, home_team_id, id, goals, assists)
 			mycursor.execute(sql, val)
 			mydb.commit()
@@ -496,8 +495,8 @@ def insert_match_team_player_info(url , last_match_id, home_team_id, away_team_i
 			assists = assist_player_id_list.count(id)
 
 			sql = "INSERT INTO match_team_player_info ( match_id, team_id , player_id , " \
-				  "goals, assists)" \
-				  "VALUES (%s, %s , %s, %s, %s)"
+				"goals, assists)" \
+				"VALUES (%s, %s , %s, %s, %s)"
 			val = (last_match_id, away_team_id, id, goals, assists)
 			mycursor.execute(sql, val)
 			mydb.commit()
@@ -665,7 +664,7 @@ def add_extra_player(player_name, player_adding_info, team_id):
 	player_nation = player_adding_info[2]
 	print(f"   this is new - {player_name} : {player_birthday}")
 	sql = "INSERT INTO soccer.playerlist (player_name, birthday , nationality, img_src, height, weight, foot" \
-		  ", position , now_pNumber, now_team_id ) VALUES (%s, %s , %s, %s, %s, %s, %s, %s,%s, %s)"
+		", position , now_pNumber, now_team_id ) VALUES (%s, %s , %s, %s, %s, %s, %s, %s,%s, %s)"
 	val = (player_name, player_birthday, player_nation, player_adding_info[0], "???", player_adding_info[3], player_adding_info[4], "??", player_adding_info[5], team_id)
 	mycursor.execute(sql, val)
 	mydb.commit()
@@ -789,7 +788,6 @@ def fn_filter_value(str):
 def fn_Get_LeagueId(league_dname, league_extra_info):
 	realLeague = league_extra_info.split("/")[2]
 	if league_dname == "Bundesliga":
-	  
 		if realLeague == "bundesliga":
 			return 8
 		if realLeague == "aut-bundesliga":
@@ -807,7 +805,7 @@ def fn_Get_LeagueId(league_dname, league_extra_info):
 				print("   -------added new league-"+league_dname + ":"+ realLeague)
 				return mycursor.lastrowid
 	if league_dname == "Super League":
-	   # realLeague = league_extra_info.split("/")[2]
+		# realLeague = league_extra_info.split("/")[2]
 		if realLeague == "gre-super-league":
 			return 9
 		if realLeague == "sui-super-league":
