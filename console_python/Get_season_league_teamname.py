@@ -29,6 +29,7 @@ def switch_season(argument):
         "2021-2022": 857
     }
     return switcher.get(argument, "null")
+    
 def switch_league(argument):
     switcher = {	
         "aut-bundesliga": 1,                  # Austria

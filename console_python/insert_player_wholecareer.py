@@ -459,7 +459,7 @@ def get_totalPageCount_onPlayerPage(season, league):
 
 
 def main():
-	season = "2020-2021"
+	season = "2021-2022"
 	# season = "2021"
 	
 	league_list_1 = [
@@ -485,7 +485,7 @@ def main():
 		"srb-super-liga"    
 		 ]
 	league_list_2 = [
-		# "nor-eliteserien" ,  			#Norway
+		"nor-eliteserien" ,  			#Norway
 		"swe-allsvenskan"   			#Sweden
 	]
 	for league in league_list_1:

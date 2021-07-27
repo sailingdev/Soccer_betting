@@ -14,54 +14,54 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #################################################################
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="soccer"
 )
-
 mycursor = mydb.cursor()
+
 def switch_season(argument):
-	switcher = {
-	  
-		"2020": 64,
-		"2020-2021" : 799,
-		"2021"		: 844,
-		'2021-2022' : 857,
-	}
-	return switcher.get(argument, "null")
+    switcher = {
+        "2019-2020": 12,
+        "2020": 64, #795
+        "2020-2021" : 799,
+        "2021"    : 844,
+        "2021-2022": 857
+    }
+    return switcher.get(argument, "null")
+
 def switch_league(argument):
-	switcher = {
-	  "esp-primera-division": 16,  #spain
-	  "eng-premier-league": 6,   #England
-	  "bundesliga": 8,   #Germany
-	  "ita-serie-a" : 11,  #italy
-	  "fra-ligue-1" : 7,   #france
-	  "ned-eredivisie": 12,  #Netherland
-	  "aut-bundesliga": 1,  #Austria
-		"por-primeira-liga": 14,  #portugal
-		"por-liga-sagres": 14,
-		"por-liga-zon-sagres":14,
-		"gre-superleague": 9,   #Greece
-		"gre-super-league": 9,   #Greece
-		"tur-sueperlig": 19,   #Turkey
-		"nor-eliteserien": 13,  #Norway
-		"nor-tippeligaen":13,
-		"swe-allsvenskan": 17,  #Sweden
-		"sui-super-league": 18,   #Swiztland
-		"den-superliga": 5,     #Denmark
-		"den-sas-ligaen":5,
-		"ukr-premyer-liga": 20,     #Ukraine       
-		"bul-parva-liga" : 2 , #bulgaria
-		"cze-1-fotbalova-liga": 3,      #Chezch
-		"cze-gambrinus-liga": 3,
-		"cro-1-hnl": 4 ,          #Croatia
-		"hun-nb-i": 10,     #Hungary
-		"hun-nb1": 10,
-		"hun-otp-liga":10,
-		"srb-super-liga": 15    #Serbia
-	}
-	return switcher.get(argument, "null")
+    switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		# "bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        # "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superliga": 5,                   # Denmark
+        # "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        # "hun-nb1": 10,
+        # "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        #"nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        # "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "swi-super-league": 18,               # Swiztland
+		"tur-superlig": 19,                   # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
+    }
+    return switcher.get(argument, "null")
 
 added_matches_count = 0
 added_player_count = 0
@@ -867,26 +867,26 @@ def fn_Get_TeamId(team_name):
 #################################################################################################
 
 def main():
-	doing_scraping_match_plan("2020-2021","esp-primera-division")   # maximum 380 - 10 * 38
-	doing_scraping_match_plan("2020-2021","aut-bundesliga")			# maximum 132 - 6 * 22
-	doing_scraping_match_plan("2020-2021","eng-premier-league")		# maximum 380 - 10 * 38
-	# doing_scraping_match_plan("2020-2021","bul-parva-liga")			# maximum 182 - 7 * 26 
-	doing_scraping_match_plan("2020-2021","fra-ligue-1")			# maximum 380 -  38 * 10
-	doing_scraping_match_plan("2020-2021","ned-eredivisie")			# maximum 306 -  9 * 34
-	doing_scraping_match_plan("2020-2021","bundesliga")				# maximum 306 -  9 * 34
-	doing_scraping_match_plan("2020-2021","ita-serie-a")			# maximum 380 -  10 * 38
-	doing_scraping_match_plan("2020-2021","por-primeira-liga")	
-	doing_scraping_match_plan("2020-2021","gre-super-league")
-	doing_scraping_match_plan("2020-2021","tur-sueperlig")
-	doing_scraping_match_plan("2021",	  "nor-eliteserien")
-	doing_scraping_match_plan("2021",	  "swe-allsvenskan")
-	doing_scraping_match_plan("2020-2021","sui-super-league")
-	doing_scraping_match_plan("2020-2021","den-superliga")
-	doing_scraping_match_plan("2020-2021","ukr-premyer-liga")
-	doing_scraping_match_plan("2020-2021","hun-nb-i")
-	doing_scraping_match_plan("2020-2021","cze-1-fotbalova-liga")
-	doing_scraping_match_plan("2020-2021","cro-1-hnl")
-	doing_scraping_match_plan("2020-2021","srb-super-liga")
+	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
+	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
+	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	# doing_scraping_match_plan("2021-2022", "den-superliga")
+	doing_scraping_match_plan("2021-2022", "eng-premier-league")
+	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
+	doing_scraping_match_plan("2021-2022", "bundesliga")
+	# doing_scraping_match_plan("2021-2022", "gre-super-league")
+	doing_scraping_match_plan("2021-2022", "hun-nb-i")
+	doing_scraping_match_plan("2021-2022", "ita-serie-a")
+	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
+	doing_scraping_match_plan("2021", "nor-eliteserien")
+	doing_scraping_match_plan("2021-2022", "por-primeira-liga")
+	doing_scraping_match_plan("2021-2022", "srb-super-liga")
+	doing_scraping_match_plan("2021-2022", "esp-primera-division")
+	doing_scraping_match_plan("2021", "swe-allsvenskan")
+	# doing_scraping_match_plan("2021-2022", "swi-super-league")
+	# doing_scraping_match_plan("2021-2022", "tur-superlig")
+	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 
 	print("")
 	print(f"-------- total added matches number is {added_matches_count} -------------")
