@@ -18,10 +18,10 @@ import sys
 
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="soccer"
 )
 
 mycursor = mydb.cursor()
@@ -43,21 +43,21 @@ chrome_options.binary_location = 'C:\Program Files\Google\Chrome\Application\chr
 
 
 site_url = "https://www.oddsportal.com/soccer/"
+
 def switch_month(argument):
     switcher = {
-      "Jan": "01",
-      "Feb" : "02",
-      "Mar" : "03",
-      "Apr" : "04",
-      "May" : "05",
-      "Jun" : "06",
-      "Jul" : "07",
-      "Aug" : "08",
-      "Sep" : "09",
-      "Oct" : "10",
-      "Nov" : "11",
-      "Dec" : "12"
-       
+        "Jan": "01",
+        "Feb" : "02",
+        "Mar" : "03",
+        "Apr" : "04",
+        "May" : "05",
+        "Jun" : "06",
+        "Jul" : "07",
+        "Aug" : "08",
+        "Sep" : "09",
+        "Oct" : "10",
+        "Nov" : "11",
+        "Dec" : "12"
     }
     return switcher.get(argument, "null")
 
@@ -69,35 +69,32 @@ def switch_season(argument):
         '2021-2022' : 857,
     }
     return switcher.get(argument, "null")
+  
 def switch_league(argument):
     switcher = {
-      
-      "england/premier-league-": 6,   #England
-      "spain/laliga": 16,  #spain
-      "germany/bundesliga": 8,   #Germany
-      "italy/serie-a" : 11,  #italy
-      "france/ligue-1" : 7,   #france
-      "netherlands/eredivisie": 12,  #Netherland
-      "austria/tipico-bundesliga": 1,  #Austria
-      
+        "england/premier-league-": 6,   #England
+        "spain/laliga": 16,  #spain
+        "germany/bundesliga": 8,   #Germany
+        "italy/serie-a" : 11,  #italy
+        "france/ligue-1" : 7,   #france
+        "netherlands/eredivisie": 12,  #Netherland
+        "austria/tipico-bundesliga": 1,  #Austria
         "portugal/primeira-liga": 14,  #portugal
         "greece/super-league": 9,   #Greece
         "turkey/super-lig": 19,   #Turkey
         "norway/eliteserien": 13,  #Norway
-
         "sweden/allsvenskan": 17,  #Sweden
         "switzerland/super-league": 18,   #Swiztland
         "denmark/superliga": 5,     #Denmark
-
         "ukraine/premier-league": 20,     #Ukraine
         "bulgaria/parva-liga": 2,       #bulgaria
         "czech-republic/1-liga": 3,      #Chezch
-       
         "croatia/1-hnl": 4 ,          #Croatia
         "hungary/otp-bank-liga": 10,     #Hungary
         "serbia/super-liga": 15    #Serbia
     }
     return switcher.get(argument, "null")
+  
 total_added_count = 0
 def insert_update_odds(basic_match_href_url, match_date, team_text):
     global total_added_count
@@ -156,16 +153,14 @@ def insert_update_odds(basic_match_href_url, match_date, team_text):
                   f"AH_p1d75_1 = {odd_price['AH']['AH_p1.75']['highest'][0]} , AH_p1d75_2 = {odd_price['AH']['AH_p1.75']['highest'][1]} ," \
                   f"AH_p2_1 = {odd_price['AH']['AH_p2']['highest'][0]} , AH_p2_2 = {odd_price['AH']['AH_p2']['highest'][1]} , updated_at = '{datetime.today().strftime('%Y-%m-%d')}'" \
                   f"WHERE match_id = {match_id} and bookmaker_id = 13"
-				        
                 mycursor.execute(sql)
                 mydb.commit()
 
                 total_added_count += 1
                 print("         # Update successful! ")
-               
             else:                       # this is new in odds, so will insert
                 # sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5 , AH2_1, AH2_2, AH1d75_1, AH1d75_2, AH1d5_1, AH1d5_2 , AH1d25_1, AH1d25_2, AH1_1, AH1_2, AH0d75_1, AH0d75_2, AH0d5_1, AH0d5_2, AH0d25_1, AH0d25_2, AH0_1, AH0_2) " \
-				        # f"VALUES ({match_id}, 12, {odd_price['3way']['aver'][0]}, {odd_price['3way']['aver'][1]}, {odd_price['3way']['aver'][2]}, {odd_price['O/U']['aver'][0]}, {odd_price['O/U']['aver'][1]} ," \
+                # f"VALUES ({match_id}, 12, {odd_price['3way']['aver'][0]}, {odd_price['3way']['aver'][1]}, {odd_price['3way']['aver'][2]}, {odd_price['O/U']['aver'][0]}, {odd_price['O/U']['aver'][1]} ," \
                 # f"{odd_price['AH']['AH_2']['aver'][0]} , {odd_price['AH']['AH_2']['aver'][1]} ,{odd_price['AH']['AH_1.75']['aver'][0]} , {odd_price['AH']['AH_1.75']['aver'][1]} , " \
                 # f"{odd_price['AH']['AH_1.5']['aver'][0]} , {odd_price['AH']['AH_1.5']['aver'][1]} ,{odd_price['AH']['AH_1.25']['aver'][0]} , {odd_price['AH']['AH_1.25']['aver'][1]} , " \
                 # f"{odd_price['AH']['AH_1']['aver'][0]} , {odd_price['AH']['AH_1']['aver'][1]} ,{odd_price['AH']['AH_0.75']['aver'][0]} , {odd_price['AH']['AH_0.75']['aver'][1]} , " \
@@ -176,7 +171,7 @@ def insert_update_odds(basic_match_href_url, match_date, team_text):
                 # mydb.commit()
 
                 sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5 , AH2_1, AH2_2, AH1d75_1, AH1d75_2, AH1d5_1, AH1d5_2 , AH1d25_1, AH1d25_2, AH1_1, AH1_2, AH0d75_1, AH0d75_2, AH0d5_1, AH0d5_2, AH0d25_1, AH0d25_2, AH0_1, AH0_2 , AH_p0d25_1 , AH_p0d25_2, AH_p0d5_1, AH_p0d5_2, AH_p0d75_1 , AH_p0d75_2, AH_p1_1, AH_p1_2, AH_p1d25_1, AH_p1d25_2, AH_p1d5_1, AH_p1d5_2, AH_p1d75_1, AH_p1d75_2, AH_p2_1, AH_p2_2 , updated_at ) " \
-				        f"VALUES ({match_id}, 13, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]} , " \
+                f"VALUES ({match_id}, 13, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_2']['highest'][0]} , {odd_price['AH']['AH_2']['highest'][1]} ,{odd_price['AH']['AH_1.75']['highest'][0]} , {odd_price['AH']['AH_1.75']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_1.5']['highest'][0]} , {odd_price['AH']['AH_1.5']['highest'][1]} ,{odd_price['AH']['AH_1.25']['highest'][0]} , {odd_price['AH']['AH_1.25']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_1']['highest'][0]} , {odd_price['AH']['AH_1']['highest'][1]} ,{odd_price['AH']['AH_0.75']['highest'][0]} , {odd_price['AH']['AH_0.75']['highest'][1]} , " \
@@ -244,9 +239,7 @@ def get_odds(turl, OU_url , AH_url):
         tfoot_OU = driver1.find_elements_by_tag_name('tfoot')
 
     if len(tfoot_OU):
-        
         high_elemnet = tfoot_OU[0].find_element_by_class_name("highest")
-           
         if high_elemnet:
             av_values = high_elemnet.find_elements_by_class_name("right")
             if len(av_values) > 1:
@@ -256,8 +249,7 @@ def get_odds(turl, OU_url , AH_url):
                   else:
                     highest_list.append(av_values[i+1].text)
     else:
-     
-       highest_list = ['0', '0']
+        highest_list = ['0', '0']
         
       
     O_U = { "highest": highest_list}
@@ -571,9 +563,7 @@ def get_various_AsianHandicap(tfoot_OU):
     
     highest_list = []
     if len(tfoot_OU):
-       
         high_elemnet = tfoot_OU[0].find_element_by_class_name("highest")
-          
         if high_elemnet:
             av_values = high_elemnet.find_elements_by_class_name("right")
             if len(av_values) > 1:
@@ -582,13 +572,9 @@ def get_various_AsianHandicap(tfoot_OU):
                     highest_list.append("0")
                   else:
                     highest_list.append(av_values[i+1].text)
-        
-        
     else:
-       
-       highest_list = ['0', '0']
+        highest_list = ['0', '0']
         
-      
     AH = {"highest": highest_list}
     return AH
 
@@ -688,7 +674,7 @@ def get_AH_Data(url):
     #driver3.quit()
     #print(return_val)
     return return_val
- 
+
 def getDate_from_trTxt(date_txt):
   if 'Today' in date_txt:
       return datetime.today().strftime('%Y-%m-%d')
@@ -713,7 +699,6 @@ def insert_Price_To_Matchplan(league, season):
     
     print(f"----------------{league}  start--------------------------------")
   
-     
     time.sleep(2)
     tbody = driver.find_element_by_tag_name('tbody')                # get tobody of all matches
     #print(tbody.text)
@@ -752,26 +737,31 @@ def insert_Price_To_Matchplan(league, season):
     print(f"---------------- {league} -  End--------------------------------")
     driver.quit()
 
-insert_Price_To_Matchplan("england/premier-league",     "")
-insert_Price_To_Matchplan("spain/laliga",               "")
-insert_Price_To_Matchplan("germany/bundesliga",         "")
-insert_Price_To_Matchplan("italy/serie-a",              "")
-insert_Price_To_Matchplan("france/ligue-1",             "")
-insert_Price_To_Matchplan("netherlands/eredivisie",     "")
-insert_Price_To_Matchplan("austria/tipico-bundesliga",  "")
-insert_Price_To_Matchplan("portugal/primeira-liga",     "")
-insert_Price_To_Matchplan("greece/super-league",        "")
-insert_Price_To_Matchplan("turkey/super-lig",           "")
-insert_Price_To_Matchplan("norway/eliteserien",         "")
-insert_Price_To_Matchplan("sweden/allsvenskan",         "")
-insert_Price_To_Matchplan("switzerland/super-league",   "")
-insert_Price_To_Matchplan("denmark/superliga",          "")   
-insert_Price_To_Matchplan("ukraine/premier-league",     "")
-insert_Price_To_Matchplan("bulgaria/parva-liga",        "")
-insert_Price_To_Matchplan("czech-republic/1-liga",      "")
-insert_Price_To_Matchplan("croatia/1-hnl",              "")
-insert_Price_To_Matchplan("hungary/otp-bank-liga",      "")
-insert_Price_To_Matchplan("serbia/super-liga",          "")
+insert_Price_To_Matchplan("england/premier-league",   "2021-2022")
+insert_Price_To_Matchplan("spain/laliga",             "2021-2022")
+insert_Price_To_Matchplan("germany/bundesliga",       "2021-2022")
+insert_Price_To_Matchplan("italy/serie-a",            "2021-2022")
+insert_Price_To_Matchplan("france/ligue-1",           "2021-2022")
+insert_Price_To_Matchplan("netherlands/eredivisie",   "2021-2022")
+insert_Price_To_Matchplan("austria/tipico-bundesliga","2021-2022")
+insert_Price_To_Matchplan("portugal/primeira-liga",   "2021-2022")
+insert_Price_To_Matchplan("greece/super-league",      "2021-2022")
+insert_Price_To_Matchplan("turkey/super-lig",         "2021-2022")
+insert_Price_To_Matchplan("norway/eliteserien",       "2021-2022")
+insert_Price_To_Matchplan("sweden/allsvenskan",       "2021-2022")
+insert_Price_To_Matchplan("switzerland/super-league", "2021-2022")
+insert_Price_To_Matchplan("denmark/superliga",        "2021-2022")
+insert_Price_To_Matchplan("ukraine/premier-league",   "2021-2022")
+insert_Price_To_Matchplan("bulgaria/parva-liga",      "2021-2022")
+insert_Price_To_Matchplan("czech-republic/1-liga",    "2021-2022")
+insert_Price_To_Matchplan("croatia/1-hnl",            "2021-2022")
+insert_Price_To_Matchplan("hungary/otp-bank-liga",    "2021-2022")
+insert_Price_To_Matchplan("serbia/super-liga",        "2021-2022")
 
+# insert_Price_To_Matchplan("serbia/super-liga", "2019-2020")
+# insert_Price_To_Matchplan("serbia/super-liga", "2018-2019")
+# insert_Price_To_Matchplan("serbia/super-liga", "2017-2018")
+# insert_Price_To_Matchplan("serbia/super-liga", "2016-2017")
+# insert_Price_To_Matchplan("serbia/super-liga", "2015-2016")
 
 print(" Total added count is : ", total_added_count)

@@ -59,6 +59,7 @@ binary = FirefoxBinary(path)
 
 site_url = "https://www.oddsportal.com/"
 tfoot_index = 0
+
 def switch_month(argument):
     switcher = {
         "Jan": "01",
@@ -75,6 +76,7 @@ def switch_month(argument):
         "Dec" : "12"
     }
     return switcher.get(argument, "null")
+
 def switch_season(argument):
     switcher = {
         "2019-2020": 12,
@@ -85,34 +87,27 @@ def switch_season(argument):
     return switcher.get(argument, "null")
 
 def switch_league(argument):
-    switcher = {	
-        "aut-bundesliga": 1,                  # Austria
-        "bul-parva-liga" : 2,				  # Bulgaria
-		# "bul-a-grupa": 2,    
-		"cze-1-fotbalova-liga": 3,            # Chezch
-        # "cze-gambrinus-liga": 3,		
-		"cro-1-hnl": 4,                       # Croatia
-		"den-superliga": 5,                   # Denmark
-        # "den-sas-ligaen": 5,
-		"eng-premier-league": 6,              # England
-		"fra-ligue-1": 7,                     # France
-		"bundesliga": 8,                      # Germany
-		"gre-super-league": 9,                # Greece
-		"hun-nb-i": 10,                       # Hungary
-        # "hun-nb1": 10,
-        # "hun-otp-liga": 10,
-		"ita-serie-a": 11,                    # Italy
-		"ned-eredivisie": 12,                 # Netherland
-		"nor-eliteserien": 13,                # Norway from 2020
-        #"nor-tippeligaen": 13,
-		"por-primeira-liga": 14,              # Portugal, Check
-        # "por-liga-sagres": 14,
-		"srb-super-liga": 15,                 # Serbia
-		"esp-primera-division": 16,           # Spain
-        "swe-allsvenskan": 17,                # Sweden
-        "swi-super-league": 18,               # Swiztland
-		"tur-superlig": 19,                   # Turkey
-        "ukr-premyer-liga": 20                # Ukraine
+    switcher = {
+        "england/premier-league-": 6,   #England
+        "spain/laliga": 16,  #spain
+        "germany/bundesliga": 8,   #Germany
+        "italy/serie-a" : 11,  #italy
+        "france/ligue-1" : 7,   #france
+        "netherlands/eredivisie": 12,  #Netherland
+        "austria/tipico-bundesliga": 1,  #Austria
+        "portugal/primeira-liga": 14,  #portugal
+        "greece/super-league": 9,   #Greece
+        "turkey/super-lig": 19,   #Turkey
+        "norway/eliteserien": 13,  #Norway
+        "sweden/allsvenskan": 17,  #Sweden
+        "switzerland/super-league": 18,   #Swiztland
+        "denmark/superliga": 5,     #Denmark
+        "ukraine/premier-league": 20,     #Ukraine
+        "bulgaria/parva-liga": 2,       #bulgaria
+        "czech-republic/1-liga": 3,      #Chezch
+        "croatia/1-hnl": 4 ,          #Croatia
+        "hungary/otp-bank-liga": 10,     #Hungary
+        "serbia/super-liga": 15    #Serbia
     }
     return switcher.get(argument, "null")
 
