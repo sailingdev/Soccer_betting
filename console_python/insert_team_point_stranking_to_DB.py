@@ -16,10 +16,10 @@ season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 857]          # 2020 - 2021 
 season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]     # 2021 style
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="soccer"
 )
 mycursor = mydb.cursor()
 
