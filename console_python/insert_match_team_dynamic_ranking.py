@@ -13,9 +13,9 @@ def switch_season(argument):
     switcher = {
         "2021" : 844,
         "2021-2022" : 857,
-        "2020-2021": 799,
+        "2021-2022": 799,
         "2019-2020": 12,
-        "2020" : 64, 
+        "2021" : 64, 
         "2014-2015": 1,
         "2015-2016": 2,
         "2016-2017": 3,
@@ -39,38 +39,38 @@ def switch_season(argument):
     }
     return switcher.get(argument, "null")
 
-season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 857]         # 2020-2021 style
-season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]     # 2020 style
+season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 799, 857]         # 2021-2022 style
+season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]         # 2021 style
 
 def switch_league(argument):
-    switcher = {	
-        "aut-bundesliga": 1,                  # Austria
-        "bul-parva-liga" : 2,				  # Bulgaria
-		# "bul-a-grupa": 2,    
-		"cze-1-fotbalova-liga": 3,            # Chezch
-        # "cze-gambrinus-liga": 3,		
-		"cro-1-hnl": 4,                       # Croatia
-		"den-superliga": 5,                   # Denmark
-        # "den-sas-ligaen": 5,
-		"eng-premier-league": 6,              # England
-		"fra-ligue-1": 7,                     # France
-		"bundesliga": 8,                      # Germany
-		"gre-super-league": 9,                # Greece
-		"hun-nb-i": 10,                       # Hungary
-        # "hun-nb1": 10,
-        # "hun-otp-liga": 10,
-		"ita-serie-a": 11,                    # Italy
-		"ned-eredivisie": 12,                 # Netherland
-		"nor-eliteserien": 13,                # Norway from 2020
-        #"nor-tippeligaen": 13,
-		"por-primeira-liga": 14,              # Portugal, Check
-        # "por-liga-sagres": 14,
-		"srb-super-liga": 15,                 # Serbia
-		"esp-primera-division": 16,           # Spain
-        "swe-allsvenskan": 17,                # Sweden
-        "swi-super-league": 18,               # Swiztland
-		"tur-superlig": 19,                   # Turkey
-        "ukr-premyer-liga": 20                # Ukraine
+    switcher = {
+      "england/premier-league": 6,   #England
+      "esp-primera-division": 16,  #spain
+      "bundesliga": 8,   #Germany
+      "ita-serie-a" : 11,  #italy
+      "fra-ligue-1" : 7,   #france
+      "ned-eredivisie": 12,  #Netherland
+      "aut-bundesliga": 1,  #Austria
+        "por-primeira-liga": 14,  #portugal
+        "por-liga-sagres": 14,
+        "por-liga-zon-sagres":14,
+        "gre-superleague": 9,   #Greece
+        "tur-sueperlig": 19,   #Turkey
+        "nor-eliteserien": 13,  #Norway
+        "nor-tippeligaen":13,
+        "swe-allsvenskan": 17,  #Sweden
+        "sui-super-league": 18,   #Swiztland
+        "den-superliga": 5,     #Denmark
+        "den-sas-ligaen":5,
+        "ukr-premyer-liga": 20,     #Ukraine
+        "bul-a-grupa": 2,       #bulgaria
+        "cze-1-fotbalova-liga": 3,      #Chezch
+        "cze-gambrinus-liga": 3,
+        "cro-1-hnl": 4 ,          #Croatia
+        "hun-nb-i": 10,     #Hungary
+        "hun-nb1": 10,
+        "hun-otp-liga":10,
+        "srb-super-liga": 15    #Serbia
     }
     return switcher.get(argument, "null")
 
@@ -150,20 +150,20 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
             ################################ HPPG, HDGPG ##################################
             if (preSeasonId == 0) | (promoteStatus ==  1):    # season is 2010 or team is promoted team
                 if nIndex_Match_of_season < moving_num:
-                    D_Home_ranking = "1"
-                    sum_HRS = (int(HPPG) + int(HGDPG))
-                    #  D_Home_RS = str(sum_HRS)
-                    D_Home_RS = "N/A"
+                      D_Home_ranking = "1"
+                      sum_HRS = (int(HPPG) + int(HGDPG))
+                      #  D_Home_RS = str(sum_HRS)
+                      D_Home_RS = "N/A"
                 if nIndex_Match_of_season >= moving_num:
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
-                    mycursor.execute(sql)
-                    previous_num_Match_Results = mycursor.fetchall()
-                    HRS = 0
-                    for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
-                        HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    HRS /= moving_num
-                    D_Home_RS = str(HRS)
-                    D_Home_ranking = str(getRangeValue(HRS))
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      mycursor.execute(sql)
+                      previous_num_Match_Results = mycursor.fetchall()
+                      HRS = 0
+                      for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
+                            HRS += (int(eachMatch[0]) + int(eachMatch[1]))
+                      HRS /= moving_num
+                      D_Home_RS = str(HRS)
+                      D_Home_ranking = str(getRangeValue(HRS))
                                 
             else:                                             # season is over 2011 and not promoted team
                 if nIndex_Match_of_season < moving_num:
@@ -234,20 +234,20 @@ def insert_match_team_dynamic_ranking_8(league, season, target_status):
 
             if (preSeasonId == 0) | (promoteStatus ==  1):    # season is 2010 or team is promoted team
                 if nIndex_Match_of_season < moving_num:
-                    D_Away_ranking = "1"
-                    sum_ARS = (int(APPG) + int(AGDPG))
-                    #  D_Away_RS = str(sum_ARS)
-                    D_Away_RS = "N/A"
-            if nIndex_Match_of_season >= moving_num:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
-                    mycursor.execute(sql)
-                    previous_num_Match_Results = mycursor.fetchall()
-                    ARS = 0
-                    for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
-                        ARS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    ARS /= moving_num
-                    D_Away_RS = str(ARS)
-                    D_Away_ranking = str(getRangeValue(ARS))
+                      D_Away_ranking = "1"
+                      sum_ARS = (int(APPG) + int(AGDPG))
+                      #  D_Away_RS = str(sum_ARS)
+                      D_Away_RS = "N/A"
+                if nIndex_Match_of_season >= moving_num:
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      mycursor.execute(sql)
+                      previous_num_Match_Results = mycursor.fetchall()
+                      ARS = 0
+                      for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
+                          ARS += (int(eachMatch[0]) + int(eachMatch[1]))
+                      ARS /= moving_num
+                      D_Away_RS = str(ARS)
+                      D_Away_ranking = str(getRangeValue(ARS))
                 
                 
             else:
@@ -364,20 +364,20 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
             ################################ HPPG, HDGPG ##################################
             if (preSeasonId == 0) | (promoteStatus ==  1):    # season is 2010 or team is promoted team
                 if nIndex_Match_of_season < moving_num:
-                    D_Home_ranking = "1"
-                    sum_HRS = (int(HPPG) + int(HGDPG))
-                    #  D_Home_RS = str(sum_HRS)
-                    D_Home_RS = "N/A"
-            if nIndex_Match_of_season >= moving_num:
-                    sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
-                    mycursor.execute(sql)
-                    previous_num_Match_Results = mycursor.fetchall()
-                    HRS = 0
-                    for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
-                        HRS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    HRS /= moving_num
-                    D_Home_RS = str(HRS)
-                    D_Home_ranking = str(getRangeValue(HRS))
+                      D_Home_ranking = "1"
+                      sum_HRS = (int(HPPG) + int(HGDPG))
+                      #  D_Home_RS = str(sum_HRS)
+                      D_Home_RS = "N/A"
+                if nIndex_Match_of_season >= moving_num:
+                      sql = f"SELECT HPPG, HGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and home_team_id = {team_id} and date < '{nowDate}'   and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      mycursor.execute(sql)
+                      previous_num_Match_Results = mycursor.fetchall()
+                      HRS = 0
+                      for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
+                            HRS += (int(eachMatch[0]) + int(eachMatch[1]))
+                      HRS /= moving_num
+                      D_Home_RS = str(HRS)
+                      D_Home_ranking = str(getRangeValue(HRS))
                                 
             else:                                             # season is over 2011 and not promoted team
                 if nIndex_Match_of_season < moving_num:
@@ -448,20 +448,20 @@ def insert_match_team_dynamic_ranking_6(league, season, target_status):
 
             if (preSeasonId == 0) | (promoteStatus ==  1):    # season is 2010 or team is promoted team
                 if nIndex_Match_of_season < moving_num:
-                    D_Away_ranking = "1"
-                    sum_ARS = (int(APPG) + int(AGDPG))
-                    #  D_Away_RS = str(sum_ARS)
-                    D_Away_RS = "N/A"
-            if nIndex_Match_of_season >= moving_num:
-                    sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
-                    mycursor.execute(sql)
-                    previous_num_Match_Results = mycursor.fetchall()
-                    ARS = 0
-                    for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
-                        ARS += (int(eachMatch[0]) + int(eachMatch[1]))
-                    ARS /= moving_num
-                    D_Away_RS = str(ARS)
-                    D_Away_ranking = str(getRangeValue(ARS))
+                      D_Away_ranking = "1"
+                      sum_ARS = (int(APPG) + int(AGDPG))
+                      #  D_Away_RS = str(sum_ARS)
+                      D_Away_RS = "N/A"
+                if nIndex_Match_of_season >= moving_num:
+                      sql = f"SELECT APPG, AGDPG FROM season_match_plan where league_id = {league_id} and season_id = {season_id} and away_team_id = {team_id} and date < '{nowDate}'  and status = 'END' ORDER BY date DESC LIMIT {moving_num}"
+                      mycursor.execute(sql)
+                      previous_num_Match_Results = mycursor.fetchall()
+                      ARS = 0
+                      for eachMatch in previous_num_Match_Results:      # loop previous results to get aver Dynamic ranking
+                          ARS += (int(eachMatch[0]) + int(eachMatch[1]))
+                      ARS /= moving_num
+                      D_Away_RS = str(ARS)
+                      D_Away_ranking = str(getRangeValue(ARS))
                 
                 
             else:
@@ -534,14 +534,14 @@ def main():
     insert_match_team_dynamic_ranking_8("ita-serie-a",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("fra-ligue-1",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "END")
+    insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "END")
+    insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2021",      "END")
     insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2021",      "END")
     insert_match_team_dynamic_ranking_8("sui-super-league",         "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_8("den-superliga",            "2021-2022", "END")
+    insert_match_team_dynamic_ranking_8("den-superliga",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("bul-a-grupa",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga",     "2021-2022", "END")
@@ -549,22 +549,20 @@ def main():
     insert_match_team_dynamic_ranking_8("hun-nb-i",                 "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("srb-super-liga",           "2021-2022", "END")
     
-
-
     insert_match_team_dynamic_ranking_6("england/premier-league",   "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("esp-primera-division",     "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("bundesliga",               "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("ita-serie-a",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("fra-ligue-1",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "END")
+    insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "END")
+    insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2021",      "END")
     insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2021",      "END")
     insert_match_team_dynamic_ranking_6("sui-super-league",         "2021-2022", "END")
-    # insert_match_team_dynamic_ranking_6("den-superliga",            "2021-2022", "END")
+    insert_match_team_dynamic_ranking_6("den-superliga",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2021-2022", "END")
@@ -572,22 +570,20 @@ def main():
     insert_match_team_dynamic_ranking_6("hun-nb-i",                 "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("srb-super-liga",           "2021-2022", "END")
 
-
-
     insert_match_team_dynamic_ranking_8("england/premier-league",   "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("esp-primera-division",     "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("bundesliga",               "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("ita-serie-a",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("fra-ligue-1",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_8("sui-super-league",         "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_8("den-superliga",            "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_8("den-superliga",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("ukr-premyer-liga",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("bul-a-grupa",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("cze-1-fotbalova-liga",     "2021-2022", "LIVE")
@@ -595,30 +591,26 @@ def main():
     insert_match_team_dynamic_ranking_8("hun-nb-i",                 "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("srb-super-liga",           "2021-2022", "LIVE")
     
-
-
     insert_match_team_dynamic_ranking_6("england/premier-league",   "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("esp-primera-division",     "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("bundesliga",               "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("ita-serie-a",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("fra-ligue-1",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_6("sui-super-league",         "2021-2022", "LIVE")
-    # insert_match_team_dynamic_ranking_6("den-superliga",            "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_6("den-superliga",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("cro-1-hnl",                "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("hun-nb-i",                 "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("srb-super-liga",           "2021-2022", "LIVE")
-    
-
     
     ########################################################################################################################
     # insert_match_team_dynamic_ranking_8("england/premier-league", "2010-2011", "END")
@@ -768,8 +760,8 @@ def main():
     # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2017", "END")
     # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2018", "END")
     # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2019", "END")
-    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2020", "END")
-    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2020", "LIVE")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2021", "END")
+    # insert_match_team_dynamic_ranking_8("nor-eliteserien", "2021", "LIVE")
 
     # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2010", "END")
     # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2011", "END")
@@ -781,8 +773,8 @@ def main():
     # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2017", "END")
     # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2018", "END")
     # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2019", "END")
-    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2020", "END")
-    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2020", "LIVE")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2021", "END")
+    # insert_match_team_dynamic_ranking_8("swe-allsvenskan", "2021", "LIVE")
 
     # insert_match_team_dynamic_ranking_8("sui-super-league", "2010-2011", "END")
     # insert_match_team_dynamic_ranking_8("sui-super-league", "2011-2012", "END")
@@ -1039,8 +1031,8 @@ def main():
     # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2017", "END")
     # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2018", "END")
     # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2019", "END")
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2020", "END")
-    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2020", "LIVE")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2021", "END")
+    # insert_match_team_dynamic_ranking_6("nor-eliteserien", "2021", "LIVE")
 
     # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2010", "END")
     # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2011", "END")
@@ -1052,8 +1044,8 @@ def main():
     # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2017", "END")
     # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2018", "END")
     # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2019", "END")
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2020", "END")
-    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2020", "LIVE")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2021", "END")
+    # insert_match_team_dynamic_ranking_6("swe-allsvenskan", "2021", "LIVE")
 
     # insert_match_team_dynamic_ranking_6("sui-super-league", "2010-2011", "END")
     # insert_match_team_dynamic_ranking_6("sui-super-league", "2011-2012", "END")
@@ -1162,4 +1154,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

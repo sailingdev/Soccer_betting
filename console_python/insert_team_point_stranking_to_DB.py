@@ -9,11 +9,11 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team into) into database.
-# python3 Get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
 #################################################################
 
-season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 857]          # 2020 - 2021 style, change from 799
-season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]     # 2021 style
+season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 799, 857]         # 2021-2022 style
+season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]         # 2021 style
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -24,21 +24,21 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 def insert_team_point_to_DB():
-  #sql = f"SELECT * FROM ranking_range_table"
+  #sql = f"SELECT  * FROM ranking_range_table"
   #mycursor.execute(sql)
   #rangeVal = mycursor.fetchall()
   
-  sql = f"SELECT season_id, league_id, team_id , info_id FROM season_league_team_info"
+  sql = f"SELECT  season_id, league_id, team_id , info_id FROM season_league_team_info"
   mycursor.execute(sql)
   myresult = mycursor.fetchall()
 
-  for i in range(3537, 4119):     #here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
+  for i in range(3503, 3765):   #here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
       season_id = myresult[i][0]
       league_id = myresult[i][1]
       team_id = myresult[i][2]
       info_id = myresult[i][3]
 
-      print(season_id, league_id, team_id)
+      # print(season_id,league_id, team_id)
       h_mp = h_w = h_d = h_l = h_f = h_a = 0
       a_mp = a_w = a_d = a_l = a_f = a_a = 0
       t_mp = t_w = t_d = t_l = t_f = t_a = 0
@@ -72,7 +72,7 @@ def insert_team_point_to_DB():
           a_w += 1                                          # total count for away wins
         a_a += match[0]                                     # total count for away lost goals
         a_f += match[1]                                     # total count for away goals
-      print(a_mp, a_w, a_d, a_l, a_f, a_a)
+      #print(a_mp, a_w, a_d, a_l, a_f, a_a)
       ########## get AWAY data end #####################
       t_mp = h_mp + a_mp                                    # total matches summed home and away
       t_w = h_w + a_w
@@ -84,30 +84,29 @@ def insert_team_point_to_DB():
       P = t_w *3 + t_d                                      # total points for this season
 
       ########## get Total data end #####################
-      if t_mp != 0 and t_w != 0 and t_d != 0 and t_l != 0 and t_f != 0 and t_a !=0:
-          PPG = round(P/t_mp , 2) 
-          HPPG = round((h_w*3 + h_d)/h_mp, 2)
-          H_percent = str(round((h_w / h_mp * 100))) + "%"
-          HG = h_f
-          HDGPG = round( (h_f - h_a)/h_mp,2)
-          #HRS = HPPG + HDGPG
-          
+      PPG = round(P/t_mp , 2) 
+      HPPG = round((h_w*3 + h_d)/h_mp, 2)
+      H_percent = str(round((h_w / h_mp * 100))) + "%"
+      HG = h_f
+      HDGPG = round( (h_f - h_a)/h_mp,2)
+      #HRS = HPPG + HDGPG
+      
 
-          APPG = round((a_w*3 + a_d)/a_mp, 2)
-          A_percent = str(round((a_w / a_mp * 100))) + "%"
-          AG = a_f
-          ADGPG = round((a_f - a_a )/a_mp,2)
-          #ARS = APPG + ADGPG
-          ############################################################################
-          preSeasonId = 0
-          if season_id in season_array1:
-              nowSeasonIndex = season_array1.index(season_id)
-              if(nowSeasonIndex > 0):
-                  preSeasonId = season_array1[nowSeasonIndex - 1]
-          if season_id in season_array2:
-              nowSeasonIndex = season_array2.index(season_id)
-              if(nowSeasonIndex > 0):
-                  preSeasonId = season_array2[nowSeasonIndex - 1]
+      APPG = round((a_w*3 + a_d)/a_mp, 2)
+      A_percent = str(round((a_w / a_mp * 100))) + "%"
+      AG = a_f
+      ADGPG = round((a_f - a_a )/a_mp,2)
+      #ARS = APPG + ADGPG
+      ############################################################################
+      preSeasonId = 0
+      if season_id in season_array1:
+          nowSeasonIndex = season_array1.index(season_id)
+          if(nowSeasonIndex > 0):
+              preSeasonId = season_array1[nowSeasonIndex - 1]
+      if season_id in season_array2:
+          nowSeasonIndex = season_array2.index(season_id)
+          if(nowSeasonIndex > 0):
+              preSeasonId = season_array2[nowSeasonIndex - 1]
       
       ################ get pre season Id end #####################################
       sql = f"SELECT HPPG, HDGPG, APPG, ADGPG FROM season_league_team_info where league_id = {league_id} and season_id = {preSeasonId} and team_id = {team_id}"

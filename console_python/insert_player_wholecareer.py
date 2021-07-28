@@ -10,7 +10,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team into) into database.
-# python3 Get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
 #################################################################
 
 mydb = mysql.connector.connect(
@@ -20,14 +20,17 @@ mydb = mysql.connector.connect(
   database="soccer"
 )
 mycursor = mydb.cursor()
+
 def switch_season(argument):
-	switcher = {
-	  "2020-2021" : 799,
-	  "2019-2020": 12,
-	  "2020" : 64, 
-	  "2021" : 844,
-	}
-	return switcher.get(argument, "null")
+    switcher = {
+        "2019-2020": 12,
+        "2020": 64,
+        "2020-2021" : 799,
+        "2021"    : 844,
+        "2021-2022": 857
+    }
+    return switcher.get(argument, "null")
+
 def switch_league(argument):
 	switcher = {
 		"esp-primera-division": 16,  		#spain

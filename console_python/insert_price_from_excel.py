@@ -3,12 +3,11 @@ import mysql.connector
 
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="soccer"
 )
-
 mycursor = mydb.cursor()
 
 def switch_Month(argument):
@@ -25,45 +24,47 @@ def switch_Month(argument):
       "Oct": "10",
       "Nov": "11",
       "Dec": "12",
-      
-       
     }
     return switcher.get(argument, "null")
+    
 def switch_season(argument):
-    switcher = {
-      "2014-2015": 1,
-      "2015-2016": 2,
-      "2016-2017": 3,
-      "2017-2018": 4,
-      "2018-2019": 5,
-      "2019-2020": 12,
-      "2020-2021": 799,
-        "2014": 6,
-        "2015": 7,
-        "2016": 8,
-        "2017": 9,
-        "2018": 10,
-        "2019": 11,
-        "2020": 64,
-      "2010-2011": 19,
-      "2011-2012": 17,
-      "2012-2013": 15,
-      "2013-2014": 13,
-      "2014": 6,
-      "2013": 14,
-      "2012": 16,
-      "2011": 18, 
-      "2010": 20,
-    }
+    	switcher = {
+		"2010-2011": 19,
+		"2011-2012": 17,
+		"2012-2013": 15,
+		"2013-2014": 13,
+		"2014-2015": 1,
+		"2015-2016": 2,
+		"2016-2017": 3,
+		"2017-2018": 4,
+		"2018-2019": 5,
+		"2019-2020": 12,
+		"2020-2021": 799,
+		"2021-2022": 857,	
+		"2010": 20,
+		"2011": 18,
+		"2012": 16,
+		"2013": 14,
+		"2014": 6,
+		"2015": 7,
+		"2016": 8,
+		"2017": 9,
+		"2018": 10,
+		"2019": 11,
+		"2020": 64,
+		"2021": 844
+	}
+	return switcher.get(argument, "null")
+
 def switch_league(argument):
     switcher = {
-      "esp-primera-division": 16,  #spain
-      "eng-premier-league": 6,   #England
-      "bundesliga": 8,   #Germany
-      "ita-serie-a" : 11,  #italy
-      "fra-ligue-1" : 7,   #france
-      "ned-eredivisie": 12,  #Netherland
-      "aut-bundesliga": 1,  #Austria
+        "esp-primera-division": 16,  #spain
+        "eng-premier-league": 6,   #England
+        "bundesliga": 8,   #Germany
+        "ita-serie-a" : 11,  #italy
+        "fra-ligue-1" : 7,   #france
+        "ned-eredivisie": 12,  #Netherland
+        "aut-bundesliga": 1,  #Austria
         "por-primeira-liga": 14,  #portugal
         "por-liga-sagres": 14,
         "por-liga-zon-sagres":14,
@@ -156,6 +157,3 @@ def save_DB(source_path, league,startfrom,Endto):
     print(f"successful_adding_count is {successful_adding_count}")
 
 save_DB("1.xlsx","", 1556,  10660)   #index should be real count +1 eg: Englnad: 3421
-
-
-

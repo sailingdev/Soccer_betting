@@ -9,7 +9,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
-# insert_match_plan("2014-2015", "eng-premier-league", 1,5)  match 1~ 5 eg: England 1 ~ 380
+# insert_match_plan("2014-2015", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
 # direct write the info for inserting..... for saving time.
 #################################################################
 
@@ -24,7 +24,7 @@ mycursor = mydb.cursor()
 def switch_season(argument):
     switcher = {
         "2019-2020": 12,
-        "2020": 64, #795
+        "2020": 64,
         "2020-2021" : 799,
         "2021"    : 844,
         "2021-2022": 857
@@ -35,25 +35,25 @@ def switch_league(argument):
     switcher = {	
         "aut-bundesliga": 1,                  # Austria
         "bul-parva-liga" : 2,				  # Bulgaria
-		# "bul-a-grupa": 2,    
+		"bul-a-grupa": 2,    
 		"cze-1-fotbalova-liga": 3,            # Chezch
-        # "cze-gambrinus-liga": 3,		
+        "cze-gambrinus-liga": 3,		
 		"cro-1-hnl": 4,                       # Croatia
 		"den-superliga": 5,                   # Denmark
-        # "den-sas-ligaen": 5,
+        "den-sas-ligaen": 5,
 		"eng-premier-league": 6,              # England
 		"fra-ligue-1": 7,                     # France
 		"bundesliga": 8,                      # Germany
 		"gre-super-league": 9,                # Greece
 		"hun-nb-i": 10,                       # Hungary
-        # "hun-nb1": 10,
-        # "hun-otp-liga": 10,
+        "hun-nb1": 10,
+        "hun-otp-liga": 10,
 		"ita-serie-a": 11,                    # Italy
 		"ned-eredivisie": 12,                 # Netherland
 		"nor-eliteserien": 13,                # Norway from 2020
-        #"nor-tippeligaen": 13,
+        "nor-tippeligaen": 13,
 		"por-primeira-liga": 14,              # Portugal, Check
-        # "por-liga-sagres": 14,
+        "por-liga-sagres": 14,
 		"srb-super-liga": 15,                 # Serbia
 		"esp-primera-division": 16,           # Spain
         "swe-allsvenskan": 17,                # Sweden
@@ -72,7 +72,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 	if season:
 		URL = f"https://www.worldfootball.net/all_matches/{league}-{season}/"
 	else:
-		URL = f"https://www.worldfootball.net/all_matches/eng-premier-league-2014-2015/"
+		# URL = f"https://www.worldfootball.net/all_matches/eng-premier-league-2014-2015/"
 		print("Enter the season !")
 		return
 	

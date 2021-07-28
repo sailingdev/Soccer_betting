@@ -7,7 +7,7 @@ import urllib3
 
 ################################################################
 # This is the sample instructions to insert the player info into playerlist.
-# python3 insert_playerlistModule.py -season 2014-2015 -league esp-primera-division -page 1
+# python3 insert_player_list_module.py -season 2014-2015 -league esp-primera-division -page 1
 
 # direct write the info for inserting..... for saving time.
 #################################################################
@@ -23,7 +23,7 @@ mycursor = mydb.cursor()
 def switch_season(argument):
 	switcher = {
         "2019-2020": 12,
-        "2020": 64, #795
+        "2020": 64,
         "2020-2021" : 799,
         "2021"    : 844,
         "2021-2022": 857

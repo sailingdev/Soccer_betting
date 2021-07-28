@@ -19,7 +19,6 @@ import sys
 import os
 
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
-
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -59,21 +58,20 @@ binary = FirefoxBinary(path)
 
 site_url = "https://www.oddsportal.com/"
 tfoot_index = 0
-
 def switch_month(argument):
     switcher = {
-        "Jan": "01",
-        "Feb" : "02",
-        "Mar" : "03",
-        "Apr" : "04",
-        "May" : "05",
-        "Jun" : "06",
-        "Jul" : "07",
-        "Aug" : "08",
-        "Sep" : "09",
-        "Oct" : "10",
-        "Nov" : "11",
-        "Dec" : "12"
+      "Jan": "01",
+      "Feb" : "02",
+      "Mar" : "03",
+      "Apr" : "04",
+      "May" : "05",
+      "Jun" : "06",
+      "Jul" : "07",
+      "Aug" : "08",
+      "Sep" : "09",
+      "Oct" : "10",
+      "Nov" : "11",
+      "Dec" : "12"
     }
     return switcher.get(argument, "null")
 
@@ -82,7 +80,7 @@ def switch_season(argument):
         "2019-2020": 12,
         "2020" : 64,
         "2021" : 844,
-        '2021-2022' : 857,
+        "2021-2022" : 857,
     }
     return switcher.get(argument, "null")
 
@@ -135,8 +133,8 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
             sql = f"select * from odds where match_id = {match_id} and bookmaker_id = 11"
             mycursor.execute(sql)
             result = mycursor.fetchall()
-            
             ################## inserting new odds data #######################################################################
+           
             if (result and result[0][3] != 0) and (result and str(result[0][42]) >= match_date):                # that wasnt resch game's odd
                 print("         # No need to insert")
                 return "No update"
@@ -151,7 +149,7 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
                 updated_at = datetime.today().strftime('%Y-%m-%d')
                 print(f"       inserted at {updated_at}")
                 sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5, AH2_1, AH2_2, AH1d75_1, AH1d75_2, AH1d5_1, AH1d5_2 , AH1d25_1, AH1d25_2, AH1_1, AH1_2, AH0d75_1, AH0d75_2, AH0d5_1, AH0d5_2, AH0d25_1, AH0d25_2, AH0_1, AH0_2 , AH_p0d25_1 , AH_p0d25_2, AH_p0d5_1, AH_p0d5_2, AH_p0d75_1 , AH_p0d75_2, AH_p1_1, AH_p1_2, AH_p1d25_1, AH_p1d25_2, AH_p1d5_1, AH_p1d5_2, AH_p1d75_1, AH_p1d75_2, AH_p2_1, AH_p2_2 , updated_at)"  \
-                f"VALUES ({match_id}, 11, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]}, " \
+			    f"VALUES ({match_id}, 11, {odd_price['3way']['highest'][0]}, {odd_price['3way']['highest'][1]}, {odd_price['3way']['highest'][2]}, {odd_price['O/U']['highest'][0]}, {odd_price['O/U']['highest'][1]}, " \
                 f"{odd_price['AH']['AH_2']['highest'][0]} , {odd_price['AH']['AH_2']['highest'][1]} ,{odd_price['AH']['AH_1.75']['highest'][0]} , {odd_price['AH']['AH_1.75']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_1.5']['highest'][0]} , {odd_price['AH']['AH_1.5']['highest'][1]} ,{odd_price['AH']['AH_1.25']['highest'][0]} , {odd_price['AH']['AH_1.25']['highest'][1]} , " \
                 f"{odd_price['AH']['AH_1']['highest'][0]} , {odd_price['AH']['AH_1']['highest'][1]} ,{odd_price['AH']['AH_0.75']['highest'][0]} , {odd_price['AH']['AH_0.75']['highest'][1]} , " \
@@ -202,14 +200,16 @@ def insert_odds(basic_match_href_url, match_date, team_text, current_season):
     
 def get_odds(turl, OU_url , AH_url):
     odd_price = {"3way": {}, "O/U": {}, "AH": {}}
+   
     highest_list = [] 
-
+   
     ################################ driver setting part start############################
     driver1 = webdriver.Chrome(driverpath,options=chrome_options)
     driver1.get(turl)
     time.sleep(0.5)
     ################################ driver setting part End #############################`
     print("        * start scraping 1X2 data --------------------")
+   
     
     # driver1.execute_script("ElementSelect.expand( 'user-header-oddsformat' , 'user-header-oddsformat-expander' )")
     # time.sleep(1)
@@ -224,11 +224,12 @@ def get_odds(turl, OU_url , AH_url):
     if high_elemnet:
         av_values = high_elemnet.find_elements_by_class_name("right")
         if len(av_values) > 2:
-            for i in range(0, 3):
-                if av_values[i].text == "-":
-                    highest_list.append("0")
-                else: 
-                    highest_list.append(av_values[i].text)
+          for i in range(0, 3):
+            if av_values[i].text == "-":
+              highest_list.append("0")
+            else: 
+              highest_list.append(av_values[i].text)
+          
 
     three_way = {"highest": highest_list}
     odd_price['3way'] = three_way
@@ -253,18 +254,22 @@ def get_odds(turl, OU_url , AH_url):
         tfoot_OU = driver1.find_elements_by_tag_name('tfoot')
 
     if len(tfoot_OU):
+   
         high_elemnet = tfoot_OU[0].find_element_by_class_name("highest")
+       
         if high_elemnet:
             av_values = high_elemnet.find_elements_by_class_name("right")
             if len(av_values) > 1:
                 for i in  range(0, 2):
-                    if av_values[i+1].text == "-":
-                        highest_list.append("0")
-                    else:
-                        highest_list.append(av_values[i+1].text)
+                  if av_values[i+1].text == "-":
+                    highest_list.append("0")
+                  else:
+                    highest_list.append(av_values[i+1].text)
     else:
-        highest_list = ['0', '0']
+
+       highest_list = ['0', '0']
         
+      
     O_U = {"highest": highest_list}
     
     odd_price['O/U'] = O_U
@@ -406,13 +411,13 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P--0.25-0-0',this)")
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_0.25"] = AH
-            driver1.execute_script("page.togleTableContent('P--0.25-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P--0.25-0-0',this)")
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_0.25"] = AH
+          driver1.execute_script("page.togleTableContent('P--0.25-0-0',this)")
         else:
-            AH_odds["AH_0.25"] = { "highest": ['0', '0']}
+          AH_odds["AH_0.25"] = { "highest": ['0', '0']}
     ##################= Asian Handicap 0 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap 0 ']")
     if len(element_OU) == 0:
@@ -422,14 +427,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-0.00-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_0"] = AH
-            driver1.execute_script("page.togleTableContent('P-0.00-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-0.00-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_0"] = AH
+          driver1.execute_script("page.togleTableContent('P-0.00-0-0',this)")
         else:
-            AH_odds["AH_0"] = { "highest": ['0', '0']}
+          AH_odds["AH_0"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +0.25 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +0.25 ']")
     if len(element_OU) == 0:
@@ -439,14 +444,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-0.25-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p0.25"] = AH
-            driver1.execute_script("page.togleTableContent('P-0.25-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-0.25-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p0.25"] = AH
+          driver1.execute_script("page.togleTableContent('P-0.25-0-0',this)")
         else:
-            AH_odds["AH_p0.25"] = { "highest": ['0', '0']}
+          AH_odds["AH_p0.25"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +0.5 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +0.5 ']")
     if len(element_OU) == 0:
@@ -456,14 +461,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-0.50-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p0.5"] = AH
-            driver1.execute_script("page.togleTableContent('P-0.50-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-0.50-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p0.5"] = AH
+          driver1.execute_script("page.togleTableContent('P-0.50-0-0',this)")
         else:
-            AH_odds["AH_p0.5"] = { "highest": ['0', '0']}
+          AH_odds["AH_p0.5"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +0.75 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +0.75 ']")
     if len(element_OU) == 0:
@@ -473,14 +478,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-0.75-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p0.75"] = AH
-            driver1.execute_script("page.togleTableContent('P-0.75-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-0.75-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p0.75"] = AH
+          driver1.execute_script("page.togleTableContent('P-0.75-0-0',this)")
         else:
-            AH_odds["AH_p0.75"] = { "highest": ['0', '0']}
+          AH_odds["AH_p0.75"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +1 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +1 ']")
     if len(element_OU) == 0:
@@ -490,14 +495,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-1.00-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p1"] = AH
-            driver1.execute_script("page.togleTableContent('P-1.00-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-1.00-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p1"] = AH
+          driver1.execute_script("page.togleTableContent('P-1.00-0-0',this)")
         else:
-            AH_odds["AH_p1"] = { "highest": ['0', '0']}
+          AH_odds["AH_p1"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +1.25 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +1.25 ']")
     if len(element_OU) == 0:
@@ -507,14 +512,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-1.25-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p1.25"] = AH
-            driver1.execute_script("page.togleTableContent('P-1.25-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-1.25-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p1.25"] = AH
+          driver1.execute_script("page.togleTableContent('P-1.25-0-0',this)")
         else:
-            AH_odds["AH_p1.25"] = { "highest": ['0', '0']}
+          AH_odds["AH_p1.25"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +1.5 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +1.5 ']")
     if len(element_OU) == 0:
@@ -524,14 +529,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-1.50-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p1.5"] = AH
-            driver1.execute_script("page.togleTableContent('P-1.50-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-1.50-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p1.5"] = AH
+          driver1.execute_script("page.togleTableContent('P-1.50-0-0',this)")
         else:
-            AH_odds["AH_p1.5"] = { "highest": ['0', '0']}
+          AH_odds["AH_p1.5"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +1.75 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +1.75 ']")
     if len(element_OU) == 0:
@@ -541,14 +546,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-1.75-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p1.75"] = AH
-            driver1.execute_script("page.togleTableContent('P-1.75-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-1.75-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p1.75"] = AH
+          driver1.execute_script("page.togleTableContent('P-1.75-0-0',this)")
         else:
-            AH_odds["AH_p1.75"] = { "highest": ['0', '0']}
+          AH_odds["AH_p1.75"] = { "highest": ['0', '0']}
     ##################= Asian Handicap +2 result#######################################################
     element_OU = driver1.find_elements_by_xpath("//a[text()='Asian handicap +2 ']")
     if len(element_OU) == 0:
@@ -558,14 +563,14 @@ def get_odds(turl, OU_url , AH_url):
         container_parent = element_OU[0].find_element_by_xpath('./../../..');
         style_display = container_parent.value_of_css_property("display")
         if style_display != "none":
-            driver1.execute_script("page.togleTableContent('P-2.00-0-0',this)")
-            
-            tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
-            AH = get_various_AsianHandicap(tfoot_OU)
-            AH_odds["AH_p2"] = AH
-            driver1.execute_script("page.togleTableContent('P-2.00-0-0',this)")
+          driver1.execute_script("page.togleTableContent('P-2.00-0-0',this)")
+          
+          tfoot_OU = container_parent.find_elements_by_tag_name('tfoot')
+          AH = get_various_AsianHandicap(tfoot_OU)
+          AH_odds["AH_p2"] = AH
+          driver1.execute_script("page.togleTableContent('P-2.00-0-0',this)")
         else:
-            AH_odds["AH_p2"] = { "highest": ['0', '0']}
+          AH_odds["AH_p2"] = { "highest": ['0', '0']}
     
     
     odd_price['AH'] = AH_odds
@@ -574,7 +579,7 @@ def get_odds(turl, OU_url , AH_url):
 
 def get_various_AsianHandicap(tfoot_OU):
     global tfoot_index
-
+  
     highest_list = []
     if len(tfoot_OU):
         #aver_element = tfoot_OU[0].find_element_by_class_name("aver")
@@ -583,6 +588,7 @@ def get_various_AsianHandicap(tfoot_OU):
         #     av_values = aver_element.find_elements_by_class_name("right")
         #     if len(av_values) > 1:
         #         for i in  range(0, 2):
+                      
         #           if (av_values[i+1].text == "-" ) or (av_values[i+1].text == "" ):
                     
         #             aver_list.append("0")
@@ -592,15 +598,17 @@ def get_various_AsianHandicap(tfoot_OU):
             av_values = high_elemnet.find_elements_by_class_name("right")
             if len(av_values) > 1:
                 for i in  range(0, 2):
-                    if (av_values[i+1].text == "-") or  (av_values[i+1].text == ""):
-                        highest_list.append("0")
-                    else:
-                        highest_list.append(av_values[i+1].text)
+                  if (av_values[i+1].text == "-") or  (av_values[i+1].text == ""):
+                    highest_list.append("0")
+                  else:
+                    highest_list.append(av_values[i+1].text)
         
         #tfoot_index += 2
     else:
-        highest_list = ['0', '0']
+       
+       highest_list = ['0', '0']
         
+      
     AH = {"highest": highest_list}
     return AH
 
@@ -615,8 +623,11 @@ def getDate_from_trTxt(date_txt):
         return date_part[2] + "-" +switch_month(date_part[1]) + '-' + date_part[0]
 
 def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None):
+      
     driver = webdriver.Chrome(driverpath, options=chrome_options)
     current_season = False
+    
+    
     
     ####################### going to result page ###############################
     if season == "":
@@ -633,13 +644,13 @@ def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None
     print("whole page count", pagenumber)
     breakflag = 0
     if startPage ==  None:
-            startPage = 1
+          startPage = 1
     for page in range(startPage, pagenumber+1):
         search_url = page_url + "#/page/" + str(page)
         #print(search_url)
     
         print(f"----------------{league} - {season} {page}page start--------------------------------")
-
+      
         driver.get(search_url)    
         time.sleep(1.5)
         tbody = driver.find_element_by_tag_name('tbody')                # get tobody of all matches
@@ -681,31 +692,35 @@ def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None
         print(f"---------------- {league} - {season} {page}page End--------------------------------")
     driver.quit()
 
-insert_Price_To_Matchplan("england/premier-league",   "2021-2022")
-insert_Price_To_Matchplan("spain/laliga",             "2021-2022")
-insert_Price_To_Matchplan("germany/bundesliga",       "2021-2022")
-insert_Price_To_Matchplan("italy/serie-a",            "2021-2022")
-insert_Price_To_Matchplan("france/ligue-1",           "2021-2022")
-insert_Price_To_Matchplan("netherlands/eredivisie",   "2021-2022")
-insert_Price_To_Matchplan("austria/tipico-bundesliga","2021-2022")
-insert_Price_To_Matchplan("portugal/primeira-liga",   "2021-2022")
-insert_Price_To_Matchplan("greece/super-league",      "2021-2022")
-insert_Price_To_Matchplan("turkey/super-lig",         "2021-2022")
-insert_Price_To_Matchplan("norway/eliteserien",       "2021-2022")
-insert_Price_To_Matchplan("sweden/allsvenskan",       "2021-2022")
-insert_Price_To_Matchplan("switzerland/super-league", "2021-2022")
-insert_Price_To_Matchplan("denmark/superliga",        "2021-2022")
-insert_Price_To_Matchplan("ukraine/premier-league",   "2021-2022")
-insert_Price_To_Matchplan("bulgaria/parva-liga",      "2021-2022")
-insert_Price_To_Matchplan("czech-republic/1-liga",    "2021-2022")
-insert_Price_To_Matchplan("croatia/1-hnl",            "2021-2022")
-insert_Price_To_Matchplan("hungary/otp-bank-liga",    "2021-2022")
-insert_Price_To_Matchplan("serbia/super-liga",        "2021-2022")
+insert_Price_To_Matchplan("england/premier-league",   "2020-2021")
+# insert_Price_To_Matchplan("spain/laliga",             "2021-2022")
+# insert_Price_To_Matchplan("germany/bundesliga",       "2021-2022")
+# insert_Price_To_Matchplan("italy/serie-a",            "2021-2022")
+# insert_Price_To_Matchplan("france/ligue-1",           "2021-2022")
+# insert_Price_To_Matchplan("netherlands/eredivisie",   "2021-2022")
+# insert_Price_To_Matchplan("austria/tipico-bundesliga","2021-2022")
+# insert_Price_To_Matchplan("portugal/primeira-liga",   "2021-2022")
+# insert_Price_To_Matchplan("greece/super-league",      "2021-2022")
+# insert_Price_To_Matchplan("turkey/super-lig",         "2021-2022")
+# insert_Price_To_Matchplan("norway/eliteserien",       "2021-2022")
+# insert_Price_To_Matchplan("sweden/allsvenskan",       "2021-2022")
+# insert_Price_To_Matchplan("switzerland/super-league", "2021-2022")
+# insert_Price_To_Matchplan("denmark/superliga",        "2021-2022")
+# insert_Price_To_Matchplan("ukraine/premier-league",   "2021-2022")
+# insert_Price_To_Matchplan("bulgaria/parva-liga",      "2021-2022")
+# insert_Price_To_Matchplan("czech-republic/1-liga",    "2021-2022")
+# insert_Price_To_Matchplan("croatia/1-hnl",            "2021-2022")
+# insert_Price_To_Matchplan("hungary/otp-bank-liga",    "2021-2022")
+# insert_Price_To_Matchplan("serbia/super-liga",        "2021-2022")
 
 # insert_Price_To_Matchplan("serbia/super-liga", "2019-2020")
 # insert_Price_To_Matchplan("serbia/super-liga", "2018-2019")
 # insert_Price_To_Matchplan("serbia/super-liga", "2017-2018")
 # insert_Price_To_Matchplan("serbia/super-liga", "2016-2017")
 # insert_Price_To_Matchplan("serbia/super-liga", "2015-2016")
+
+
+
+
 
 print(" Total added count is : ", total_added_count)

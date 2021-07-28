@@ -112,13 +112,13 @@ def switch_season(argument):
 	return switcher.get(argument, "null")
 def switch_league(argument):
 	switcher = {
-	  "esp-primera-division": 16,  #spain
-	  "eng-premier-league": 6,   #England
-	  "bundesliga": 8,   #Germany
-	  "ita-serie-a" : 11,  #italy
-	  "fra-ligue-1" : 7,   #france
-	  "ned-eredivisie": 12,  #Netherland
-	  "aut-bundesliga": 1,  #Austria
+		"esp-primera-division": 16,  #spain
+		"eng-premier-league": 6,   #England
+		"bundesliga": 8,   #Germany
+		"ita-serie-a" : 11,  #italy
+		"fra-ligue-1" : 7,   #france
+		"ned-eredivisie": 12,  #Netherland
+		"aut-bundesliga": 1,  #Austria
 		"por-primeira-liga": 14,  #portugal
 		"por-liga-sagres": 14,
 		"por-liga-zon-sagres":14,

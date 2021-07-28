@@ -8,7 +8,7 @@ import urllib3
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
-# This is the sample instructions to insert the team info(team_list and season_league_team info) into database.
+# This is the sample instructions to insert the team info(team_list and season_league_team_info) into database.
 # python3 Get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
 #################################################################
 
@@ -23,7 +23,7 @@ mycursor = mydb.cursor()
 def switch_season(argument):
     switcher = {
         "2019-2020": 12,
-        "2020": 64, #795
+        "2020": 64,
         "2020-2021" : 799,
         "2021"    : 844,
         "2021-2022": 857
@@ -67,7 +67,9 @@ def scrape_season_league_teamname(season=None , league=None):
     if season:
         URL = f"https://www.worldfootball.net/players/{league}-{season}"
     else:
-        URL = f"https://www.worldfootball.net/players/eng-premier-league-2014-2015/"
+        # URL = f"https://www.worldfootball.net/players/eng-premier-league-2014-2015/"
+        print("Enter the season !")
+        
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
 
