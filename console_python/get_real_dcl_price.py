@@ -10,10 +10,10 @@ from collections import defaultdict
 #################################################################
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+	host="localhost",
+	user="root",
+	passwd="",
+	database="soccer"
 )
 
 mycursor = mydb.cursor()
@@ -251,7 +251,7 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 		price_id = mycursor.fetchone()
 
 		if price_id:
-			update_sql = f"update season_match_plan set DCL_refer_id = {price_id[0]} where match_id = {match_id}"
+			update_sql = f"update season_match_plan set DCL_refer_id = '{price_id[0]}' where match_id = {match_id}"
 			mycursor.execute(update_sql)
 			mydb.commit()
 			print(f"  W{week_number} - update one match id {match_id}")

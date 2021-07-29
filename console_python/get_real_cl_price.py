@@ -10,16 +10,16 @@ from collections import defaultdict
 #################################################################
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="soccer"
 )
 
 mycursor = mydb.cursor()
 
 def switch_season(argument):
-	switcher = {
+    switcher = {
 		"2010-2011": 19,
 		"2011-2012": 17,
 		"2012-2013": 15,
@@ -31,19 +31,21 @@ def switch_season(argument):
 		"2018-2019": 5,
 		"2019-2020": 12,
 		"2020-2021": 799,
-			"2010": 20,
-			"2011": 18,
-			"2012": 16,
-			"2013": 14,
-			"2014": 6,
-			"2015": 7,
-			"2016": 8,
-			"2017": 9,
-			"2018": 10,
-			"2019": 11, 
-			"2020": 64, 
+		"2021-2022": 857,	
+		"2010": 20,
+		"2011": 18,
+		"2012": 16,
+		"2013": 14,
+		"2014": 6,
+		"2015": 7,
+		"2016": 8,
+		"2017": 9,
+		"2018": 10,
+		"2019": 11,
+		"2020": 64,
+		"2021": 844
 	}
-	return switcher.get(argument, "null")
+    return switcher.get(argument, "null")
 
 season_list = []
 
@@ -503,7 +505,7 @@ def update_real_mo_price_id_toSeasonMatchPlanTable(week_number):
 		price_id = mycursor.fetchone()
 
 		if price_id:
-			update_sql = f"update season_match_plan set CL_mo_refer_id = {price_id[0]} where match_id = {match_id}"
+			update_sql = f"update season_match_plan set CL_mo_refer_id = '{price_id[0]}' where match_id = {match_id}"
 			mycursor.execute(update_sql)
 			mydb.commit()
 			print(f"  W{week_number} - update one match id {match_id}")

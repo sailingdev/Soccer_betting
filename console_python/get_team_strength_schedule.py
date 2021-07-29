@@ -110,6 +110,7 @@ def switch_season(argument):
 		'2021-2022' : 857,
 	}
 	return switcher.get(argument, "null")
+	
 def switch_league(argument):
 	switcher = {
 		"esp-primera-division": 16,  #spain
