@@ -77,10 +77,11 @@ def switch_month(argument):
 
 def switch_season(argument):
     switcher = {
-        "2019-2020": 12,
         "2020" : 64,
         "2021" : 844,
-        "2021-2022" : 857,
+        "2019-2020": 12,
+        "2020-2021": 799,
+        "2021-2022" : 857
     }
     return switcher.get(argument, "null")
 
