@@ -32,13 +32,13 @@ def insert_team_point_to_DB():
   mycursor.execute(sql)
   myresult = mycursor.fetchall()
 
-  for i in range(3503, 3765):   #here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
+  for i in range(3503, 3789):   #here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
       season_id = myresult[i][0]
       league_id = myresult[i][1]
       team_id = myresult[i][2]
       info_id = myresult[i][3]
 
-      # print(season_id,league_id, team_id)
+      print(season_id, league_id, team_id)
       h_mp = h_w = h_d = h_l = h_f = h_a = 0
       a_mp = a_w = a_d = a_l = a_f = a_a = 0
       t_mp = t_w = t_d = t_l = t_f = t_a = 0
@@ -72,7 +72,7 @@ def insert_team_point_to_DB():
           a_w += 1                                          # total count for away wins
         a_a += match[0]                                     # total count for away lost goals
         a_f += match[1]                                     # total count for away goals
-      #print(a_mp, a_w, a_d, a_l, a_f, a_a)
+      print(a_mp, a_w, a_d, a_l, a_f, a_a)
       ########## get AWAY data end #####################
       t_mp = h_mp + a_mp                                    # total matches summed home and away
       t_w = h_w + a_w
@@ -90,7 +90,6 @@ def insert_team_point_to_DB():
       HG = h_f
       HDGPG = round( (h_f - h_a)/h_mp,2)
       #HRS = HPPG + HDGPG
-      
 
       APPG = round((a_w*3 + a_d)/a_mp, 2)
       A_percent = str(round((a_w / a_mp * 100))) + "%"
@@ -143,7 +142,6 @@ def insert_team_point_to_DB():
       print(f"-------------------------One row -{info_id} - updated-------------------")
   print("-------------------end-------------------------------------")
 
-
 def getRangeValue(RS):
     print("---------------------------")
     if RS <= 0:
@@ -160,7 +158,5 @@ def getRangeValue(RS):
         return 6
     if (RS >=5):
         return 7
-    
-    
         
 insert_team_point_to_DB()

@@ -13,10 +13,10 @@ import urllib3
 #################################################################
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="soccer"
+	host="localhost",
+	user="root",
+	passwd="",
+	database="soccer"
 )
 mycursor = mydb.cursor()
 
@@ -30,39 +30,40 @@ def switch_season(argument):
     }
 	return switcher.get(argument, "null")
 def switch_league(argument):
-	switcher = {
-		"esp-primera-division": 16,  #spain
-		"eng-premier-league": 6,   #England
-		"bundesliga": 8,   #Germany   
-		"ita-serie-a" : 11,  #italy  
-		"fra-ligue-1" : 7,   #france
-		"ned-eredivisie": 12,  #Netherland
-		"aut-bundesliga": 1,  #Austria
-		"por-primeira-liga": 14,  #portugal  
-		"gre-super-league": 9,   #Greece
-		"tur-sueperlig": 19,   #Turkey
-		
-		"nor-eliteserien": 13,  #Norway
-		"swe-allsvenskan": 17,  #Sweden 
-
-		"sui-super-league": 18,   #Swiztland 
-		"den-superliga": 5,     #Denmark
-		"ukr-premyer-liga": 20,     #Ukraine     
-		"bul-parva-liga" : 2 ,    #bulgaria
-		"cze-1-fotbalova-liga": 3,      #Chezch
-		"cze-gambrinus-liga": 3,
-		"cro-1-hnl": 4 ,          #Croatia
-		"hun-nb-i": 10,     #Hungary
-		"hun-nb1": 10,
-		"hun-otp-liga":10,
-		"srb-super-liga": 15    #Serbia
-	}
-	return switcher.get(argument, "null")
+    switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		"bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superliga": 5,                   # Denmark
+        "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        "hun-nb1": 10,
+        "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        "nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "sui-super-league": 18,               # Swiztland
+		"tur-superlig": 19,                   # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
+    }
+    return switcher.get(argument, "null")
 
 new_added_playercount = 0
 
 def insert_playerList(season=None , league=None, page = None):
-		
 	pageNumber = page
 	print(f"-------------------------------{season}-{league}-{pageNumber}page start-----------------------------------------")
 	if season:
@@ -303,15 +304,15 @@ Insert_Update_Players("2021-2022", "cro-1-hnl")
 Insert_Update_Players("2021-2022", "eng-premier-league")
 Insert_Update_Players("2021-2022", "fra-ligue-1")
 Insert_Update_Players("2021-2022", "bundesliga")
-#Insert_Update_Players("2021-2022", "gre-super-league")
+Insert_Update_Players("2021-2022", "gre-super-league")
 Insert_Update_Players("2021-2022", "hun-nb-i")
 Insert_Update_Players("2021-2022", "ita-serie-a")
 Insert_Update_Players("2021-2022", "ned-eredivisie")
-Insert_Update_Players("2021", "nor-eliteserien")
+Insert_Update_Players("2021", 	   "nor-eliteserien")
 Insert_Update_Players("2021-2022", "por-primeira-liga")
 Insert_Update_Players("2021-2022", "srb-super-liga")
 Insert_Update_Players("2021-2022", "esp-primera-division")
-Insert_Update_Players("2021", "swe-allsvenskan")
+Insert_Update_Players("2021", 	   "swe-allsvenskan")
 #Insert_Update_Players("2021-2022", "tur-superlig")
-#Insert_Update_Players("2021-2022", "srb-super-liga")
+Insert_Update_Players("2021-2022", "sui-super-league")
 Insert_Update_Players("2021-2022", "ukr-premyer-liga")

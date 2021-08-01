@@ -57,7 +57,7 @@ def switch_league(argument):
 		"srb-super-liga": 15,                 # Serbia
 		"esp-primera-division": 16,           # Spain
         "swe-allsvenskan": 17,                # Sweden
-        "swi-super-league": 18,               # Swiztland
+        "sui-super-league": 18,               # Swiztland
 		"tur-superlig": 19,                   # Turkey
         "ukr-premyer-liga": 20                # Ukraine
     }
@@ -94,19 +94,17 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 		firstMatch = 1
 	
 	for i in range(firstMatch-1,lastMatch):
-
 		all_td = tr_results[i].find_all("td")
 		if(len(all_td)) :
 			print(f"------------------{season}-{league}- {i + 1}th Match process start --------------------")
 			if all_td[0].text !="":
 				match_date = convert_strDate_sqlDateFormat(all_td[0].text)
-				
 			match_total_result = all_td[5].text
 			start_time = all_td[1].text
 			match_status = all_td[6]
 			sql = f'SELECT team_id FROM team_list WHERE team_name = "{all_td[2].text}" UNION ' \
 				f'SELECT team_id FROM team_list WHERE team_name = "{all_td[4].text}"'
-			#print(sql)
+			print(sql)
 			mycursor.execute(sql)
 			myresult = mycursor.fetchall()
 			home_team_id = myresult[0][0]
@@ -148,7 +146,6 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									half_away_score = half.split(":")[1][:-1]
 							print(f"   {match_date}, {home_team_id}, {away_team_id},{total_home_score}-{total_away_score},{half_home_score}-{half_away_score} ")
 							sql = f"UPDATE season_match_plan set date = '{match_date}', time = '{start_time}', total_home_score = {total_home_score}, half_home_score = {half_home_score}, total_away_score = {total_away_score} , half_away_score = {half_away_score} , status = '{status}' where match_id = {current_match_id}"
-							
 							mycursor.execute(sql)
 							mydb.commit()
 
@@ -162,7 +159,6 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 								href_info = all_td[5].find("a")['href']
 								url = "https://www.worldfootball.net"+href_info
 								insert_match_team_player_info(url , current_match_id, home_team_id, away_team_id)
-
 						else:  
 							status = ""                                             # if the match is yet planned or resch
 							if "resch" in match_total_result :
@@ -210,7 +206,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 
 								if all_td[5].find("a"):
 									href_info = all_td[5].find("a")['href']
-									url = "https://www.worldfootball.net"+href_info
+									url = "https://www.worldfootball.net" + href_info
 									insert_match_team_player_info(url , current_match_id, home_team_id, away_team_id)
 							else:
 								sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
@@ -340,7 +336,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 
 									if all_td[5].find("a"):
 										href_info = all_td[5].find("a")['href']
-										url = "https://www.worldfootball.net"+href_info
+										url = "https://www.worldfootball.net" + href_info
 										insert_match_team_player_info(url , current_match_id, home_team_id, away_team_id)
 						else:
 							sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'LIVE' and date ='{match_date}'"
@@ -355,7 +351,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 								if len(result):
 									current_match_id = result[0][0]
 									status = "LIVE"
-									sql = f"UPDATE season_match_plan set date = '{match_date}' , time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
+									sql = f"UPDATE season_match_plan set date = '{match_date}', time = '{start_time}', status = '{status}' where match_id = {current_match_id}"
 									mycursor.execute(sql)
 									mydb.commit()
 									sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 ,c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {current_match_id}"
@@ -387,14 +383,13 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 					mydb.commit()
 					print("    1 completed game inserted, ID: ", mycursor.lastrowid, " in match_plan")
 					
-					
 					sql = f"UPDATE season_match_plan AS a SET WN = WEEK(a.date - INTERVAL 1 DAY)+1 , c_WN = (SELECT WEEK  FROM date_week_map AS b WHERE a.date = b.date ) where match_id = {last_match_id}"
 					mycursor.execute(sql)
 					mydb.commit()
 
 					if all_td[5].find("a"):
 						href_info = all_td[5].find("a")['href']
-						url = "https://www.worldfootball.net"+href_info
+						url = "https://www.worldfootball.net" + href_info
 						insert_match_team_player_info(url , last_match_id, home_team_id, away_team_id)
 
 				else:                                                   # if the match is planned
@@ -453,7 +448,6 @@ def insert_match_team_player_info(url , last_match_id, home_team_id, away_team_i
 		home_team_container = results[3]
 		away_team_container = results[4]
 
-
 	tr_results = goal_assist_container.find_all("tr")
 	for every_tr in tr_results:
 		#if video exist
@@ -469,7 +463,6 @@ def insert_match_team_player_info(url , last_match_id, home_team_id, away_team_i
 				if len(a_results) > 1:
 					assist_player_id_list.append(get_player_id(a_results[1]['title'], a_results[1]['href'] ,team_id_for_player))
 	print("    goal list - ", goal_player_id_list, "assist list - ", assist_player_id_list)
-
 
 	a_results = home_team_container.find_all("a")
 	if len(a_results) > 10:
@@ -518,7 +511,7 @@ def get_player_id(player_name, player_href, team_id):
 		mycursor.execute(sql)
 		player_existing_result = mycursor.fetchall()
 		if len(player_existing_result):                 # match found with player name and birthday
-			#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+			print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 			player_id = player_existing_result[0][0]
 			return player_id
 		else:      										# not found with name and birthday , so will find with player number and team id
@@ -533,11 +526,11 @@ def get_player_id(player_name, player_href, team_id):
 				now_player_id = player_existing_result[0][0]
 				
 				if (player_birthday ==  now_player_birthday) | (player_name == now_player_name):
-					#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+					print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 					sql= f'UPDATE playerlist set birthday = "{player_birthday}", player_name = "{player_name}" where player_id = {now_player_id}'
 					mycursor.execute(sql)
 					mydb.commit()
-					#print(mycursor.rowcount, "record Updated. its name or birthday updated.. not img_src")
+					print(mycursor.rowcount, "record Updated. its name or birthday updated.. not img_src")
 					return now_player_id
 				else:
 					player_id = add_extra_player(player_name, player_adding_info, team_id)
@@ -556,13 +549,13 @@ def get_player_id(player_name, player_href, team_id):
 			player_existing_result = mycursor.fetchall()
 			if len(player_existing_result):   # its img_src, pnumber, team_id update
 				player_id = player_existing_result[0][0]
-				#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+				print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 				if player_number == "":
 						player_number = 0
 				sql = f'UPDATE playerlist set img_src = "{player_adding_info[0]}", now_pNumber = {player_number}, now_team_id = {team_id} where player_id = {player_id}'
 				mycursor.execute(sql)
 				mydb.commit()
-				#print(mycursor.rowcount, "record Updated. its img_src or pnumber, team id updated, have its own imag")
+				print(mycursor.rowcount, "record Updated. its img_src or pnumber, team id updated, have its own imag")
 				return player_id
 			else:   
 				if player_number == "":
@@ -576,11 +569,11 @@ def get_player_id(player_name, player_href, team_id):
 					now_player_birthday = player_existing_result[0][2]
 					now_player_id = player_existing_result[0][0]
 					if (player_birthday ==  now_player_birthday) | (player_name == now_player_name):
-						#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+						print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 						sql= f'UPDATE playerlist set img_src = "{player_adding_info[0]}", birthday = "{now_player_birthday}", player_name = "{now_player_name}" where player_id = {now_player_id}'
 						mycursor.execute(sql)
 						mydb.commit()
-						#print(mycursor.rowcount, "record Updated. its img, birthday or name changed.. have its own image, but not searched")
+						print(mycursor.rowcount, "record Updated. its img, birthday or name changed.. have its own image, but not searched")
 						return now_player_id
 					else:
 						player_id = add_extra_player(player_name, player_adding_info, team_id)
@@ -592,14 +585,14 @@ def get_player_id(player_name, player_href, team_id):
 			img_src_flag = 1
 			player_id = player_existing_result[0][0]
 			player_birthday = player_adding_info[1]
-			#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+			print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 			now_pNumber = player_adding_info[5]
 			if now_pNumber == "":
 				now_pNumber = 0
 			sql = f'UPDATE playerlist SET player_name = "{player_name}", birthday = "{player_birthday}" ,now_team_id = {team_id}, now_pNumber = {now_pNumber} WHERE player_id = {player_id}'
 			mycursor.execute(sql)
 			mydb.commit()
-			#print(mycursor.rowcount, "record Updated. searched with its own image and his whole info updated!")
+			print(mycursor.rowcount, "record Updated. searched with its own image and his whole info updated!")
 			return player_id
 				
 def get_more_player_info(url , player_name):
@@ -652,8 +645,6 @@ def get_more_player_info(url , player_name):
 	if player_number != "":
 			player_number = player_number.split('#')[1]
 
-	
-		
 	return_list = [player_img, player_birthday , player_nation, player_weight, player_foot, player_number]
 
 	return return_list
@@ -678,14 +669,14 @@ def update_insert_PlayerCareer(player_id, player_href):
 	mycursor.execute(sql)
 	myresult = mycursor.fetchall()
 	href_info = player_href
-	url = "https://www.worldfootball.net"+href_info+"/2/"
+	url = "https://www.worldfootball.net" + href_info + "/2/"
 	
 	page = requests.get(url , headers={"User-Agent":"Mozilla/5.0"})
 	
 	soup = BeautifulSoup(page.content, "html.parser")
 		################################### page url check end ###############################
 	if len(myresult):           # player data is already existed in career table , so have to update or insert
-		#print(f"{player_id}th data is already added! so will update ")
+		print(f"{player_id}th data is already added! so will update ")
 		extra_results = soup.find('table', class_="standard_tabelle")
 		extra_tr_results = extra_results.find_all("tr")
 		count = 1
@@ -702,7 +693,7 @@ def update_insert_PlayerCareer(player_id, player_href):
 					season_id = fn_Get_SeasonId(all_td[2].text)
 					
 					if "2018" in all_td[2].text:          # 2018 lower season no updated and will break 
-						#print("    now season is lower than 2018 , so break")
+						print("    now season is lower than 2018 , so break")
 						break
 					
 					team_id = fn_Get_TeamId(all_td[3].text)
@@ -721,23 +712,23 @@ def update_insert_PlayerCareer(player_id, player_href):
 								where player_id = {player_id} and league_id = {league_id} and season_id = {season_id} and team_id = {team_id}"
 						mycursor.execute(sql)
 						mydb.commit()
-						#print(f"   Updated new row-{count}")
+						print(f"   Updated new row-{count}")
 						count = count + 1
 					else:						# if the data not existing in DB, will inset this
 						sql = f"INSERT INTO player_career (player_id, flag, league_id, season_id, team_id, matches, goals, started,s_in, s_out, yellow, s_yellow, red ) \
 							VALUES ({player_id},'{flag}', {league_id} ,{ season_id}, {team_id}, \
-						{  fn_filter_value(all_td[4].text)}, \
-						{ fn_filter_value(all_td[5].text)}, \
-						{ fn_filter_value(all_td[6].text)}, \
-						{ fn_filter_value(all_td[7].text)}, \
-						{ fn_filter_value(all_td[8].text)}, \
-						{ fn_filter_value(all_td[9].text)}, \
-						{ fn_filter_value(all_td[10].text)}, \
-						{ fn_filter_value(all_td[11].text)})"
+								{  fn_filter_value(all_td[4].text)}, \
+								{ fn_filter_value(all_td[5].text)}, \
+								{ fn_filter_value(all_td[6].text)}, \
+								{ fn_filter_value(all_td[7].text)}, \
+								{ fn_filter_value(all_td[8].text)}, \
+								{ fn_filter_value(all_td[9].text)}, \
+								{ fn_filter_value(all_td[10].text)}, \
+								{ fn_filter_value(all_td[11].text)})"
 					
 						mycursor.execute(sql)
 						mydb.commit()
-						#print(f"   added extra new row-{count}")
+						print(f"   added extra new row-{count}")
 						count = count + 1
 			tr_index = tr_index +1
 
@@ -772,14 +763,13 @@ def update_insert_PlayerCareer(player_id, player_href):
 					
 					mycursor.execute(sql)
 					mydb.commit()
-					#print(f"   added extra new row-{count}")
+					print(f"   added extra new row-{count}")
 					count = count + 1
 			tr_index = tr_index +1
 						
 	print("    Player's career updated as new data!")
 
 def fn_filter_value(str):
-		
 	if '?' in str:
 		return 0
 	else: 
@@ -873,7 +863,7 @@ def main():
 	doing_scraping_match_plan("2021-2022", "eng-premier-league")
 	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
 	doing_scraping_match_plan("2021-2022", "bundesliga")
-	# doing_scraping_match_plan("2021-2022", "gre-super-league", firstMatch=None, lastMatch=None, newInsertFlag=True)
+	doing_scraping_match_plan("2021-2022", "gre-super-league")
 	doing_scraping_match_plan("2021-2022", "hun-nb-i")
 	doing_scraping_match_plan("2021-2022", "ita-serie-a")
 	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
@@ -882,7 +872,7 @@ def main():
 	doing_scraping_match_plan("2021-2022", "srb-super-liga")
 	doing_scraping_match_plan("2021-2022", "esp-primera-division")
 	doing_scraping_match_plan("2021", "swe-allsvenskan")
-	# doing_scraping_match_plan("2021-2022", "swi-super-league", firstMatch=None, lastMatch=None, newInsertFlag=True)
+	doing_scraping_match_plan("2021-2022", "sui-super-league")
 	# doing_scraping_match_plan("2021-2022", "tur-superlig", firstMatch=None, lastMatch=None, newInsertFlag=True)
 	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 

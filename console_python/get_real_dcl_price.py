@@ -203,7 +203,7 @@ def get_dcl_source_list(c_weeknumber):
 	print("-----length of source list is ", len(source_list))
 	return source_list
 
-def insert_real_prcie_to_realpriceTable( C_weeknumber):
+def insert_real_prcie_to_realpriceTable(C_weeknumber):
 	
 	##################### get all Dynamic Cream League combination################################
 	source_list = get_dcl_source_list(C_weeknumber)
@@ -254,22 +254,19 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 		mycursor.execute(query_sql)
 		price_id = mycursor.fetchone()
 
-		try:
-			if price_id:
-				update_sql = f"update season_match_plan set DCL_refer_id = '{price_id[0]}' where match_id = {match_id}"
-				mycursor.execute(update_sql)
-				mydb.commit()
-				print(f"  W{week_number} - update one match id {match_id}")
-				count += 1
-		except Error as e:
-			print("Error while connecting to MySQL", e)
+		if price_id:
+			update_sql = f"update season_match_plan set DCL_refer_id = '{price_id[0]}' where match_id = {match_id}"
+			mycursor.execute(update_sql)
+			mydb.commit()
+			print(f"  W{week_number} - update one match id {match_id}")
+			count += 1
 
 	print(f" - W{week_number} - updated {count} : END !")
 
 def get_realprice_toRealPriceTable_perweek(weeknumber):
 	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
 	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
-    insert_real_prcie_to_realpriceTable(weeknumber)								#  param shoulb be current continuous week.
+    insert_real_prcie_to_realpriceTable(weeknumber)							#  param shoulb be current continuous week.
 
 
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
@@ -278,7 +275,7 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 596
+	weeknumber = 605
 	get_realprice_toRealPriceTable_perweek(weeknumber)							# completed by 594 - 2021-05-04 .
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	
