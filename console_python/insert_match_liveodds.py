@@ -24,7 +24,7 @@ mydb = mysql.connector.connect(
     database="soccer"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor() 
 
 PROXY = "193.149.225.224:80"
 driverpath = "C:\Soccer_betting\chromedriver.exe"
@@ -46,7 +46,7 @@ site_url = "https://www.oddsportal.com/soccer/"
 
 def switch_month(argument):
     switcher = {
-        "Jan": "01",
+        "Jan" : "01",
         "Feb" : "02",
         "Mar" : "03",
         "Apr" : "04",
@@ -63,10 +63,11 @@ def switch_month(argument):
 
 def switch_season(argument):
     switcher = {
-        "2019-2020": 12,
         "2020" : 64,
         "2021" : 844 ,
-        '2021-2022' : 857,
+        "2019-2020": 12,
+        "2020-2021": 799,
+        "2021-2022": 857
     }
     return switcher.get(argument, "null")
   

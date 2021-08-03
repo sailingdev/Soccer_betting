@@ -24,43 +24,45 @@ def switch_season(argument):
 	  "2019-2020-meistergruppe": 145,
 	  "2019-2020-abstieg" : 86,
 	  "2019-2020-meisterschaft": 234, 
-	  "2020": 64
+	  "2020": 64,
+	  "2020-2021" : 799,
+	  "2021" : 844 ,
+      "2021-2022" : 857
+	}
+	return switcher.get(argument, "null")
 
-	}
-	return switcher.get(argument, "null")
 def switch_league(argument):
-	switcher = {
-	  "esp-primera-division": 16,  #spain
-	  "eng-premier-league": 6,   #England
-	  "bundesliga": 8,   #Germany
-	  "ita-serie-a" : 11,  #italy
-	  "fra-ligue-1" : 7,   #france
-	  "ned-eredivisie": 12,  #Netherland
-	  "aut-bundesliga": 1,  #Austria
-		"por-primeira-liga": 14,  #portugal
-		"por-liga-sagres": 14,
-		"por-liga-zon-sagres":14,
-		"gre-superleague": 9,   #Greece
-		"gre-super-league": 9,   #Greece
-		"tur-sueperlig": 19,   #Turkey
-		"nor-eliteserien": 13,  #Norway
-		"nor-tippeligaen":13,
-		"swe-allsvenskan": 17,  #Sweden
-		"sui-super-league": 18,   #Swiztland
-		"den-superliga": 5,     #Denmark
-		"den-sas-ligaen":5,
-		"ukr-premyer-liga": 20,     #Ukraine
-		"bul-a-grupa": 2,       #bulgaria
-		"bul-parva-liga" : 2 , 
-		"cze-1-fotbalova-liga": 3,      #Chezch
-		"cze-gambrinus-liga": 3,
-		"cro-1-hnl": 4 ,          #Croatia
-		"hun-nb-i": 10,     #Hungary
-		"hun-nb1": 10,
-		"hun-otp-liga":10,
-		"srb-super-liga": 15    #Serbia
-	}
-	return switcher.get(argument, "null")
+    switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		"bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superliga": 5,                   # Denmark
+        "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        "hun-nb1": 10,
+        "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        "nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "sui-super-league": 18,               # Swiztland
+		"tur-superlig": 19,                   # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
+    }
+    return switcher.get(argument, "null")
+
 def get_Real_LeagueUrl(argument):
 	switcher = {
 		"Spain La Liga" 			:		 "esp-primera-division",  	#spain
