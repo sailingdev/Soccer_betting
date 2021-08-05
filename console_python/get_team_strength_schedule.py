@@ -622,7 +622,7 @@ def make_schedule_ofToday():
 	month = int(month)
 	day = int(day)
 	#mycursor = mydb.cursor()
-	sql = f"SELECT `match_id`, `time` FROM season_match_plan where date = '{today}' and status = 'LIVE' order by time "
+	sql = f"SELECT `match_id`, `time` FROM season_match_plan where date = '{today}' and status = 'LIVE' order by time"
 
 	#mycursor.execute(sql)
 	match_list  = mysql_pool.execute(sql)
