@@ -82,7 +82,7 @@ updated_count = 0
 def insert_match_team_socre_strength_TPGR():
 	global updated_count
 	
-	sql = f"SELECT  * FROM season_match_plan where match_id BETWEEN 68171 and 72708"
+	sql = f"SELECT * FROM season_match_plan WHERE match_id > 59098"
 	
 	mycursor.execute(sql)
 	wholeMatchResult = mycursor.fetchall()
@@ -90,7 +90,7 @@ def insert_match_team_socre_strength_TPGR():
 	for i in range(0, length_result):                   # loop for each match in match plan total 53856
 		print(f"------------{i + 1}th row Start-------------")
 		if wholeMatchResult[i][11] == "END":
-			if wholeMatchResult[i][18] == None:         # the game ended but team score not added yet . so will calculate!
+			if wholeMatchResult[i][18] == None:         # the game ended but team score not added yet. so will calculate!
 				match_id = wholeMatchResult[i][0]
 				season_id = wholeMatchResult[i][1]
 				home_team_id = wholeMatchResult[i][5]

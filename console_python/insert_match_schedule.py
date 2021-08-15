@@ -9,7 +9,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
-# insert_match_plan("2014-2015", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
+# insert_match_plan("2021-2022", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
 # direct write the info for inserting..... for saving time.
 #################################################################
 
@@ -93,7 +93,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 	if firstMatch == None:        # when the fist match start is not defined
 		firstMatch = 1
 	
-	for i in range(firstMatch-1,lastMatch):
+	for i in range(firstMatch-1, lastMatch):
 		all_td = tr_results[i].find_all("td")
 		if(len(all_td)) :
 			print(f"------------------{season}-{league}- {i + 1}th Match process start --------------------")

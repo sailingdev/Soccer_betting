@@ -50,9 +50,10 @@ def insert_match_plan(season=None , league=None, firstMatch = None, lastMatch = 
     if season:
         URL = f"https://www.worldfootball.net/all_matches/{league}-{season}/"
     else:
-        URL = f"https://www.worldfootball.net/all_matches/eng-premier-league-2014-2015/"
+        # URL = f"https://www.worldfootball.net/all_matches/eng-premier-league-2014-2015/"
         print("Enter the season !")
         return
+
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     results = soup.find('table', class_="standard_tabelle")

@@ -10,7 +10,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team into) into database.
-# python3 get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2021-2022 -league esp-primera-division
 #################################################################
 
 mydb = mysql.connector.connect(
@@ -498,11 +498,18 @@ def main():
 		"nor-eliteserien" ,  			#Norway
 		"swe-allsvenskan"   			#Sweden
 	]
+
 	for league in league_list_1:
 		startPageNumber = 1
-		totalpageCount = get_totalPageCount_onPlayerPage(season, league ) + 1
+		totalpageCount = get_totalPageCount_onPlayerPage(season, league) + 1
 		for x in range(startPageNumber, totalpageCount):
-			insert_player_wholecareer(season,league,x)
+			insert_player_wholecareer(season, league, x)
+
+	# for league in league_list_2:
+	# 	startPageNumber = 1
+	# 	totalpageCount = get_totalPageCount_onPlayerPage(season, league) + 1
+	# 	for x in range(startPageNumber, totalpageCount):
+	# 		insert_player_wholecareer(season, league, x)
 
 
 if '__main__' == __name__:

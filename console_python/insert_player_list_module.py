@@ -7,7 +7,7 @@ import urllib3
 
 ################################################################
 # This is the sample instructions to insert the player info into playerlist.
-# python3 insert_player_list_module.py -season 2014-2015 -league esp-primera-division -page 1
+# python3 insert_player_list_module.py -season 2021-2022 -league esp-primera-division -page 1
 
 # direct write the info for inserting..... for saving time.
 #################################################################
@@ -69,7 +69,7 @@ def insert_playerList(season=None , league=None, page = None):
 	if season:
 		URL = f"https://www.worldfootball.net/players_list/{league}-{season}/nach-mannschaft/{page}/"
 	else:
-		#URL = f"https://www.worldfootball.net/players_list/esp-primera-division-2014-2015/nach-mannschaft/1/"
+		# URL = f"https://www.worldfootball.net/players_list/esp-primera-division-2014-2015/nach-mannschaft/1/"
 		print("Enter the season !")
 		return
 
@@ -288,31 +288,31 @@ def add_extra_player(player_name, player_adding_info, team_id):
 	print("new player added - soccer ", player_name, player_birthday)
 	return mycursor.lastrowid
 
-def Insert_Update_Players(season, league):
+def insert_update_players(season, league):
 	startPageNumber = 1
 	totalpageCount = get_totalPageCount_onPlayerPage(season, league ) + 1
 	for x in range(startPageNumber, totalpageCount):
 		insert_playerList(season,league,x)
 
-	print(f" added new player count is {new_added_playercount}");
+	print(f"Totally {new_added_playercount} new players were added");
 	
-Insert_Update_Players("2021-2022", "aut-bundesliga")
-Insert_Update_Players("2021-2022", "bul-parva-liga")
-Insert_Update_Players("2021-2022", "cze-1-fotbalova-liga")
-Insert_Update_Players("2021-2022", "cro-1-hnl")
-#Insert_Update_Players("2021-2022", "den-superliga")
-Insert_Update_Players("2021-2022", "eng-premier-league")
-Insert_Update_Players("2021-2022", "fra-ligue-1")
-Insert_Update_Players("2021-2022", "bundesliga")
-Insert_Update_Players("2021-2022", "gre-super-league")
-Insert_Update_Players("2021-2022", "hun-nb-i")
-Insert_Update_Players("2021-2022", "ita-serie-a")
-Insert_Update_Players("2021-2022", "ned-eredivisie")
-Insert_Update_Players("2021", 	   "nor-eliteserien")
-Insert_Update_Players("2021-2022", "por-primeira-liga")
-Insert_Update_Players("2021-2022", "srb-super-liga")
-Insert_Update_Players("2021-2022", "esp-primera-division")
-Insert_Update_Players("2021", 	   "swe-allsvenskan")
-#Insert_Update_Players("2021-2022", "tur-superlig")
-Insert_Update_Players("2021-2022", "sui-super-league")
-Insert_Update_Players("2021-2022", "ukr-premyer-liga")
+insert_update_players("2021-2022", "aut-bundesliga")
+insert_update_players("2021-2022", "bul-parva-liga")
+insert_update_players("2021-2022", "cze-1-fotbalova-liga")
+insert_update_players("2021-2022", "cro-1-hnl")
+#insert_update_players("2021-2022", "den-superliga")
+insert_update_players("2021-2022", "eng-premier-league")
+insert_update_players("2021-2022", "fra-ligue-1")
+insert_update_players("2021-2022", "bundesliga")
+insert_update_players("2021-2022", "gre-super-league")
+insert_update_players("2021-2022", "hun-nb-i")
+insert_update_players("2021-2022", "ita-serie-a")
+insert_update_players("2021-2022", "ned-eredivisie")
+insert_update_players("2021", 	   "nor-eliteserien")
+insert_update_players("2021-2022", "por-primeira-liga")
+insert_update_players("2021-2022", "srb-super-liga")
+insert_update_players("2021-2022", "esp-primera-division")
+insert_update_players("2021", 	   "swe-allsvenskan")
+#insert_update_players("2021-2022", "tur-superlig")
+insert_update_players("2021-2022", "sui-super-league")
+insert_update_players("2021-2022", "ukr-premyer-liga")

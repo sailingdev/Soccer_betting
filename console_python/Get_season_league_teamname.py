@@ -9,7 +9,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team_info) into database.
-# python3 Get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2021-2022 -league esp-primera-division
 #################################################################
 
 mydb = mysql.connector.connect(
@@ -69,6 +69,7 @@ def scrape_season_league_teamname(season=None , league=None):
     else:
         # URL = f"https://www.worldfootball.net/players/eng-premier-league-2014-2015/"
         print("Enter the season !")
+        return
         
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
@@ -82,7 +83,7 @@ def scrape_season_league_teamname(season=None , league=None):
         teamname = td.find("img")['title']
         ev_team = [img_src, teamname]
         team_info.append(ev_team)
-        #print(f"img : {img_src} , title : {teamname}")
+        # print(f"img : {img_src} , title : {teamname}")
 
     return team_info
 
@@ -90,7 +91,7 @@ def print_scrape_season_league_teamname(season=None , league=None):
     if season == None:
         print(f"Enter the season and league")
     else:
-        team_info = scrape_season_league_teamname(season,league)
+        team_info = scrape_season_league_teamname(season, league)
         i=0
         for  info in team_info:
             i+=1
