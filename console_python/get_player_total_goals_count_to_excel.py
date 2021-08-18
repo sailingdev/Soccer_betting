@@ -42,7 +42,7 @@ def switch_league(argument):
 		"nor-eliteserien": 13,  			#Norway
 		"swe-allsvenskan": 17,  			#Sweden
 		"sui-super-league": 18,  			 #Swiztland
-		"den-superliga": 5,     			#Denmark
+		"den-superligaen": 5,     			#Denmark
 		"ukr-premyer-liga": 20,    			 #Ukraine
 		"bul-parva-liga" : 2,      			#bulgaria
 		"cze-1-fotbalova-liga": 3,      	#Chezch

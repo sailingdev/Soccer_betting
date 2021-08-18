@@ -119,7 +119,7 @@ def switch_league(argument):
 		"cze-1-fotbalova-liga": 3,            # Chezch
         "cze-gambrinus-liga": 3,		
 		"cro-1-hnl": 4,                       # Croatia
-		"den-superliga": 5,                   # Denmark
+		"den-superligaen": 5,                   # Denmark
         "den-sas-ligaen": 5,
 		"eng-premier-league": 6,              # England
 		"fra-ligue-1": 7,                     # France
@@ -138,7 +138,7 @@ def switch_league(argument):
 		"esp-primera-division": 16,           # Spain
         "swe-allsvenskan": 17,                # Sweden
         "sui-super-league": 18,               # Swiztland
-		"tur-superlig": 19,                   # Turkey
+		"tur-sueperlig": 19,                   # Turkey
         "ukr-premyer-liga": 20                # Ukraine
     }
     return switcher.get(argument, "null")
@@ -163,7 +163,7 @@ def get_Real_LeagueUrl(argument):
 		13			: 		 "nor-eliteserien",  		#Norway
 		17 			: 		 "swe-allsvenskan",  		#Sweden
 		18 			: 		 "sui-super-league",   		#Swiztland
-		5 			: 		 "den-superliga",    		 #Denmark
+		5 			: 		 "den-superligaen",    		 #Denmark
 		20 			: 		 "ukr-premyer-liga",     	#Ukraine
 		2			: 		 "bul-parva-liga",     		#bulgaria
 		3			: 		 "cze-1-fotbalova-liga",     #Chezch

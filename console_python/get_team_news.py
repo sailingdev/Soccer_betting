@@ -37,7 +37,7 @@ def switch_league(argument):
 		"nor-tippeligaen":13,
 		"swe-allsvenskan": 17,  #Sweden
 		"sui-super-league": 18,   #Swiztland
-		"den-superliga": 5,     #Denmark
+		"den-superligaen": 5,     #Denmark
 		"den-sas-ligaen":5,
 		"ukr-premyer-liga": 20,     #Ukraine      
 		"bul-parva-liga" : 2,		#bulgaria
@@ -65,7 +65,7 @@ def get_Real_LeagueUrl(argument):
 		13			: 		 "nor-eliteserien",  		#Norway
 		17 			: 		 "swe-allsvenskan",  		#Sweden
 		18 			: 		 "sui-super-league",   		#Swiztland
-		5 			: 		 "den-superliga",    		 #Denmark
+		5 			: 		 "den-superligaen",    		 #Denmark
 		20 			: 		 "ukr-premyer-liga",     	#Ukraine
 		2			: 		 "bul-parva-liga",     		#bulgaria
 		3			: 		 "cze-1-fotbalova-liga",     #Chezch

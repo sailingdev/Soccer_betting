@@ -37,7 +37,7 @@ def switch_league(argument):
 		"cze-1-fotbalova-liga": 3,            # Chezch
         "cze-gambrinus-liga": 3,		
 		"cro-1-hnl": 4,                       # Croatia
-		"den-superliga": 5,                   # Denmark
+		"den-superligaen": 5,                   # Denmark
         "den-sas-ligaen": 5,
 		"eng-premier-league": 6,              # England
 		"fra-ligue-1": 7,                     # France
@@ -56,7 +56,7 @@ def switch_league(argument):
 		"esp-primera-division": 16,           # Spain
         "swe-allsvenskan": 17,                # Sweden
         "sui-super-league": 18,               # Swiztland
-		"tur-superlig": 19,                   # Turkey
+		"tur-sueperlig": 19,                  # Turkey
         "ukr-premyer-liga": 20                # Ukraine
     }
     return switcher.get(argument, "null")
@@ -300,7 +300,7 @@ insert_update_players("2021-2022", "aut-bundesliga")
 insert_update_players("2021-2022", "bul-parva-liga")
 insert_update_players("2021-2022", "cze-1-fotbalova-liga")
 insert_update_players("2021-2022", "cro-1-hnl")
-#insert_update_players("2021-2022", "den-superliga")
+insert_update_players("2021-2022", "den-superligaen")
 insert_update_players("2021-2022", "eng-premier-league")
 insert_update_players("2021-2022", "fra-ligue-1")
 insert_update_players("2021-2022", "bundesliga")
@@ -313,6 +313,6 @@ insert_update_players("2021-2022", "por-primeira-liga")
 insert_update_players("2021-2022", "srb-super-liga")
 insert_update_players("2021-2022", "esp-primera-division")
 insert_update_players("2021", 	   "swe-allsvenskan")
-#insert_update_players("2021-2022", "tur-superlig")
+insert_update_players("2021-2022", "tur-sueperlig")
 insert_update_players("2021-2022", "sui-super-league")
 insert_update_players("2021-2022", "ukr-premyer-liga")

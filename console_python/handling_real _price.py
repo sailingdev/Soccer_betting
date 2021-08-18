@@ -202,7 +202,7 @@ def get_dcl_source_list(limit_date):
 	print("-----length of source list is ", len(source_list))
 	return source_list
 
-def insert_real_prcie_to_realpriceTable( season , year , week_number):
+def insert_real_prcie_to_realpriceTable(season , year , week_number):
 	season_id = switch_season(season)
 	##################### get limit date for selecting matches before week ##################
 	if week_number == 0:

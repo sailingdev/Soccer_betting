@@ -67,7 +67,7 @@ def get_leagueid_DB(argument):
 		"nor-tippeligaen":13,
 		"swe-allsvenskan": 17,  #Sweden
 		"sui-super-league": 18,   #Swiztland
-		"den-superliga": 5,     #Denmark
+		"den-superligaen": 5,     #Denmark
 		"den-sas-ligaen":5,
 		"ukr-premyer-liga": 20,     #Ukraine       
 		"bul-parva-liga" : 2 , #bulgaria
@@ -131,7 +131,7 @@ def get_leagueid_API(argument):
 		"nor-eliteserien"		: 444,  		#Norway
 		"swe-allsvenskan"		: 573, 			#Sweden
 		"sui-super-league"		: 591,  		#Swiztland
-		"den-superliga"			: 271,     		#Denmark
+		"den-superligaen"		: 271,     		#Denmark
 		"ukr-premyer-liga"		: 609,     		#Ukraine
 		"bul-parva-liga"		: 229,       	#bulgaria
 		"cze-1-fotbalova-liga"	: 262,      	#Chezch
@@ -313,7 +313,7 @@ def main():
 	insert_league_odd("nor-eliteserien",		"2020")
 	insert_league_odd("swe-allsvenskan",		"2020")
 	insert_league_odd("sui-super-league",		"2020-2021")
-	insert_league_odd("den-superliga",			"2020-2021")
+	insert_league_odd("den-superligaen",			"2020-2021")
 	insert_league_odd("ukr-premyer-liga",		"2020-2021")
 	insert_league_odd("bul-parva-liga",			"2020-2021")
 	insert_league_odd("cze-1-fotbalova-liga",	"2020-2021")
@@ -334,7 +334,7 @@ def main():
 	# insert_league_odd("nor-eliteserien",		"2018")
 	# insert_league_odd("swe-allsvenskan",		"2018")
 	# insert_league_odd("sui-super-league",		"2018-2019")
-	# insert_league_odd("den-superliga",			"2018-2019")
+	# insert_league_odd("den-superligaen",			"2018-2019")
 	# insert_league_odd("ukr-premyer-liga",		"2018-2019")
 	# insert_league_odd("bul-parva-liga",			"2018-2019")
 	# insert_league_odd("cze-1-fotbalova-liga",	"2018-2019")

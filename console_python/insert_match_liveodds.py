@@ -759,6 +759,7 @@ insert_Price_To_Matchplan("croatia/1-hnl",            "2021-2022")
 insert_Price_To_Matchplan("hungary/otp-bank-liga",    "2021-2022")
 insert_Price_To_Matchplan("serbia/super-liga",        "2021-2022")
 
+
 # insert_Price_To_Matchplan("serbia/super-liga", "2019-2020")
 # insert_Price_To_Matchplan("serbia/super-liga", "2018-2019")
 # insert_Price_To_Matchplan("serbia/super-liga", "2017-2018")

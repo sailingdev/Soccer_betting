@@ -39,7 +39,7 @@ def switch_league(argument):
 		"cze-1-fotbalova-liga": 3,            # Chezch
         "cze-gambrinus-liga": 3,		
 		"cro-1-hnl": 4,                       # Croatia
-		"den-superliga": 5,                   # Denmark
+		"den-superligaen": 5,                   # Denmark
         "den-sas-ligaen": 5,
 		"eng-premier-league": 6,              # England
 		"fra-ligue-1": 7,                     # France
@@ -58,7 +58,7 @@ def switch_league(argument):
 		"esp-primera-division": 16,           # Spain
         "swe-allsvenskan": 17,                # Sweden
         "sui-super-league": 18,               # Swiztland
-		"tur-superlig": 19,                   # Turkey
+		"tur-sueperlig": 19,                   # Turkey
         "ukr-premyer-liga": 20                # Ukraine
     }
     return switcher.get(argument, "null")
@@ -486,7 +486,7 @@ def main():
 		#"nor-eliteserien" ,  			#Norway
 		#"swe-allsvenskan" ,  			#Sweden
 		"sui-super-league" ,  			 #Swiztland
-		"den-superliga" ,     			#Denmark
+		"den-superligaen" ,     			#Denmark
 		"ukr-premyer-liga" ,    			 #Ukraine
 		"bul-parva-liga" ,      			#bulgaria	
 		"cze-1-fotbalova-liga" ,      	#Chezch
@@ -495,8 +495,8 @@ def main():
 		"srb-super-liga"    
 	]
 	league_list_2 = [
-		"nor-eliteserien" ,  			#Norway
-		"swe-allsvenskan"   			#Sweden
+		"nor-eliteserien" ,  			# Norway
+		"swe-allsvenskan"   			# Sweden
 	]
 
 	for league in league_list_1:

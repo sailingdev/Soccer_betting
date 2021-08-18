@@ -9,7 +9,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team into) into database.
-# python3 get_season_league_teamname.py -season 2014-2015 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2021-2022 -league esp-primera-division
 #################################################################
 
 season_array1 = [19, 17, 15, 13, 1, 2, 3, 4, 5, 12, 799, 857]         # 2021-2022 style
@@ -32,7 +32,7 @@ def insert_team_point_to_DB():
   mycursor.execute(sql)
   myresult = mycursor.fetchall()
 
-  for i in range(3503, 3789):   # here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
+  for i in range(3503, 3821):   # here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
       season_id = myresult[i][0]
       league_id = myresult[i][1]
       team_id = myresult[i][2]

@@ -623,7 +623,7 @@ def getDate_from_trTxt(date_txt):
         date_part = date_txt.split(' ');
         return date_part[2] + "-" +switch_month(date_part[1]) + '-' + date_part[0]
 
-def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None):
+def insert_price_to_matchplan(league, season, breakFlag = True, startPage = None):
       
     driver = webdriver.Chrome(driverpath, options=chrome_options)
     current_season = False
@@ -672,7 +672,7 @@ def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None
                 print(f"    --- {league} {season} {page} page {index}th match start---")
                 team_text = each_tr.find_elements_by_tag_name("a")[0].text
                 score_field = each_tr.find_elements_by_tag_name('td')[2].text
-                #if (" - " in team_text) & ( ':' in score_field ):
+                # if (" - " in team_text) & ( ':' in score_field ):
                 if (" - " in team_text):
                     print(f"        {match_date} , {team_text} ")
                     hrefUrl = each_tr.find_elements_by_tag_name("a")[0].get_attribute('href')
@@ -693,25 +693,25 @@ def insert_Price_To_Matchplan(league, season, breakFlag = True, startPage = None
         print(f"---------------- {league} - {season} {page}page End--------------------------------")
     driver.quit()
 
-insert_Price_To_Matchplan("england/premier-league",   "")
-insert_Price_To_Matchplan("spain/laliga",             "")
-insert_Price_To_Matchplan("germany/bundesliga",       "")
-insert_Price_To_Matchplan("italy/serie-a",            "")
-insert_Price_To_Matchplan("france/ligue-1",           "")
-insert_Price_To_Matchplan("netherlands/eredivisie",   "")
-insert_Price_To_Matchplan("austria/tipico-bundesliga","")
-insert_Price_To_Matchplan("portugal/primeira-liga",   "")
-insert_Price_To_Matchplan("greece/super-league",      "")
-insert_Price_To_Matchplan("turkey/super-lig",         "")
-insert_Price_To_Matchplan("norway/eliteserien",       "")
-insert_Price_To_Matchplan("sweden/allsvenskan",       "")
-# insert_Price_To_Matchplan("switzerland/super-league", "")
-insert_Price_To_Matchplan("denmark/superliga",        "")
-insert_Price_To_Matchplan("ukraine/premier-league",   "")
-insert_Price_To_Matchplan("bulgaria/parva-liga",      "")
-insert_Price_To_Matchplan("czech-republic/1-liga",    "")
-insert_Price_To_Matchplan("croatia/1-hnl",            "")
-insert_Price_To_Matchplan("hungary/otp-bank-liga",    "")
-insert_Price_To_Matchplan("serbia/super-liga",        "")
+insert_price_to_matchplan("england/premier-league",   "")
+insert_price_to_matchplan("spain/laliga",             "")
+insert_price_to_matchplan("germany/bundesliga",       "")
+insert_price_to_matchplan("italy/serie-a",            "")
+insert_price_to_matchplan("france/ligue-1",           "")
+insert_price_to_matchplan("netherlands/eredivisie",   "")
+insert_price_to_matchplan("austria/tipico-bundesliga","")
+insert_price_to_matchplan("portugal/primeira-liga",   "")
+insert_price_to_matchplan("greece/super-league",      "")
+insert_price_to_matchplan("turkey/super-lig",         "")
+insert_price_to_matchplan("norway/eliteserien",       "")
+insert_price_to_matchplan("sweden/allsvenskan",       "")
+insert_price_to_matchplan("switzerland/super-league", "")
+insert_price_to_matchplan("denmark/superliga",        "")
+insert_price_to_matchplan("ukraine/premier-league",   "")
+insert_price_to_matchplan("bulgaria/parva-liga",      "")
+insert_price_to_matchplan("czech-republic/1-liga",    "")
+insert_price_to_matchplan("croatia/1-hnl",            "")
+insert_price_to_matchplan("hungary/otp-bank-liga",    "")
+insert_price_to_matchplan("serbia/super-liga",        "")
 
 print(" Total added count is : ", total_added_count)
