@@ -179,8 +179,10 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 								mycursor.execute(sql)
 								mydb.commit()
 								print("    1 LIVE game updated, ID: ", current_match_id, " in match_plan")
-							elif "dec" in match_total_result :
+							elif "dec" in match_total_result:
 								print("    this is dec game")
+							elif "abor." in match_total_result:
+								print("    this is aborted game")
 							elif '-' not in match_total_result:				# END game but no half score
 								print("   Special Match was finished , will update soon")
 								total = match_total_result.split(" ")[0]
@@ -855,26 +857,30 @@ def fn_Get_TeamId(team_name):
 #################################################################################################
 
 def main():
-	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
-	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
-	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
-	doing_scraping_match_plan("2021-2022", "cro-1-hnl")
-	doing_scraping_match_plan("2021-2022", "den-superligaen")
-	doing_scraping_match_plan("2021-2022", "eng-premier-league")
-	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
-	doing_scraping_match_plan("2021-2022", "bundesliga")
-	doing_scraping_match_plan("2021-2022", "gre-super-league")
-	doing_scraping_match_plan("2021-2022", "hun-nb-i")
-	doing_scraping_match_plan("2021-2022", "ita-serie-a")
-	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
-	doing_scraping_match_plan("2021", "nor-eliteserien")
-	doing_scraping_match_plan("2021-2022", "por-primeira-liga")
-	doing_scraping_match_plan("2021-2022", "srb-super-liga")
-	doing_scraping_match_plan("2021-2022", "esp-primera-division")
-	doing_scraping_match_plan("2021", "swe-allsvenskan")
-	doing_scraping_match_plan("2021-2022", "sui-super-league")
-	doing_scraping_match_plan("2021-2022", "tur-sueperlig")
-	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
+	# doing_scraping_match_plan("2021-2022", "aut-bundesliga")
+	# doing_scraping_match_plan("2021-2022", "bul-parva-liga")
+	# doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
+	# # doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	# doing_scraping_match_plan("2021-2022", "den-superligaen")
+	# doing_scraping_match_plan("2021-2022", "eng-premier-league")
+	# doing_scraping_match_plan("2021-2022", "fra-ligue-1")
+	# doing_scraping_match_plan("2021-2022", "bundesliga")
+	# doing_scraping_match_plan("2021-2022", "gre-super-league")
+	# # doing_scraping_match_plan("2021-2022", "hun-nb-i")
+	# doing_scraping_match_plan("2021-2022", "ita-serie-a")
+	# doing_scraping_match_plan("2021-2022", "ned-eredivisie")
+	# doing_scraping_match_plan("2021", "nor-eliteserien")
+	# doing_scraping_match_plan("2021-2022", "por-primeira-liga")
+	# doing_scraping_match_plan("2021-2022", "srb-super-liga")
+	# doing_scraping_match_plan("2021-2022", "esp-primera-division")
+	# doing_scraping_match_plan("2021", "swe-allsvenskan")
+	# doing_scraping_match_plan("2021-2022", "sui-super-league")
+	# doing_scraping_match_plan("2021-2022", "tur-sueperlig")
+	# doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
+
+
+	# doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	# doing_scraping_match_plan("2021-2022", "hun-nb-i")
 
 	print("")
 	print(f"-------- total added matches number is {added_matches_count} -------------")

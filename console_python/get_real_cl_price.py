@@ -549,22 +549,17 @@ def update_real_AH_price_id_toSeasonMatchPlanTable(week_number):
     print(f" - W{week_number} - updated {count} : END !")
 
 # real price data of MO and AH into real price table
-def get_realprice_toRealPriceTable_perweek(weeknumber):
-	# for C_weeknumber in range(434, 596):                                  # 275 = 2015-04-01 546 = 2020-06-14 , 578 = 2021-01-21
-	#     insert_real_prcie_to_AH_realpriceTable(C_weeknumber)
-    #     insert_real_prcie_to_MO_realpriceTable(C_weeknumber)       
+def get_realprice_toRealPriceTable_perweek(weeknumber):       
     insert_real_prcie_to_MO_realpriceTable(weeknumber)	
     insert_real_prcie_to_AH_realpriceTable(weeknumber)							
 
 # insert real_price id of each match into season_match_plan
-def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
-	# for C_weeknumber in range(275, 596):
-	#  	update_real_mo_price_id_toSeasonMatchPlanTable(C_weeknumber)		    
+def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):		    
 	update_real_mo_price_id_toSeasonMatchPlanTable(weeknumber)						#  param should be current continuous week.
     
     
 def main():
-	weeknumber = 608
+	weeknumber = 609
 	get_realprice_toRealPriceTable_perweek(weeknumber)							
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	

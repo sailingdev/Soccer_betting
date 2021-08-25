@@ -281,25 +281,18 @@ def insert_real_price_id_toSeasonMatchPlanTable(season, year, week_number):
 	print(f" -- {season}- {year}-W{week_number} - updated {count} : END !")
 
 def get_realprice_toRealPriceTable_perweek():
-	# insert_real_prcie_to_realpriceTable("2021-2022", '2021', 0)
 	# for i in range(24, 54):														# 24 is the first week of 2021-2022. 2021 season.
 	# 	insert_real_prcie_to_realpriceTable("2021-2022", '2021', i)  			# arg3 will be last weeknumber. 0 means start of this season so if 2021-w0 means 2021-06-14
-	# insert_real_prcie_to_realpriceTable("2021-2022", '2021', 1)
 	insert_real_prcie_to_realpriceTable("2021-2022", '2021', 31)
 
 def matching_realpriceid_toSeasonMatchPlanColumn():
 	# for i in range(30, 54):
 	# 	insert_real_price_id_toSeasonMatchPlanTable("2021-2022", '2021', i)		# arg3 will be current weeknumber. will insert price id of WN -1 's week price data  eg:  2021-W26 have 2021-W25 data's id.
 	insert_real_price_id_toSeasonMatchPlanTable("2021-2022", '2021', 31)
-	# insert_real_price_id_toSeasonMatchPlanTable("2021-2022", '2021', 2)
-	# insert_real_price_id_toSeasonMatchPlanTable("2021-2022", '2021', 3)
-	# insert_real_price_id_toSeasonMatchPlanTable("2021-2022", '2021', 4)
 
 def main():
 	get_realprice_toRealPriceTable_perweek()
 	matching_realpriceid_toSeasonMatchPlanColumn()
-	
-	
 	
 if __name__ == "__main__":
 	main()
