@@ -6,7 +6,7 @@ from mysql.connector import Error
 import certifi
 import urllib3
 from collections import defaultdict
-################################################################
+#################################################################
 # Inserting Reference of Dynamic with Strength and league column in season_match_plan table
 #################################################################
 
@@ -269,7 +269,7 @@ def get_realprice_toRealPriceTable_perweek(weeknumber):
     insert_real_prcie_to_realpriceTable(weeknumber)							#  param shoulb be current continuous week.
 
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):		    
-	update_real_price_id_toSeasonMatchPlanTable(weeknumber)						#  param shoulb be current continuous week.
+	update_real_price_id_toSeasonMatchPlanTable(weeknumber)					#  param shoulb be current continuous week.
 
 def main():
 	weeknumber = 609
