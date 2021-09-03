@@ -19,7 +19,7 @@ dbconfig = {
 
 class MySQLPool(object):
 	def __init__(self, host="127.0.0.1", port="3306", user="root",
-			password="", database="soccer", pool_name="mypool", pool_size=3 , auth_plugin = "mysql_native_password"):
+			password="P@ssw0rd2021", database="soccer", pool_name="mypool", pool_size=3 , auth_plugin = "mysql_native_password"):
 		res = {}
 		self._host = host
 		self._port = port

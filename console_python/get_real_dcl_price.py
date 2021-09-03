@@ -13,7 +13,7 @@ from collections import defaultdict
 mydb = mysql.connector.connect(
 	host="localhost",
 	user="root",
-	passwd="",
+	passwd="P@ssw0rd2021",
 	database="soccer",
 	buffered=True
 )
@@ -272,7 +272,7 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)					#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 609
+	weeknumber = 610
 	get_realprice_toRealPriceTable_perweek(weeknumber)
 	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
 	

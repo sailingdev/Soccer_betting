@@ -76,7 +76,7 @@ def switch_league(argument):
 mydb = mysql.connector.connect( 
     host="localhost",
     user="root",
-    passwd="",
+    passwd="P@ssw0rd2021",
     database="soccer"
 )
 mycursor = mydb.cursor()

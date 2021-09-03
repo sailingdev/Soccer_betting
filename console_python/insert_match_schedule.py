@@ -16,7 +16,7 @@ http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="",
+    passwd="P@ssw0rd2021",
     database="soccer"
 )
 mycursor = mydb.cursor()

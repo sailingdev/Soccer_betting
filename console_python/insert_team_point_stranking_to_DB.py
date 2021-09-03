@@ -18,7 +18,7 @@ season_array2 = [20, 18, 16, 14, 6, 7, 8, 9, 10, 11, 64, 844]         # 2021 sty
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="",
+    passwd="P@ssw0rd2021",
     database="soccer"
 )
 mycursor = mydb.cursor()
