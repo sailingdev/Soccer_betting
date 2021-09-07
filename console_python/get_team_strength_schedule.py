@@ -12,7 +12,7 @@ dbconfig = {
     "host":"localhost",
     "port":"3306",
     "user":"root",
-    "password":"",
+    "password":"P@ssw0rd2021",
     "database":"soccer",
 	"auth_plugin" : 'mysql_native_password'
 }
