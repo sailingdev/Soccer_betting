@@ -224,6 +224,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 					print("    there are many same matches in this league, so will check the fixture carefully")
 					if "(" in match_total_result:							# if the match is ended game
 						sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'END' and date = '{match_date}'"
+						# sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'END'"
 						mycursor.execute(sql)
 						ended_Match_array = mycursor.fetchall()
 						if len(ended_Match_array):							# if matching date-ended game is existing in DB
@@ -860,13 +861,13 @@ def main():
 	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
 	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
 	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
-	# doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl")
 	doing_scraping_match_plan("2021-2022", "den-superligaen")
 	doing_scraping_match_plan("2021-2022", "eng-premier-league")
 	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
 	doing_scraping_match_plan("2021-2022", "bundesliga")
 	doing_scraping_match_plan("2021-2022", "gre-super-league")
-	# doing_scraping_match_plan("2021-2022", "hun-nb-i")
+	doing_scraping_match_plan("2021-2022", "hun-nb-i")
 	doing_scraping_match_plan("2021-2022", "ita-serie-a")
 	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
 	doing_scraping_match_plan("2021", "nor-eliteserien")
@@ -878,7 +879,7 @@ def main():
 	doing_scraping_match_plan("2021-2022", "tur-sueperlig")
 	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 
-	# doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	# doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = None, lastMatch = None, newInsertFlag = True)
 	# doing_scraping_match_plan("2021-2022", "hun-nb-i")
 
 	print("")

@@ -9,16 +9,16 @@ import mysql.connector
 import mysql.connector.pooling
 
 dbconfig = {
-    "host":"localhost",
-    "port":"3306",
-    "user":"root",
-    "password":"P@ssw0rd2021",
-    "database":"soccer",
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "password": "P@ssw0rd2021",
+    "database": "soccer",
 	"auth_plugin" : 'mysql_native_password'
 }
 
 class MySQLPool(object):
-	def __init__(self, host="127.0.0.1", port="3306", user="root",
+	def __init__(self, host="localhost", port="3306", user="root",
 			password="P@ssw0rd2021", database="soccer", pool_name="mypool", pool_size=3 , auth_plugin = "mysql_native_password"):
 		res = {}
 		self._host = host
