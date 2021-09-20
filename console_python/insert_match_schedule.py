@@ -262,7 +262,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 
 					else :													# if the match is yet planned or resch game						
 						status = ""
-						if "resch" in match_total_result :
+						if "resch" in match_total_result:
 							sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'resch' and date ='{match_date}'"
 							mycursor.execute(sql)
 							result = mycursor.fetchall()
@@ -283,7 +283,7 @@ def doing_scraping_match_plan(season=None , league=None, firstMatch = None, last
 									mycursor.execute(sql)
 									mydb.commit()
 									print("    1 resch game updated, ID: ", current_match_id, " in match_plan")
-						elif len (match_status.find_all("img")):				# Live Match
+						elif len(match_status.find_all("img")):			    # Live Match
 							sql = f"SELECT * from season_match_plan where season_id = {switch_season(season)} and league_id = {switch_league(league)} and home_team_id = {home_team_id} and away_team_id = {away_team_id} and status = 'LIVE' and date ='{match_date}'"
 							mycursor.execute(sql)
 							result = mycursor.fetchall()
@@ -861,13 +861,13 @@ def main():
 	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
 	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
 	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
-	doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = 46, lastMatch = 50)
 	doing_scraping_match_plan("2021-2022", "den-superligaen")
 	doing_scraping_match_plan("2021-2022", "eng-premier-league")
 	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
 	doing_scraping_match_plan("2021-2022", "bundesliga")
 	doing_scraping_match_plan("2021-2022", "gre-super-league")
-	doing_scraping_match_plan("2021-2022", "hun-nb-i")
+	doing_scraping_match_plan("2021-2022", "hun-nb-i", firstMatch = 37, lastMatch = 42)
 	doing_scraping_match_plan("2021-2022", "ita-serie-a")
 	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
 	doing_scraping_match_plan("2021", "nor-eliteserien")
@@ -879,9 +879,8 @@ def main():
 	doing_scraping_match_plan("2021-2022", "tur-sueperlig")
 	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 
-	# doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = None, lastMatch = None, newInsertFlag = True)
-	# doing_scraping_match_plan("2021-2022", "hun-nb-i")
-
+	# doing_scraping_match_plan("", "", firstMatch = None, lastMatch = None, newInsertFlag = True)
+	
 	print("")
 	print(f"-------- total added matches number is {added_matches_count} -------------")
 	print(f"-------- total added players number is {added_player_count} -------------")

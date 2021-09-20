@@ -18,7 +18,7 @@ import time
 import sys
 import os
 
-http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -87,26 +87,26 @@ def switch_season(argument):
 
 def switch_league(argument):
     switcher = {
-        "england/premier-league-": 6,   #England
-        "spain/laliga": 16,  #spain
-        "germany/bundesliga": 8,   #Germany
-        "italy/serie-a" : 11,  #italy
-        "france/ligue-1" : 7,   #france
-        "netherlands/eredivisie": 12,  #Netherland
-        "austria/tipico-bundesliga": 1,  #Austria
-        "portugal/primeira-liga": 14,  #portugal
-        "greece/super-league": 9,   #Greece
-        "turkey/super-lig": 19,   #Turkey
-        "norway/eliteserien": 13,  #Norway
-        "sweden/allsvenskan": 17,  #Sweden
-        "switzerland/super-league": 18,   #Swiztland
-        "denmark/superliga": 5,     #Denmark
-        "ukraine/premier-league": 20,     #Ukraine
-        "bulgaria/parva-liga": 2,       #bulgaria
-        "czech-republic/1-liga": 3,      #Chezch
-        "croatia/1-hnl": 4 ,          #Croatia
-        "hungary/otp-bank-liga": 10,     #Hungary
-        "serbia/super-liga": 15    #Serbia
+        "england/premier-league-": 6,       # England
+        "spain/laliga": 16,                 # Spain
+        "germany/bundesliga": 8,            # Germany
+        "italy/serie-a" : 11,               # Italy
+        "france/ligue-1" : 7,               # France
+        "netherlands/eredivisie": 12,       # Netherland
+        "austria/tipico-bundesliga": 1,     # Austria
+        "portugal/primeira-liga": 14,       # Portugal
+        "greece/super-league": 9,           # Greece
+        "turkey/super-lig": 19,             # Turkey
+        "norway/eliteserien": 13,           # Norway
+        "sweden/allsvenskan": 17,           # Sweden
+        "switzerland/super-league": 18,     # Swiztland
+        "denmark/superliga": 5,             # Denmark
+        "ukraine/premier-league": 20,       # Ukraine
+        "bulgaria/parva-liga": 2,           # Bulgaria
+        "czech-republic/1-liga": 3,         # Chezch
+        "croatia/1-hnl": 4 ,                # Croatia
+        "hungary/otp-bank-liga": 10,        # Hungary
+        "serbia/super-liga": 15             # Serbia
     }
     return switcher.get(argument, "null")
 

@@ -537,7 +537,7 @@ def add_extra_player(player_name, player_adding_info, team_id):
 	mydb = mysql.connector.connect(
 		host="localhost",
 		user="root",
-		passwd="",
+		passwd="P@ssw0rd2021",
 		database="soccer"
 	)
 	player_birthday = player_adding_info[1]
