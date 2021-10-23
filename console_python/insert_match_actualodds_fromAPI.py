@@ -14,7 +14,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
-# insert_match_plan("2014-2015", "eng-premier-league", 1,5)  match 1~ 5 eg: England 1 ~ 380
+# insert_match_plan("2021-2022", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
 # direct write the info for inserting..... for saving time.
 #################################################################
 
@@ -29,57 +29,47 @@ NotFoundMatch_count = 0
 
 mycursor = mydb.cursor()
 def switch_season(argument):
-	switcher = {
+    switcher = {
+        "2019-2020": 12,
+        "2020": 64,
+        "2021-2022" : 799,
+        "2021"    : 844,
+        "2021-2022": 857
+    }
+    return switcher.get(argument, "null")
 
-        "2014": 6,
-        "2015": 7,
-        "2016": 8,
-        "2017": 9,
-        "2018": 10,
-	  	"2019"		: 11,
-		"2020"        : 64,
-  
-		"2020-2021"   : 799,
-		"2019-2020"   : 12,
-		"2018-2019": 5,
-		"2017-2018": 4,
-		"2016-2017": 3,
-		"2015-2016": 2,
-
-	}
-	return switcher.get(argument, "null")
 def get_leagueid_DB(argument):
-	switcher = {
-		"esp-primera-division": 16,  #spain
-		"eng-premier-league": 6,   #England
-		"bundesliga": 8,   #Germany
-		"ita-serie-a" : 11,  #italy
-		"fra-ligue-1" : 7,   #france
-		"ned-eredivisie": 12,  #Netherland
-		"aut-bundesliga": 1,  #Austria
-		"por-primeira-liga": 14,  #portugal
-		"por-liga-sagres": 14,
-		"por-liga-zon-sagres":14,
-		"gre-superleague": 9,   #Greece
-		"gre-super-league": 9,   #Greece
-		"tur-sueperlig": 19,   #Turkey
-		"nor-eliteserien": 13,  #Norway
-		"nor-tippeligaen":13,
-		"swe-allsvenskan": 17,  #Sweden
-		"sui-super-league": 18,   #Swiztland
-		"den-superligaen": 5,     #Denmark
-		"den-sas-ligaen":5,
-		"ukr-premyer-liga": 20,     #Ukraine       
-		"bul-parva-liga" : 2 , #bulgaria
-		"cze-1-fotbalova-liga": 3,      #Chezch
-		"cze-gambrinus-liga": 3,
-		"cro-1-hnl": 4 ,          #Croatia
-		"hun-nb-i": 10,     #Hungary
-		"hun-nb1": 10,
-		"hun-otp-liga":10,
-		"srb-super-liga": 15    #Serbia
-	}
+	switcher = {	
+        "aut-bundesliga": 1,                  # Austria
+        "bul-parva-liga" : 2,				  # Bulgaria
+		"bul-a-grupa": 2,    
+		"cze-1-fotbalova-liga": 3,            # Chezch
+        "cze-gambrinus-liga": 3,		
+		"cro-1-hnl": 4,                       # Croatia
+		"den-superligaen": 5,                 # Denmark
+        "den-sas-ligaen": 5,
+		"eng-premier-league": 6,              # England
+		"fra-ligue-1": 7,                     # France
+		"bundesliga": 8,                      # Germany
+		"gre-super-league": 9,                # Greece
+		"hun-nb-i": 10,                       # Hungary
+        "hun-nb1": 10,
+        "hun-otp-liga": 10,
+		"ita-serie-a": 11,                    # Italy
+		"ned-eredivisie": 12,                 # Netherland
+		"nor-eliteserien": 13,                # Norway from 2020
+        "nor-tippeligaen": 13,
+		"por-primeira-liga": 14,              # Portugal, Check
+        "por-liga-sagres": 14,
+		"srb-super-liga": 15,                 # Serbia
+		"esp-primera-division": 16,           # Spain
+        "swe-allsvenskan": 17,                # Sweden
+        "sui-super-league": 18,               # Swiztland
+		"tur-sueperlig": 19,                  # Turkey
+        "ukr-premyer-liga": 20                # Ukraine
+    }
 	return switcher.get(argument, "null")
+	
 def get_bookmakerid_API(argument):
 	switcher = {
 		"bet365" 		: 2, 
@@ -93,19 +83,21 @@ def get_bookmakerid_API(argument):
 		#"WilliamHill" 	: 187
 	}
 	return switcher.get(argument, "null")
+
 def get_bookmakerid_DB(argument):
 	switcher = {
 		"bet365" 		: 1, 
 		"Betfair" 		: 2,
-		#"Betway" 		: 3,
+		"Betway" 		: 3,
 		"Dafabet" 		: 4,
-		#"Matchbook" 	: 5 ,
+		"Matchbook" 	: 5,
 		"Pncl" 			: 6, 
-		"Sbo" 			: 7 , 
+		"Sbo" 			: 7, 
 		"Unibet" 		: 8,
-		#"WilliamHill" 	: 9
+		"WilliamHill" 	: 9
 	}
 	return switcher.get(argument, "null")
+
 def get_marketingid_DB(argument):
 	switcher = {
 		"Home" 		: 1, 
@@ -113,9 +105,9 @@ def get_marketingid_DB(argument):
 		"Away" 		: 3,
 		"Over2.5" 	: 4 ,
 		"Under2.5" 	: 5 ,
-		
 	}
 	return switcher.get(argument, "null")
+
 def get_leagueid_API(argument):
 	leaguelist = {
 		"esp-primera-division"	: 564,  		#spain
@@ -156,13 +148,11 @@ def insert_bookmaker_odd(match_id, fixture_id, bookmaker_name):
 	else:
 		for each_odd in odd_data_array:
 			if each_odd['id'] == 1: 							# 3 way results 
-				
 				print("    - found 3 way result odd in API")
 				bookmaker_data_array = each_odd['bookmaker']['data'][0]['odds']['data']
-				
+
 				for each_data in bookmaker_data_array:
 					if each_data['label'] == "1":				# value is Home
-						
 						home_value = each_data['value']
 						if "," in str(home_value):
 							home_value = 0
@@ -192,10 +182,9 @@ def insert_bookmaker_odd(match_id, fixture_id, bookmaker_name):
 		marketing_id = get_marketingid_DB('Home')
 		sql = f"INSERT INTO odds (match_id, bookmaker_id, Home, Draw, Away, Over2d5, Under2d5 ) " \
 				f"VALUES ({match_id}, {bookmaker_id}, {home_value}, {draw_value}, {away_value}, {over_value}, {under_value})"
-		#print(sql)
+		print(sql)
 		mycursor.execute(sql)
 		mydb.commit()
-		
 					
 def insert_match_odd(match_id, league, match_date, home_team_name, away_team_name):
 	global NotFoundMatch_count
@@ -283,7 +272,7 @@ def insert_league_odd(league , season):
 		f"inner join team_list as b on a.home_team_id = b.team_id "	\
 		f"inner join team_list as c on a.away_team_id = c.team_id "	\
 		f"where a.league_id = {get_leagueid_DB(league)} and a.season_id = {switch_season(season)} and status = 'END'"
-	#print(sql)
+	print(sql)
 	mycursor.execute(sql)
 	matchArray = mycursor.fetchall()
 	index = 1
@@ -300,47 +289,26 @@ def insert_league_odd(league , season):
 def main():
 	init(sportmonks_token)
 	#####################################################################################
-	insert_league_odd("eng-premier-league",		"2020-2021")
-	insert_league_odd("esp-primera-division",	"2020-2021")
-	insert_league_odd("fra-ligue-1",			"2020-2021")
-	insert_league_odd("ned-eredivisie",			"2020-2021")
-	insert_league_odd("aut-bundesliga",			"2020-2021")
-	insert_league_odd("bundesliga",				"2020-2021")
-	insert_league_odd("ita-serie-a",			"2020-2021")
-	insert_league_odd("por-primeira-liga",		"2020-2021")
-	insert_league_odd("gre-super-league",		"2020-2021")
-	insert_league_odd("tur-sueperlig",			"2020-2021")
-	insert_league_odd("nor-eliteserien",		"2020")
-	insert_league_odd("swe-allsvenskan",		"2020")
-	insert_league_odd("sui-super-league",		"2020-2021")
-	insert_league_odd("den-superligaen",			"2020-2021")
-	insert_league_odd("ukr-premyer-liga",		"2020-2021")
-	insert_league_odd("bul-parva-liga",			"2020-2021")
-	insert_league_odd("cze-1-fotbalova-liga",	"2020-2021")
-	insert_league_odd("cro-1-hnl",				"2020-2021")
-	insert_league_odd("hun-nb-i",				"2020-2021")
-	insert_league_odd("srb-super-liga",			"2020-2021")
-
-	# insert_league_odd("eng-premier-league",		"2018-2019")
-	# insert_league_odd("esp-primera-division",	"2018-2019")
-	# insert_league_odd("fra-ligue-1",			"2018-2019")
-	# insert_league_odd("ned-eredivisie",			"2018-2019")
-	# insert_league_odd("aut-bundesliga",			"2018-2019")
-	# insert_league_odd("bundesliga",				"2018-2019")
-	# insert_league_odd("ita-serie-a",			"2018-2019")
-	# insert_league_odd("por-primeira-liga",		"2018-2019")
-	# insert_league_odd("gre-super-league",		"2018-2019")
-	# insert_league_odd("tur-sueperlig",			"2018-2019")
-	# insert_league_odd("nor-eliteserien",		"2018")
-	# insert_league_odd("swe-allsvenskan",		"2018")
-	# insert_league_odd("sui-super-league",		"2018-2019")
-	# insert_league_odd("den-superligaen",			"2018-2019")
-	# insert_league_odd("ukr-premyer-liga",		"2018-2019")
-	# insert_league_odd("bul-parva-liga",			"2018-2019")
-	# insert_league_odd("cze-1-fotbalova-liga",	"2018-2019")
-	# insert_league_odd("cro-1-hnl",				"2018-2019")
-	# insert_league_odd("hun-nb-i",				"2018-2019")
-	# insert_league_odd("srb-super-liga",			"2018-2019")
+	insert_league_odd("eng-premier-league",		"2021-2022")
+	insert_league_odd("esp-primera-division",	"2021-2022")
+	insert_league_odd("fra-ligue-1",			"2021-2022")
+	insert_league_odd("ned-eredivisie",			"2021-2022")
+	insert_league_odd("aut-bundesliga",			"2021-2022")
+	insert_league_odd("bundesliga",				"2021-2022")
+	insert_league_odd("ita-serie-a",			"2021-2022")
+	insert_league_odd("por-primeira-liga",		"2021-2022")
+	insert_league_odd("gre-super-league",		"2021-2022")
+	insert_league_odd("tur-sueperlig",			"2021-2022")
+	insert_league_odd("nor-eliteserien",		"2022")
+	insert_league_odd("swe-allsvenskan",		"2022")
+	insert_league_odd("sui-super-league",		"2021-2022")
+	insert_league_odd("den-superligaen",		"2021-2022")
+	insert_league_odd("ukr-premyer-liga",		"2021-2022")
+	insert_league_odd("bul-parva-liga",			"2021-2022")
+	insert_league_odd("cze-1-fotbalova-liga",	"2021-2022")
+	insert_league_odd("cro-1-hnl",				"2021-2022")
+	insert_league_odd("hun-nb-i",				"2021-2022")
+	insert_league_odd("srb-super-liga",			"2021-2022")
 
 	print(f" ------------ not found match count in API : {NotFoundMatch_count} -----------")
 

@@ -205,7 +205,7 @@ def get_odds(turl, OU_url , AH_url):
     highest_list = [] 
    
     ################################ driver setting part start############################
-    driver1 = webdriver.Chrome(driverpath,options=chrome_options)
+    driver1 = webdriver.Chrome(driverpath, options=chrome_options)
     driver1.get(turl)
     time.sleep(0.5)
     ################################ driver setting part End #############################`
