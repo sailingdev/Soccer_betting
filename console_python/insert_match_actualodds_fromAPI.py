@@ -74,13 +74,13 @@ def get_bookmakerid_API(argument):
 	switcher = {
 		"bet365" 		: 2, 
 		"Betfair" 		: 15,
-		#"Betway" 		: 271057011,
+		"Betway" 		: 271057011,
 		"Dafabet" 		: 25,
-		#"Matchbook" 	: 44 ,
+		"Matchbook" 	: 44 ,
 		"Pncl" 			: 70, 
 		"Sbo" 			: 25679320 , 
 		"Unibet" 		: 97,
-		#"WilliamHill" 	: 187
+		"WilliamHill" 	: 187
 	}
 	return switcher.get(argument, "null")
 
@@ -259,6 +259,9 @@ def insert_match_odd(match_id, league, match_date, home_team_name, away_team_nam
 			print("      fixture id is ", fixture_id)
 			insert_bookmaker_odd(match_id, fixture_id, "bet365")
 			insert_bookmaker_odd(match_id, fixture_id, "Betfair")
+			insert_bookmaker_odd(match_id, fixture_id, "Betway")
+			insert_bookmaker_odd(match_id, fixture_id, "Matchbook")
+			insert_bookmaker_odd(match_id, fixture_id, "WilliamHill")
 			insert_bookmaker_odd(match_id, fixture_id, "Dafabet")
 			insert_bookmaker_odd(match_id, fixture_id, "Pncl")
 			insert_bookmaker_odd(match_id, fixture_id, "Sbo")

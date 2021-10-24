@@ -861,7 +861,7 @@ def main():
 	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
 	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
 	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
-	doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = 1, lastMatch = 40)
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = 1, lastMatch = 70)
 	doing_scraping_match_plan("2021-2022", "den-superligaen")
 	doing_scraping_match_plan("2021-2022", "eng-premier-league")
 	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
