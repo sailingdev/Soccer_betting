@@ -252,6 +252,7 @@ def get_more_player_info(url , player_name):
 		player_birthday = player_birthday.replace('.', '/')
 		if player_birthday  == "":
 			player_birthday = "???"
+   
 	################## get player's number of team ##########################
 	player_number = ""
 	results = soup.find('tr', class_ = "dunkel")
@@ -266,9 +267,7 @@ def get_more_player_info(url , player_name):
 			if td_results:
 				player_number = td_results[2].text.strip()
 	if player_number != "":
-			player_number = player_number.split('#')[1]
-
-	
+			player_number = player_number.split('#')[1]	
 		
 	return_list = [player_img, player_birthday , player_nation, player_weight, player_foot, player_number]
 
@@ -308,11 +307,11 @@ insert_update_players("2021-2022", "gre-super-league")
 insert_update_players("2021-2022", "hun-nb-i")
 insert_update_players("2021-2022", "ita-serie-a")
 insert_update_players("2021-2022", "ned-eredivisie")
-insert_update_players("2021", 	   "nor-eliteserien")
 insert_update_players("2021-2022", "por-primeira-liga")
 insert_update_players("2021-2022", "srb-super-liga")
 insert_update_players("2021-2022", "esp-primera-division")
-insert_update_players("2021", 	   "swe-allsvenskan")
 insert_update_players("2021-2022", "tur-sueperlig")
 insert_update_players("2021-2022", "sui-super-league")
 insert_update_players("2021-2022", "ukr-premyer-liga")
+insert_update_players("2021", 	   "nor-eliteserien")
+insert_update_players("2021", 	   "swe-allsvenskan")

@@ -291,7 +291,7 @@ def get_player_id(player_name, player_href, team_id):
 		mycursor.execute(sql)
 		player_existing_result = mycursor.fetchall()
 		if len(player_existing_result):                 # match found with player name and birthday
-			#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+			print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 			player_id = player_existing_result[0][0]
 			return player_id
 		else:      										# not found with name and birthday , so will find with player number and team id
@@ -307,11 +307,11 @@ def get_player_id(player_name, player_href, team_id):
 				now_player_id = player_existing_result[0][0]
 				
 				if (player_birthday ==  now_player_birthday) | (player_name == now_player_name):
-					#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+					print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 					sql= f'UPDATE playerlist set birthday = "{player_birthday}", player_name = "{player_name}" where player_id = {now_player_id}'
 					mycursor.execute(sql)
 					mydb.commit()
-					#print(mycursor.rowcount, "record Updated. its name or birthday updated.. not img_src")
+					print(mycursor.rowcount, "record Updated. its name or birthday updated.. not img_src")
 					return now_player_id
 				else:
 					player_id = add_extra_player(player_name, player_adding_info, team_id)
@@ -330,31 +330,31 @@ def get_player_id(player_name, player_href, team_id):
 			player_existing_result = mycursor.fetchall()
 			if len(player_existing_result):   # its img_src, pnumber, team_id update
 				player_id = player_existing_result[0][0]
-				#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+				print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 				if player_number == "":
     					player_number = 0
 				sql = f'UPDATE playerlist set img_src = "{player_adding_info[0]}", now_pNumber = {player_number}, now_team_id = {team_id} where player_id = {player_id}'
 				mycursor.execute(sql)
 				mydb.commit()
-				#print(mycursor.rowcount, "record Updated. its img_src or pnumber, team id updated, have its own imag")
+				print(mycursor.rowcount, "record Updated. its img_src or pnumber, team id updated, have its own imag")
 				return player_id
 			else:   
 				if player_number == "":
 					player_number = 0				
 				sql = f"SELECT player_id, player_name, birthday from playerlist where now_pNumber = {player_number} and now_team_id = {team_id}"
-				#print(sql)
+				print(sql)
 				mycursor.execute(sql)
 				player_existing_result = mycursor.fetchall()
-				if len(player_existing_result):            # name or birthday match..so will check availabe 
+				if len(player_existing_result):            # name or birthday match.. so will check availabe 
 					now_player_name = player_existing_result[0][1]
 					now_player_birthday = player_existing_result[0][2]
 					now_player_id = player_existing_result[0][0]
 					if (player_birthday ==  now_player_birthday) | (player_name == now_player_name):
-						#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+						print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 						sql= f'UPDATE playerlist set img_src = "{player_adding_info[0]}", birthday = "{now_player_birthday}", player_name = "{now_player_name}" where player_id = {now_player_id}'
 						mycursor.execute(sql)
 						mydb.commit()
-						#print(mycursor.rowcount, "record Updated. its img, birthday or name changed.. have its own image, but not searched")
+						print(mycursor.rowcount, "record Updated. its img, birthday or name changed.. have its own image, but not searched")
 						return now_player_id
 					else:
 						player_id = add_extra_player(player_name, player_adding_info, team_id)
@@ -367,14 +367,14 @@ def get_player_id(player_name, player_href, team_id):
 			player_id = player_existing_result[0][0]
 			player_birthday = player_adding_info[1]
 			
-			#print(f"   There is already in playerlist - {player_name} : {player_birthday}")
+			print(f"   There is already in playerlist - {player_name} : {player_birthday}")
 			now_pNumber = player_adding_info[5]
 			if now_pNumber == "":
 				now_pNumber = 0
 			sql = f'UPDATE playerlist SET player_name = "{player_name}", birthday = "{player_birthday}" ,now_team_id = {team_id}, now_pNumber = {now_pNumber} WHERE player_id = {player_id}'
 			mycursor.execute(sql)
 			mydb.commit()
-			#print(mycursor.rowcount, "record Updated. searched with its own image and his whole info updated!")
+			print(mycursor.rowcount, "record Updated. searched with its own image and his whole info updated!")
 			return player_id
 			
 def get_more_player_info(url , player_name):
@@ -410,6 +410,7 @@ def get_more_player_info(url , player_name):
 		player_birthday = player_birthday.split(" ")[0]
 		if player_birthday  == "":
 			player_birthday = "???"
+   
 	################## get player's number of team ##########################
 	player_number = ""
 	results = soup.find('tr', class_ = "dunkel")
@@ -424,9 +425,7 @@ def get_more_player_info(url , player_name):
 			if td_results:
 				player_number = td_results[2].text.strip()
 	if player_number != "":
-			player_number = player_number.split('#')[1]
-
-	
+			player_number = player_number.split('#')[1]	
 		
 	return_list = [player_img, player_birthday , player_nation, player_weight, player_foot, player_number]
 
@@ -473,31 +472,30 @@ def main():
 	# season = "2021"
 	
 	league_list_1 = [
-		"esp-primera-division" ,
+		"esp-primera-division",         #Spain
 		"eng-premier-league",  		 	#England
-		"bundesliga",   					#Germany
-		"ita-serie-a" , 				 #italy
-		"fra-ligue-1",  				 #france
+		"bundesliga",   		 		#Germany
+		"ita-serie-a", 				 	#italy
+		"fra-ligue-1",  				#france
 		"ned-eredivisie",  				#Netherland
 		"aut-bundesliga",  				#Austria
-		"por-primeira-liga", 			 #portugal
-		"gre-super-league" ,   			#Greece
-		"tur-sueperlig" ,   				#Turkey
-		#"nor-eliteserien" ,  			#Norway
-		#"swe-allsvenskan" ,  			#Sweden
-		"sui-super-league" ,  			 #Swiztland
-		"den-superligaen" ,     			#Denmark
-		"ukr-premyer-liga" ,    			 #Ukraine
-		"bul-parva-liga" ,      			#bulgaria	
-		"cze-1-fotbalova-liga" ,      	#Chezch
-		"cro-1-hnl"  ,         			 #Croatia
-		"hun-nb-i" ,     				#Hungary
+		"por-primeira-liga", 			#portugal
+		"gre-super-league",   			#Greece
+		"tur-sueperlig",   				#Turkey
+		"sui-super-league",  			#Swiztland
+		"den-superligaen",     			#Denmark
+		"ukr-premyer-liga",    			#Ukraine
+		"bul-parva-liga",      			#bulgaria	
+		"cze-1-fotbalova-liga",      	#Chezch
+		"cro-1-hnl",         			#Croatia
+		"hun-nb-i",     				#Hungary
 		"srb-super-liga"    
 	]
-	league_list_2 = [
-		"nor-eliteserien" ,  			# Norway
-		"swe-allsvenskan"   			# Sweden
-	]
+ 
+	# league_list_2 = [
+	# 	"nor-eliteserien",  			# Norway
+	# 	"swe-allsvenskan"   			# Sweden
+	# ]
 
 	for league in league_list_1:
 		startPageNumber = 1

@@ -76,13 +76,13 @@ def get_Real_LeagueUrl(argument):
 	return switcher.get(argument, "null")
 
 def doing_team_news(season, league_id, date, time, home_team_name_id, away_team_name_id):
-	#print(season, league_id, date, time, home_team_name_id, away_team_name_id)
+	print(season, league_id, date, time, home_team_name_id, away_team_name_id)
 
 	league_url = get_Real_LeagueUrl(int(league_id))
-	#print(league_url)
+	print(league_url)
 	if league_url:
 		URL = f"https://www.worldfootball.net/all_matches/{league_url}-{season}/"
-	#print(URL)
+	print(URL)
 	
 	page = requests.get(URL)
 	
@@ -519,7 +519,8 @@ def main():
 	else:
 		print("Need full arguments!")
 
-	#text = doing_team_news("2020-2021", '4', '2021-01-27',' 15:00', '401' ,'399');
+	#print(season, league_id, date, time, home_team_name_id, away_team_name_id)
+ 	#text = doing_team_news("2021-2022", '4', '2021-01-27', '15:00', '401','399');
 	#text = json.dumps(text)
 	#text = text.encode('utf8');
 	#print(text);
