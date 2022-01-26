@@ -133,25 +133,23 @@ def insert_teamList(season=None, league=None):
 insert_teamList("2021-2022", "aut-bundesliga")
 insert_teamList("2021-2022", "bul-parva-liga")
 insert_teamList("2021-2022", "cze-1-fotbalova-liga")
-insert_teamList("2021-2022", "cro-1-hnl")
 insert_teamList("2021-2022", "den-superligaen")
 insert_teamList("2021-2022", "eng-premier-league")
 insert_teamList("2021-2022", "fra-ligue-1")
 insert_teamList("2021-2022", "bundesliga")
 insert_teamList("2021-2022", "gre-super-league")
-insert_teamList("2021-2022", "hun-nb-i")
 insert_teamList("2021-2022", "ita-serie-a")
 insert_teamList("2021-2022", "ned-eredivisie")
-insert_teamList("2021", "nor-eliteserien")
 insert_teamList("2021-2022", "por-primeira-liga")
 insert_teamList("2021-2022", "srb-super-liga")
 insert_teamList("2021-2022", "esp-primera-division")
-insert_teamList("2021", "swe-allsvenskan")
 insert_teamList("2021-2022", "sui-super-league")
 insert_teamList("2021-2022", "tur-sueperlig")
 insert_teamList("2021-2022", "ukr-premyer-liga")
-
-
+insert_teamList("2021-2022", "cro-1-hnl")
+insert_teamList("2021-2022", "hun-nb-i")
+insert_teamList("2021", "nor-eliteserien")
+insert_teamList("2021", "swe-allsvenskan")
 
 
 
