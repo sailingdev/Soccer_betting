@@ -79,7 +79,7 @@ mydb = mysql.connector.connect(
     passwd="P@ssw0rd2021",
     database="soccer"
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def insert_match_team_dynamic_ranking_8(league, season, target_status):
     #sql = f"SELECT  * FROM ranking_range_table"
@@ -534,7 +534,7 @@ def main():
     insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2021-2022", "END")
-    insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "END")
+    insert_match_team_dynamic_ranking_8("gre-super-league",         "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2021",      "END")
     insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2021",      "END")
@@ -555,7 +555,7 @@ def main():
     insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2021-2022", "END")
-    insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "END")
+    insert_match_team_dynamic_ranking_6("gre-super-league",         "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2021-2022", "END")
     insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2021",      "END")
     insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2021",      "END")
@@ -576,7 +576,7 @@ def main():
     insert_match_team_dynamic_ranking_8("ned-eredivisie",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("aut-bundesliga",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("por-primeira-liga",        "2021-2022", "LIVE")
-    insert_match_team_dynamic_ranking_8("gre-superleague",          "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_8("gre-super-league",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("tur-sueperlig",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_8("nor-eliteserien",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_8("swe-allsvenskan",          "2021",      "LIVE")
@@ -597,7 +597,7 @@ def main():
     insert_match_team_dynamic_ranking_6("ned-eredivisie",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("aut-bundesliga",           "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("por-primeira-liga",        "2021-2022", "LIVE")
-    insert_match_team_dynamic_ranking_6("gre-superleague",          "2021-2022", "LIVE")
+    insert_match_team_dynamic_ranking_6("gre-super-league",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("tur-sueperlig",            "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("nor-eliteserien",          "2021",      "LIVE")
     insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2021",      "LIVE")

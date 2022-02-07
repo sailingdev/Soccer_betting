@@ -16,7 +16,7 @@ mydb = mysql.connector.connect(
     database="soccer"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def switch_season(argument):
     switcher = {
@@ -548,7 +548,6 @@ def update_real_AH_price_id_toSeasonMatchPlanTable(week_number):
 
     print(f" - W{week_number} - updated {count} : END !")
 
-# real price data of MO and AH into real price table
 def get_realprice_toRealPriceTable_perweek(weeknumber):       
     insert_real_prcie_to_MO_realpriceTable(weeknumber)	
     insert_real_prcie_to_AH_realpriceTable(weeknumber)							
@@ -559,9 +558,10 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
     
     
 def main():
-	weeknumber = 625
-	get_realprice_toRealPriceTable_perweek(weeknumber)							
-	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
+    # for C_weeknumber in range(630, 633):
+    get_realprice_toRealPriceTable_perweek(633)							
+    matching_realpriceid_toSeasonMatchPlanColumn(633)
+    
 	
 if __name__ == "__main__":
 	main()

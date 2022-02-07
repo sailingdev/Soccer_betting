@@ -24,7 +24,7 @@ mydb = mysql.connector.connect(
     database="soccer"
 )
 
-mycursor = mydb.cursor() 
+mycursor = mydb.cursor(buffered=True) 
 
 PROXY = "193.149.225.224:80"
 driverpath = "C:\Soccer_betting\chromedriver.exe"

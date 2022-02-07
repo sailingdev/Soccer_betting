@@ -26,7 +26,7 @@ mydb = mysql.connector.connect(
     database="soccer"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 driverpath = "C:\Soccer_betting\chromedriver.exe"
 chrome_options = Options()

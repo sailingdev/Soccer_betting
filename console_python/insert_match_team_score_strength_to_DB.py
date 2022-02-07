@@ -76,7 +76,7 @@ mydb = mysql.connector.connect(
 	passwd="P@ssw0rd2021",
 	database="soccer"
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 updated_count = 0
 def insert_match_team_socre_strength_TPGR():
@@ -142,7 +142,7 @@ def get_player_TGPR_season(player_id, season_id):
 	if total_started != 0:
 		player_TGPR = total_goals / total_started
 	
-	return player_TGPR;
+	return player_TGPR
 
 def get_team_TGPR(match_id, season_id, team_id):
 	sql = f"SELECT  * FROM match_team_player_info where match_id = {match_id} and team_id = {team_id}"

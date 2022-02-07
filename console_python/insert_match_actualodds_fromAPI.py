@@ -9,7 +9,7 @@ import locale
 import time
 locale.setlocale( locale.LC_ALL, 'deu_deu') 
 
-sportmonks_token = "J8EKD6k0BAHIh1QJpr7K2YEPw4IhfpruZ6d63vZonQZX4GJOtkMf4Ml5cRfo"
+sportmonks_token = "4Kj1qmmeUiN7isAnIGBwHNYVUUzodVwvyJuyRi2UvVP61ignYAhdob3kRfIv"
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
@@ -27,7 +27,7 @@ mydb = mysql.connector.connect(
 
 NotFoundMatch_count = 0
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 def switch_season(argument):
     switcher = {
         "2019-2020": 12,
@@ -302,8 +302,8 @@ def main():
 	insert_league_odd("por-primeira-liga",		"2021-2022")
 	insert_league_odd("gre-super-league",		"2021-2022")
 	insert_league_odd("tur-sueperlig",			"2021-2022")
-	insert_league_odd("nor-eliteserien",		"2022")
-	insert_league_odd("swe-allsvenskan",		"2022")
+	insert_league_odd("nor-eliteserien",		"2021")
+	insert_league_odd("swe-allsvenskan",		"2021")
 	insert_league_odd("sui-super-league",		"2021-2022")
 	insert_league_odd("den-superligaen",		"2021-2022")
 	insert_league_odd("ukr-premyer-liga",		"2021-2022")

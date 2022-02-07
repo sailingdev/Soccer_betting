@@ -18,7 +18,7 @@ mydb = mysql.connector.connect(
 	buffered=True
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def switch_season(argument):
     switcher = {
@@ -264,17 +264,15 @@ def update_real_price_id_toSeasonMatchPlanTable(week_number):
 	print(f" - W{week_number} - updated {count} : END !")
 
 def get_realprice_toRealPriceTable_perweek(weeknumber):
-	# for C_weeknumber in range(275, 546):                                  # 546 = 2020-06-14 , 578 = 2021-01-21
-	#     insert_real_prcie_to_realpriceTable(C_weeknumber)
     insert_real_prcie_to_realpriceTable(weeknumber)							#  param shoulb be current continuous week.
 
 def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):		    
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)  				#  param shoulb be current continuous week.
 
 def main():
-	weeknumber = 625
-	get_realprice_toRealPriceTable_perweek(weeknumber)
-	matching_realpriceid_toSeasonMatchPlanColumn(weeknumber)
+    get_realprice_toRealPriceTable_perweek(633)
+    matching_realpriceid_toSeasonMatchPlanColumn(633)
+    
 	
 if __name__ == "__main__":
 	main()
