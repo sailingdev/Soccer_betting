@@ -8,7 +8,7 @@ mydb = mysql.connector.connect(
   database="soccer"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def Acutal_prices_toexcel():
     

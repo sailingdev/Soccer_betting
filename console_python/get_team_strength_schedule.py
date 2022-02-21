@@ -183,7 +183,7 @@ def get_Real_LeagueUrl(argument):
 def doing_team_news(season, league_id, date, time, home_team_name_id, away_team_name_id):
     print("       ", season, league_id, date, time, home_team_name_id, away_team_name_id)
     mysql_pool = MySQLPool(**dbconfig)
-    # mycursor = mydb.cursor()
+    # mycursor = mydb.cursor(buffered=True)
     league_url = get_Real_LeagueUrl(int(league_id))
     # print(league_url)
     if league_url:
@@ -301,7 +301,7 @@ def get_data_from_awayteam(team_info, team_id, season_id):
 
 
 def get_player_score_season(player_id, season_id):
-    # mycursor = mydb.cursor()
+    # mycursor = mydb.cursor(buffered=True)
     mysql_pool = MySQLPool(**dbconfig)
     sql = f'SELECT A.season_id, A.goals, A.started FROM player_career AS A INNER JOIN season AS B ON A.season_id = B.season_id WHERE player_id = {player_id} ORDER BY B.season_title ASC'
     # mycursor.execute(sql)
@@ -396,7 +396,7 @@ def get_player_id(player_name, player_href, team_id):
     player_birthday = player_adding_info[1]
     player_number = player_adding_info[5]
     img_src_flag = 0
-    # mycursor = mydb.cursor()
+    # mycursor = mydb.cursor(buffered=True)
     mysql_pool = MySQLPool(**dbconfig)
     if 'gross/0.' in player_adding_info[0]:  # No image, so empty man
         sql = f'SELECT * FROM playerlist WHERE player_name like "%{player_name}" and birthday = "{player_birthday}"'
@@ -554,7 +554,7 @@ def add_extra_player(player_name, player_adding_info, team_id):
     player_birthday = player_adding_info[1]
     player_nation = player_adding_info[2]
     # print(f"   this is new - {player_name} : {player_birthday}"
-    mycursor = mydb.cursor()
+    mycursor = mydb.cursor(buffered=True)
     sql = "INSERT INTO soccer.playerlist (player_name, birthday , nationality, img_src, height, weight, foot" \
           ", position , now_pNumber, now_team_id ) VALUES (%s, %s , %s, %s, %s, %s, %s, %s,%s, %s)"
     val = (player_name, player_birthday, player_nation, player_adding_info[0], "???", player_adding_info[3],
@@ -633,7 +633,7 @@ def make_schedule_ofToday():
     year = int(year)
     month = int(month)
     day = int(day)
-    # mycursor = mydb.cursor()
+    # mycursor = mydb.cursor(buffered=True)
     sql = f"SELECT `match_id`, `time` FROM season_match_plan where date = '{today}' and status = 'LIVE' order by time"
 
     # mycursor.execute(sql)

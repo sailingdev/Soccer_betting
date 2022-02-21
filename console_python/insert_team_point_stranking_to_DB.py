@@ -21,18 +21,15 @@ mydb = mysql.connector.connect(
     passwd="P@ssw0rd2021",
     database="soccer"
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def insert_team_point_to_DB():
-  #sql = f"SELECT  * FROM ranking_range_table"
-  #mycursor.execute(sql)
-  #rangeVal = mycursor.fetchall()
   
   sql = f"SELECT  season_id, league_id, team_id, info_id FROM season_league_team_info"
   mycursor.execute(sql)
   myresult = mycursor.fetchall()
 
-  for i in range(3503, 3815):   # here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
+  for i in range(3809, 3821):   # here the sequence...... index - 1  so index 0 means 1st row...season_league_team_info 3503
       season_id = myresult[i][0]
       league_id = myresult[i][1]
       team_id = myresult[i][2]

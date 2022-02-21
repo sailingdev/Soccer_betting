@@ -18,7 +18,7 @@ mydb = mysql.connector.connect(
 	passwd="P@ssw0rd2021",
 	database="soccer"
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def switch_season(argument):
 	switcher = {

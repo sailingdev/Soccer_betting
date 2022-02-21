@@ -7,7 +7,7 @@ mydb = mysql.connector.connect(
   passwd="P@ssw0rd2021",
   database="soccer"
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def get_import_to_excel():
     workbook = xlsxwriter.Workbook('Player last career.xlsx')

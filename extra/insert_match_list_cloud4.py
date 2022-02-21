@@ -20,7 +20,7 @@ mydb = mysql.connector.connect(
   database="soccer_cloud_4"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 def switch_season(argument):
     switcher = {
