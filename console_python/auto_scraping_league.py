@@ -65,7 +65,10 @@ def main():
   init(sportmonks_token)
   for season, value1 in seasons.items():
     for league, value2 in leagues.items():
-      print(season, league)
+      print(season, league, f'predictions/valuebets/fixture/{value2}')
+      leagueData = get(f'predictions/valuebets/fixture/{value2}', None, value2)
+      print(leagueData)
+      exit(0)
 
 
 if __name__ == "__main__":
