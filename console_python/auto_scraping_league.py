@@ -13,9 +13,9 @@ sportmonks_token = "4Kj1qmmeUiN7isAnIGBwHNYVUUzodVwvyJuyRi2UvVP61ignYAhdob3kRfIv
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
-# This is the sample instructions to insert the match plan and match-player info.
-# insert_match_plan("2021-2022", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
-# direct write the info for inserting..... for saving time.
+# Steps followed while scraping:
+#   1. Get all predictions from API
+#   2. Loop the predication data and store only the required leagues
 #################################################################
 
 mydb = mysql.connector.connect(
@@ -26,9 +26,8 @@ mydb = mysql.connector.connect(
 )
 
 mycursor = mydb.cursor(buffered=True)
-seasons = {
-  "2021-2022": 857
-}
+seasonId = 857 #"2021-2022"
+
 
 leagues = {	
   "aut-bundesliga": 1,                  # Austria
@@ -60,15 +59,58 @@ leagues = {
   "ukr-premyer-liga": 20                # Ukraine
 }
 
+leaguelist = {
+	"esp-primera-division"	: 564,  		#spain
+	"eng-premier-league"	: 8,   			#England
+	"bundesliga"			: 82,   		#Germany
+	"ita-serie-a" 			: 384, 			#italy
+	"fra-ligue-1" 			: 301,   		#france
+	"ned-eredivisie"		: 72,  			#Netherland
+	"aut-bundesliga"		: 181,  		#Austria
+	"por-primeira-liga"		: 462,  		#portugal
+	"gre-super-league"		: 325,   		#Greece
+	"tur-sueperlig"			: 600,   		#Turkey
+	"nor-eliteserien"		: 444,  		#Norway
+	"swe-allsvenskan"		: 573, 			#Sweden
+	"sui-super-league"		: 591,  		#Swiztland
+	"den-superligaen"		: 271,     		#Denmark
+	"ukr-premyer-liga"		: 609,     		#Ukraine
+	"bul-parva-liga"		: 229,       	#bulgaria
+	"cze-1-fotbalova-liga"	: 262,      	#Chezch
+	"cro-1-hnl"				: 244 ,         #Croatia
+	"hun-nb-i"				: 334,    		#Hungary
+	"srb-super-liga"		: 531    		#Serbia
+}
+
+def storeData(predicationData,lgId):
+  global seasonId
+  sql = f'SELECT id from predictions where season_id = {seasonId} and league_id={lgId} limit 1'
+  mycursor.execute(sql)
+  result = mycursor.fetchall()
+  if len(result):
+    print("- No need to update. already saved in DB!", lgId)
+  else:
+    sql = f"INSERT INTO predictions (season_id, league_id, hit_ratio, log_loss, predictability, predictive_power, hll_3ways_ft, hll_btts, hll_overunder25, hll_overunder35, hll_scores, mhr_3ways_ft, mhr_btts, mhr_overunder25, mhr_overunder35, mhr_scores, mp_3ways_ft, mp_btts, mp_overunder25, mp_overunder35, mp_scores, mpp_3ways_ft, mpp_btts, mpp_overunder25, mpp_overunder35, mpp_scores, mll_3ways_ft, mll_btts, mll_overunder25, mll_overunder35, mll_scores, updated_at) VALUES ({seasonId}, {lgId}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, {predicationData['hit_ratio']}, now())"
+    print(sql)
+    mycursor.execute(sql)
+    mydb.commit()
+
 
 def main():
   init(sportmonks_token)
-  for season, value1 in seasons.items():
-    for league, value2 in leagues.items():
-      print(season, league, f'predictions/valuebets/fixture/{value2}')
-      leagueData = get(f'predictions/valuebets/fixture/{value2}', None, value2)
-      print(leagueData)
-      exit(0)
+  
+  print(f"-------------Get all league predications----------------")
+  leagueData = get(f'predictions/leagues')
+  #print(leagueData)
+  for one in leagueData:
+    try:
+      for lgName,lgId in leaguelist.items(): 
+        if one['predictability']['data']['league_id'] == lgId:
+          print("Storing --- ", lgId, lgName)
+          storeData(one['predictability']['data'], lgId)
+          
+    except KeyError:
+      print(f"------------- predictability Data not found. Name: {one['name']} ----------------")
 
 
 if __name__ == "__main__":
