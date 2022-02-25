@@ -20,14 +20,13 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #   2. Loop the predication data and store only the required leagues
 #################################################################
 
-'''
-mydb = mysql.connector.connect(
-  host="3.69.28.146",
-  user="root",
-  passwd="P@ssw0rd2021",
-  database="soccer"
-)
-'''
+
+#mydb = mysql.connector.connect(
+#  host="3.69.28.146",
+#  user="root",
+#  passwd="P@ssw0rd2021",
+#  database="soccer"
+#)
 mydb = mysql.connector.connect(
   host="localhost",
   user="akhil",
@@ -114,6 +113,7 @@ def storeData(predicationData):
     for k,v in predicationData.items():
       if k not in allColumnNames:
         mycursor.execute("alter table predictions add column `"+k+"` varchar(15) default null")
+        mydb.commit()
         allColumnNames = allColumnNames+", "+k
         
       columns.append( "`"+k+"`")
@@ -124,6 +124,7 @@ def storeData(predicationData):
     insertQuery = "insert into predictions("+", ".join(columns)+") values("+", ".join(values)+")"
     print(insertQuery)
     mycursor.execute(insertQuery)
+    mydb.commit()
     
     
 allTeamInfo = {}
@@ -132,13 +133,18 @@ def findTeamId(teamId):
   
   if allTeamInfo.get(teamId) == None:
     teamData = get(f'teams/{teamId}')
-    print("Fine teamId by name: ", teamData['name'])
+    print("Find teamId by name: ", teamData['name'])
     sql = f"SELECT team_id from team_list where team_name = '{teamData['name']}' or team_name_odd = '{teamData['name']}'"
     mycursor.execute(sql)
     result = mycursor.fetchall()
     if result == []:
-      print("TeamId not found in DB");
-      exit(0);
+      print("=======TeamId not found in DB====.. Adding new team");
+      sql = f"insert into team_list(team_name, team_name_odd, img_src) values('{teamData['name']}', '{teamData['name']}', '{teamData['logo_path']}')"
+      print(sql)
+      mycursor.execute(sql)
+      mydb.commit()
+      allTeamInfo[teamId] = mycursor.lastrowid 
+      return mycursor.lastrowid
     else:
       print("-------TeamId found: ", result[0][0])
       allTeamInfo[teamId] = result[0][0]
@@ -166,22 +172,23 @@ def main():
           fixture_id = det1['id']
           print("Fixture details: ", fixture_id, det1['localteam_id'], det1['visitorteam_id'])
           leagueData = get(f'predictions/probabilities/fixture/{fixture_id}', None, lgId)
-          dataData = {
-            "league_id" : lgId,
-            "fixture_id" : fixture_id,
-            "season_id" : seasonId,
-            "home_team" : findTeamId(det1['localteam_id']),
-            "away_team" : findTeamId(det1['visitorteam_id']),
-            "match_date": match_date 
-          }
-          for k,v in leagueData['predictions'].items():
-            if k == "correct_score":
-              for k2,v2 in leagueData['predictions']['correct_score'].items():
-                k2 = "correct_score_"+k2
-                dataData[k2] = v2  
-            else:  
-              dataData[k] = v
-          storeData(dataData)
+          if leagueData != None:
+            dataData = {
+              "league_id" : lgId,
+              "fixture_id" : fixture_id,
+              "season_id" : seasonId,
+              "home_team" : findTeamId(det1['localteam_id']),
+              "away_team" : findTeamId(det1['visitorteam_id']),
+              "match_date": match_date 
+            }
+            for k,v in leagueData['predictions'].items():
+              if k == "correct_score":
+                for k2,v2 in leagueData['predictions']['correct_score'].items():
+                  k2 = "correct_score_"+k2
+                  dataData[k2] = v2  
+              else:  
+                dataData[k] = v
+            storeData(dataData)
 
 
 if __name__ == "__main__":
