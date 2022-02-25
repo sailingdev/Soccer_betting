@@ -20,20 +20,20 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #   2. Loop the predication data and store only the required leagues
 #################################################################
 
-
-#mydb = mysql.connector.connect(
-#  host="3.69.28.146",
-#  user="root",
-#  passwd="P@ssw0rd2021",
-#  database="soccer"
-#)
+mydb = mysql.connector.connect(
+  host="3.69.28.146",
+  user="root",
+  passwd="P@ssw0rd2021",
+  database="soccer"
+)
+'''
 mydb = mysql.connector.connect(
   host="localhost",
   user="akhil",
   passwd="password",
   database="soccer"
 )
-
+'''
 mycursor = mydb.cursor(buffered=True)
 seasonId = 857 #"2021-2022"
 
@@ -91,15 +91,15 @@ leaguelist = {
 	"srb-super-liga"		: 531    		#Serbia
 }
 
-allColumnNames = ""
+allColumnNames = []
 def setColumnNames():
   global allColumnNames
   sql = f'show columns from predictions'
   mycursor.execute(sql)
   result = mycursor.fetchall()
   for k in result:
-    allColumnNames = allColumnNames+", "+k[0];
-
+    allColumnNames.append(k[0])
+  
 def storeData(predicationData):
   global allColumnNames;
   sql = f'SELECT id from predictions where league_id = {predicationData["league_id"]} and fixture_id={predicationData["fixture_id"]} and season_id={predicationData["season_id"]} and match_date="{predicationData["match_date"]}" limit 1'
@@ -112,9 +112,10 @@ def storeData(predicationData):
     values = [];
     for k,v in predicationData.items():
       if k not in allColumnNames:
+        print("Adding new column: ", k);
         mycursor.execute("alter table predictions add column `"+k+"` varchar(15) default null")
         mydb.commit()
-        allColumnNames = allColumnNames+", "+k
+        allColumnNames.append(k)
         
       columns.append( "`"+k+"`")
       if type(v) != str:
