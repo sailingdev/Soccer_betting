@@ -7,6 +7,8 @@ import urllib3
 from sportmonks import *
 import locale
 import time
+import datetime
+
 #locale.setlocale( locale.LC_ALL, 'deu_deu') ##testing 
 
 sportmonks_token = "4Kj1qmmeUiN7isAnIGBwHNYVUUzodVwvyJuyRi2UvVP61ignYAhdob3kRfIv"
@@ -18,6 +20,14 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #   2. Loop the predication data and store only the required leagues
 #################################################################
 
+'''
+mydb = mysql.connector.connect(
+  host="3.69.28.146",
+  user="root",
+  passwd="P@ssw0rd2021",
+  database="soccer"
+)
+'''
 mydb = mysql.connector.connect(
   host="localhost",
   user="akhil",
@@ -82,35 +92,96 @@ leaguelist = {
 	"srb-super-liga"		: 531    		#Serbia
 }
 
-def storeData(predicationData,lgId):
-  global seasonId
-  sql = f'SELECT id from predictions where season_id = {seasonId} and league_id={lgId} limit 1'
+allColumnNames = ""
+def setColumnNames():
+  global allColumnNames
+  sql = f'show columns from predictions'
+  mycursor.execute(sql)
+  result = mycursor.fetchall()
+  for k in result:
+    allColumnNames = allColumnNames+", "+k[0];
+
+def storeData(predicationData):
+  global allColumnNames;
+  sql = f'SELECT id from predictions where league_id = {predicationData["league_id"]} and fixture_id={predicationData["fixture_id"]} and season_id={predicationData["season_id"]} and match_date="{predicationData["match_date"]}" limit 1'
   mycursor.execute(sql)
   result = mycursor.fetchall()
   if len(result):
-    print("- No need to update. already saved in DB!", lgId)
+    print("- No need to update. already saved in DB!", predicationData['fixture_id'])
   else:
-    sql = f"INSERT INTO predictions (season_id, league_id, hit_ratio, log_loss, predictability, predictive_power, hll_3ways_ft, hll_btts, hll_overunder25, hll_overunder35, hll_scores, mhr_3ways_ft, mhr_btts, mhr_overunder25, mhr_overunder35, mhr_scores, mp_3ways_ft, mp_btts, mp_overunder25, mp_overunder35, mp_scores, mpp_3ways_ft, mpp_btts, mpp_overunder25, mpp_overunder35, mpp_scores, mll_3ways_ft, mll_btts, mll_overunder25, mll_overunder35, mll_scores, updated_at) VALUES ({seasonId}, {lgId}, '{predicationData['hit_ratio']}', '{predicationData['log_loss']}', '{predicationData['predictability']}', '{predicationData['predictive_power']}', '{predicationData['historical_log_loss']['3ways-ft']}', '{predicationData['historical_log_loss']['btts']}', '{predicationData['historical_log_loss']['overunder25']}', '{predicationData['historical_log_loss']['overunder35']}', '{predicationData['historical_log_loss']['scores']}', '{predicationData['model_hit_ratio']['3ways-ft']}', '{predicationData['model_hit_ratio']['btts']}', '{predicationData['model_hit_ratio']['overunder25']}', '{predicationData['model_hit_ratio']['overunder35']}', '{predicationData['model_hit_ratio']['scores']}', '{predicationData['model_predictability']['3ways-ft']}', '{predicationData['model_predictability']['btts']}', '{predicationData['model_predictability']['overunder25']}', '{predicationData['model_predictability']['overunder35']}', '{predicationData['model_predictability']['scores']}', '{predicationData['model_predictive_power']['3ways-ft']}', '{predicationData['model_predictive_power']['btts']}', '{predicationData['model_predictive_power']['overunder25']}', '{predicationData['model_predictive_power']['overunder35']}', '{predicationData['model_predictive_power']['scores']}', '{predicationData['model_log_loss']['3ways-ft']}', '{predicationData['model_log_loss']['btts']}', '{predicationData['model_log_loss']['overunder25']}', '{predicationData['model_log_loss']['overunder35']}', '{predicationData['model_log_loss']['scores']}', now())"
-    print(sql)
+    columns = [];
+    values = [];
+    for k,v in predicationData.items():
+      if k not in allColumnNames:
+        mycursor.execute("alter table predictions add column `"+k+"` varchar(15) default null")
+        allColumnNames = allColumnNames+", "+k
+        
+      columns.append( "`"+k+"`")
+      if type(v) != str:
+        v = str(v)
+      values.append('"'+v+'"');  
+      
+    insertQuery = "insert into predictions("+", ".join(columns)+") values("+", ".join(values)+")"
+    print(insertQuery)
+    mycursor.execute(insertQuery)
+    
+    
+allTeamInfo = {}
+def findTeamId(teamId):
+  global allTeamInfo;
+  
+  if allTeamInfo.get(teamId) == None:
+    teamData = get(f'teams/{teamId}')
+    print("Fine teamId by name: ", teamData['name'])
+    sql = f"SELECT team_id from team_list where team_name = '{teamData['name']}' or team_name_odd = '{teamData['name']}'"
     mycursor.execute(sql)
-    mydb.commit()
-
+    result = mycursor.fetchall()
+    if result == []:
+      print("TeamId not found in DB");
+      exit(0);
+    else:
+      print("-------TeamId found: ", result[0][0])
+      allTeamInfo[teamId] = result[0][0]
+      return result[0][0]
+  else:
+    return allTeamInfo.get(teamId)
 
 def main():
   init(sportmonks_token)
   
-  print(f"-------------Get all league predications----------------")
-  leagueData = get(f'predictions/leagues')
-  #print(leagueData)
-  for one in leagueData:
-    try:
-      for lgName,lgId in leaguelist.items(): 
-        if one['predictability']['data']['league_id'] == lgId:
-          print("Storing --- ", lgId, lgName)
-          storeData(one['predictability']['data'], lgId)
-          
-    except KeyError:
-      print(f"------------- predictability Data not found. Name: {one['name']} ----------------")
+  setColumnNames();
+ 
+  date = datetime.datetime(2022,2,26)
+  endDate = "2022-12-31"
+  for i in range(365): 
+    date += datetime.timedelta(days=1)
+    match_date = date.strftime("%Y-%m-%d")
+    if endDate == match_date:
+      break
+    for lgName,lgId in leaguelist.items():  
+      print("=======Datewise API call - Date: ", match_date, ", LeagueId: ", lgId)
+      match_data_ofDay = get(f'fixtures/date/{match_date}', None, lgId)
+      if match_data_ofDay != None:
+        for det1 in match_data_ofDay:
+          fixture_id = det1['id']
+          print("Fixture details: ", fixture_id, det1['localteam_id'], det1['visitorteam_id'])
+          leagueData = get(f'predictions/probabilities/fixture/{fixture_id}', None, lgId)
+          dataData = {
+            "league_id" : lgId,
+            "fixture_id" : fixture_id,
+            "season_id" : seasonId,
+            "home_team" : findTeamId(det1['localteam_id']),
+            "away_team" : findTeamId(det1['visitorteam_id']),
+            "match_date": match_date 
+          }
+          for k,v in leagueData['predictions'].items():
+            if k == "correct_score":
+              for k2,v2 in leagueData['predictions']['correct_score'].items():
+                k2 = "correct_score_"+k2
+                dataData[k2] = v2  
+            else:  
+              dataData[k] = v
+          storeData(dataData)
 
 
 if __name__ == "__main__":
