@@ -19,7 +19,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #   1. Get all predictions from API
 #   2. Loop the predication data and store only the required leagues
 #################################################################
-
+'''
 mydb = mysql.connector.connect(
   host="3.69.28.146",
   user="root",
@@ -33,7 +33,7 @@ mydb = mysql.connector.connect(
   passwd="password",
   database="soccer"
 )
-'''
+
 mycursor = mydb.cursor(buffered=True)
 seasonId = 857 #"2021-2022"
 
@@ -173,6 +173,8 @@ def main():
           fixture_id = det1['id']
           print("Fixture details: ", fixture_id, det1['localteam_id'], det1['visitorteam_id'])
           leagueData = get(f'predictions/probabilities/fixture/{fixture_id}', None, lgId)
+          valueBetData = get(f'predictions/valuebets/fixture/{fixture_id}')
+          
           if leagueData != None:
             dataData = {
               "league_id" : lgId,
@@ -182,6 +184,13 @@ def main():
               "away_team" : findTeamId(det1['visitorteam_id']),
               "match_date": match_date 
             }
+            if valueBetData != None:
+              if valueBetData['fixture_id'] == fixture_id:
+                print("**************AutoBet found");
+                for k3,v3 in valueBetData['predictions'].items():
+                  k3 = "autobet_"+k3
+                  dataData[k3] = v3
+
             for k,v in leagueData['predictions'].items():
               if k == "correct_score":
                 for k2,v2 in leagueData['predictions']['correct_score'].items():
