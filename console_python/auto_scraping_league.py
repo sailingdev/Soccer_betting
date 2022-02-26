@@ -19,7 +19,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 #   1. Get all predictions from API
 #   2. Loop the predication data and store only the required leagues
 #################################################################
-'''
+
 mydb = mysql.connector.connect(
   host="3.69.28.146",
   user="root",
@@ -33,7 +33,7 @@ mydb = mysql.connector.connect(
   passwd="password",
   database="soccer"
 )
-
+'''
 mycursor = mydb.cursor(buffered=True)
 seasonId = 857 #"2021-2022"
 
