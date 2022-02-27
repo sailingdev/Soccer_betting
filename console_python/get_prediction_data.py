@@ -95,7 +95,7 @@ def setColumnNames():
   
 def storeData(predicationData):
   global allColumnNames;
-  sql = f'SELECT id from predictions where league_id = {predicationData["league_id"]} and fixture_id={predicationData["fixture_id"]} and season_id={predicationData["season_id"]} and match_date="{predicationData["match_date"]}" limit 1'
+  sql = f'SELECT id from predictions where league_id = "{predicationData["league_id"]}" and fixture_id={predicationData["fixture_id"]} and season_id="{predicationData["season_id"]}" and match_date="{predicationData["match_date"]}" limit 1'
   mycursor.execute(sql)
   result = mycursor.fetchall()
   if len(result):
@@ -167,14 +167,35 @@ def main():
           print("Fixture details: ", fixture_id, det1['localteam_id'], det1['visitorteam_id'])
           leagueData = get(f'predictions/probabilities/fixture/{fixture_id}', None, lgId)
           valueBetData = get(f'predictions/valuebets/fixture/{fixture_id}')
+          try:
+            league_id = leagues[list(leaguelist.keys())[list(leaguelist.values()).index(lgId)]]
+            mycursor.execute('SELECT league_title FROM soccer.league where league_id = (%s);', (league_id,))
+            league_name = list(mycursor.fetchone())[0]
+          except Exception as ex:
+            print('League Name not found' + str(ex))
+          try:
+            home_team_id = findTeamId(det1['localteam_id'])
+            away_team_id = findTeamId(det1['visitorteam_id'])
+            mycursor.execute('SELECT team_name FROM soccer.team_list where team_id = (%s);', (home_team_id,))
+            home_team = list(mycursor.fetchone())[0]
+            mycursor.execute('SELECT team_name FROM soccer.team_list where team_id = (%s);', (away_team_id,))
+            away_team = list(mycursor.fetchone())[0]
+          except Exception as ex:
+            print('Team names not found' + str(ex))
+          try:
+            mycursor.execute('SELECT season_title FROM soccer.season where season_id = (%s);', (seasonId,))
+            season_name = list(mycursor.fetchone())[0]
+          except Exception as ex:
+            print('Season Name not found' + str(ex))
           
           if leagueData != None:
             dataData = {
-              "league_id" : lgId,
+              "league_id" : league_id,
+              "league_name": league_name,
               "fixture_id" : fixture_id,
-              "season_id" : seasonId,
-              "home_team" : findTeamId(det1['localteam_id']),
-              "away_team" : findTeamId(det1['visitorteam_id']),
+              "season_id" : season_name,
+              "home_team" : home_team,
+              "away_team" : away_team,
               "match_date": match_date 
             }
             if valueBetData != None:
