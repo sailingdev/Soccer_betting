@@ -857,27 +857,27 @@ def fn_Get_TeamId(team_name):
 
 #################################################################################################
 
-def main():
-	doing_scraping_match_plan("2021-2022", "aut-bundesliga", firstMatch = 109)
-	doing_scraping_match_plan("2021-2022", "bul-parva-liga", firstMatch = 132)
-	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga", firstMatch = 159)
-	doing_scraping_match_plan("2021-2022", "den-superligaen", firstMatch = 103)
-	doing_scraping_match_plan("2021-2022", "eng-premier-league", firstMatch = 226)
-	doing_scraping_match_plan("2021-2022", "fra-ligue-1", firstMatch = 231)
-	doing_scraping_match_plan("2021-2022", "bundesliga", firstMatch = 190)
-	doing_scraping_match_plan("2021-2022", "gre-super-league", firstMatch = 145)
-	doing_scraping_match_plan("2021-2022", "ita-serie-a", firstMatch = 240)
-	doing_scraping_match_plan("2021-2022", "ned-eredivisie", firstMatch = 190)
-	doing_scraping_match_plan("2021-2022", "por-primeira-liga", firstMatch = 188)
-	doing_scraping_match_plan("2021-2022", "srb-super-liga", firstMatch = 169)
-	doing_scraping_match_plan("2021-2022", "esp-primera-division", firstMatch = 228)
-	doing_scraping_match_plan("2021-2022", "sui-super-league", firstMatch = 101)
-	doing_scraping_match_plan("2021-2022", "tur-sueperlig", firstMatch = 239)
-	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga", firstMatch = 145)
+def main(): 
+	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
+	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
+	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
+	doing_scraping_match_plan("2021-2022", "den-superligaen")
+	doing_scraping_match_plan("2021-2022", "eng-premier-league")
+	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
+	doing_scraping_match_plan("2021-2022", "bundesliga")
+	doing_scraping_match_plan("2021-2022", "gre-super-league")
+	doing_scraping_match_plan("2021-2022", "ita-serie-a")
+	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
+	doing_scraping_match_plan("2021-2022", "por-primeira-liga")
+	doing_scraping_match_plan("2021-2022", "srb-super-liga")
+	doing_scraping_match_plan("2021-2022", "esp-primera-division")
+	doing_scraping_match_plan("2021-2022", "sui-super-league")
+	doing_scraping_match_plan("2021-2022", "tur-sueperlig")
+	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 	doing_scraping_match_plan("2021", "swe-allsvenskan")
 	doing_scraping_match_plan("2021", "nor-eliteserien")
-	doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = 116, lastMatch = 125) #2/27
-	doing_scraping_match_plan("2021-2022", "hun-nb-i", firstMatch = 120, lastMatch = 132) #2/27
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl", firstMatch = 126, lastMatch = 130) #3/6
+	doing_scraping_match_plan("2021-2022", "hun-nb-i", firstMatch = 133, lastMatch = 138) #3/6
  
 	# doing_scraping_match_plan("", "", firstMatch = None, lastMatch = None, newInsertFlag = True)
 	
