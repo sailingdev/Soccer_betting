@@ -11,7 +11,7 @@ import datetime
 
 #locale.setlocale( locale.LC_ALL, 'deu_deu') ##testing 
 
-sportmonks_token = "4Kj1qmmeUiN7isAnIGBwHNYVUUzodVwvyJuyRi2UvVP61ignYAhdob3kRfIv"
+sportmonks_token = "qWE7Q9apsiG3xGhxldIdekQYk5c1ERCW4gdtKoF0tas64syfCD7ooW3Nxs48"
 http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################

@@ -9,8 +9,8 @@ import locale
 import time
 locale.setlocale( locale.LC_ALL, 'deu_deu') 
 
-sportmonks_token = "4Kj1qmmeUiN7isAnIGBwHNYVUUzodVwvyJuyRi2UvVP61ignYAhdob3kRfIv"
-http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+sportmonks_token = "qWE7Q9apsiG3xGhxldIdekQYk5c1ERCW4gdtKoF0tas64syfCD7ooW3Nxs48"
+http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
@@ -310,8 +310,8 @@ def main():
 	insert_league_odd("bul-parva-liga",			"2021-2022")
 	insert_league_odd("cze-1-fotbalova-liga",	"2021-2022")
 	insert_league_odd("cro-1-hnl",				"2021-2022")
-	insert_league_odd("hun-nb-i",				"2021-2022")
-	insert_league_odd("srb-super-liga",			"2021-2022")
+	# insert_league_odd("hun-nb-i",				"2021-2022")
+	# insert_league_odd("srb-super-liga",			"2021-2022")
 
 	print(f" ------------ not found match count in API : {NotFoundMatch_count} -----------")
 

@@ -559,8 +559,8 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
     
 def main():
     # for C_weeknumber in range(630, 633):
-    get_realprice_toRealPriceTable_perweek(637)
-    matching_realpriceid_toSeasonMatchPlanColumn(637)
+    get_realprice_toRealPriceTable_perweek(638)
+    matching_realpriceid_toSeasonMatchPlanColumn(638)
     
 	
 if __name__ == "__main__":
