@@ -10,7 +10,7 @@ import time
 locale.setlocale( locale.LC_ALL, 'deu_deu') 
 
 sportmonks_token = "qWE7Q9apsiG3xGhxldIdekQYk5c1ERCW4gdtKoF0tas64syfCD7ooW3Nxs48"
-http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
