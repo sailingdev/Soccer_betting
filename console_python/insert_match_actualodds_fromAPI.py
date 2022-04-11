@@ -310,8 +310,8 @@ def main():
 	insert_league_odd("bul-parva-liga",			"2021-2022")
 	insert_league_odd("cze-1-fotbalova-liga",	"2021-2022")
 	insert_league_odd("cro-1-hnl",				"2021-2022")
-	# insert_league_odd("hun-nb-i",				"2021-2022")
-	# insert_league_odd("srb-super-liga",			"2021-2022")
+	insert_league_odd("hun-nb-i",				"2021-2022")
+	insert_league_odd("srb-super-liga",			"2021-2022")
 
 	print(f" ------------ not found match count in API : {NotFoundMatch_count} -----------")
 
