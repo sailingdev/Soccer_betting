@@ -9,7 +9,7 @@ http = urllib3.PoolManager( cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the team info(team_list and season_league_team_info) into database.
-# python3 get_season_league_teamname.py -season 2021-2022 -league esp-primera-division
+# python3 get_season_league_teamname.py -season 2022-2023 -league esp-primera-division
 #################################################################
 
 mydb = mysql.connector.connect(
@@ -26,7 +26,9 @@ def switch_season(argument):
         "2020": 64,
         "2020-2021" : 799,
         "2021"    : 844,
-        "2021-2022": 857
+        "2021-2022": 857,
+        "2022" : 916,
+        "2022-2023" : 935
     }
     return switcher.get(argument, "null")
     
@@ -130,26 +132,26 @@ def insert_teamList(season=None, league=None):
         mydb.commit()
         print("insert season_league_team end!")
 
-insert_teamList("2021-2022", "aut-bundesliga")
-insert_teamList("2021-2022", "bul-parva-liga")
-insert_teamList("2021-2022", "cze-1-fotbalova-liga")
-insert_teamList("2021-2022", "den-superligaen")
-insert_teamList("2021-2022", "eng-premier-league")
-insert_teamList("2021-2022", "fra-ligue-1")
-insert_teamList("2021-2022", "bundesliga")
-insert_teamList("2021-2022", "gre-super-league")
-insert_teamList("2021-2022", "ita-serie-a")
-insert_teamList("2021-2022", "ned-eredivisie")
-insert_teamList("2021-2022", "por-primeira-liga")
-insert_teamList("2021-2022", "srb-super-liga")
-insert_teamList("2021-2022", "esp-primera-division")
-insert_teamList("2021-2022", "sui-super-league")
-insert_teamList("2021-2022", "tur-sueperlig")
-insert_teamList("2021-2022", "ukr-premyer-liga")
-insert_teamList("2021-2022", "cro-1-hnl")
-insert_teamList("2021-2022", "hun-nb-i")
-insert_teamList("2021", "nor-eliteserien")
-insert_teamList("2021", "swe-allsvenskan")
+# insert_teamList("2022-2023", "aut-bundesliga")
+# insert_teamList("2022-2023", "bul-parva-liga")
+# insert_teamList("2022-2023", "cze-1-fotbalova-liga")
+# insert_teamList("2022-2023", "den-superligaen")
+# insert_teamList("2022-2023", "eng-premier-league")
+# insert_teamList("2022-2023", "fra-ligue-1")
+# insert_teamList("2022-2023", "bundesliga")
+# insert_teamList("2022-2023", "gre-super-league")
+# insert_teamList("2022-2023", "ita-serie-a")
+# insert_teamList("2022-2023", "ned-eredivisie")
+# insert_teamList("2022-2023", "por-primeira-liga")
+# insert_teamList("2022-2023", "srb-super-liga")
+# insert_teamList("2022-2023", "esp-primera-division")
+# insert_teamList("2022-2023", "sui-super-league")
+# insert_teamList("2022-2023", "tur-sueperlig")
+# insert_teamList("2022-2023", "ukr-premyer-liga")
+# insert_teamList("2022-2023", "cro-1-hnl")
+# insert_teamList("2022-2023", "hun-nb-i")
+insert_teamList("2022", "nor-eliteserien")
+insert_teamList("2022", "swe-allsvenskan")
 
 
 

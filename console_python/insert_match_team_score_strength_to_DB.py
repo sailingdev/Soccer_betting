@@ -22,7 +22,8 @@ def switch_season(argument):
 		"2018-2019": 5,
 		"2019-2020": 12,
 		"2020-2021": 799,
-		"2021-2022": 857,	
+		"2021-2022": 857,
+        "2022-2023": 935,	
 		"2010": 20,
 		"2011": 18,
 		"2012": 16,
@@ -34,7 +35,8 @@ def switch_season(argument):
 		"2018": 10,
 		"2019": 11,
 		"2020": 64,
-		"2021": 844
+		"2021": 844,
+  		"2022": 916
 	}
 	return switcher.get(argument, "null")
 
@@ -153,7 +155,6 @@ def get_team_TGPR(match_id, season_id, team_id):
 	for eachPlayer in wholePlayerResult:    # loop each plaer
 		player_id =  eachPlayer[3]
 		Player_TPGR = get_player_TGPR_season(player_id , season_id)
-		#print(f"      player tpgr is {Player_TPGR}")
 		team_TPGR += Player_TPGR
 
 	return team_TPGR / 11
@@ -169,11 +170,8 @@ def get_team_score_strength_of_team(match_id, team_id ,season_id):
 
 	for eachPlayer in wholePlayerResult:    # loop each plaer
 		player_id =  eachPlayer[3]
-		#print(f"      player id -  {player_id}")
 		Player_score = get_player_score_season(player_id , season_id)
-		#print(f"      player tpgr is {Player_score}")
 		team_score += Player_score
-	#print(f"     team score {team_score}")
 
 	team_strength = get_strength(team_score)
 	return_list = [team_score, team_strength]
