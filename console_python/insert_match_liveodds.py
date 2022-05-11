@@ -67,7 +67,9 @@ def switch_season(argument):
         "2021" : 844 ,
         "2019-2020": 12,
         "2020-2021": 799,
-        "2021-2022": 857
+        "2021-2022": 857,
+        "2022" : 916,
+        "2022-2023" : 935
     }
     return switcher.get(argument, "null")
   
@@ -748,8 +750,8 @@ insert_Price_To_Matchplan("austria/tipico-bundesliga","2021-2022")
 insert_Price_To_Matchplan("portugal/primeira-liga",   "2021-2022")
 insert_Price_To_Matchplan("greece/super-league",      "2021-2022")
 insert_Price_To_Matchplan("turkey/super-lig",         "2021-2022")
-insert_Price_To_Matchplan("norway/eliteserien",       "2021-2022")
-insert_Price_To_Matchplan("sweden/allsvenskan",       "2021-2022")
+insert_Price_To_Matchplan("norway/eliteserien",       "2022")
+insert_Price_To_Matchplan("sweden/allsvenskan",       "2022")
 insert_Price_To_Matchplan("switzerland/super-league", "2021-2022")
 insert_Price_To_Matchplan("denmark/superliga",        "2021-2022")
 insert_Price_To_Matchplan("ukraine/premier-league",   "2021-2022")

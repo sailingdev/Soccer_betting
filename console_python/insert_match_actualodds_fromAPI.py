@@ -34,7 +34,9 @@ def switch_season(argument):
         "2020": 64,
         "2021-2022" : 799,
         "2021"    : 844,
-        "2021-2022": 857
+        "2021-2022": 857,
+        "2022" : 916,
+        "2022-2023" : 935
     }
     return switcher.get(argument, "null")
 
@@ -302,16 +304,16 @@ def main():
 	insert_league_odd("por-primeira-liga",		"2021-2022")
 	insert_league_odd("gre-super-league",		"2021-2022")
 	insert_league_odd("tur-sueperlig",			"2021-2022")
-	insert_league_odd("nor-eliteserien",		"2021")
-	insert_league_odd("swe-allsvenskan",		"2021")
+	insert_league_odd("nor-eliteserien",		"2022")
+	insert_league_odd("swe-allsvenskan",		"2022")
 	insert_league_odd("sui-super-league",		"2021-2022")
 	insert_league_odd("den-superligaen",		"2021-2022")
 	insert_league_odd("ukr-premyer-liga",		"2021-2022")
 	insert_league_odd("bul-parva-liga",			"2021-2022")
 	insert_league_odd("cze-1-fotbalova-liga",	"2021-2022")
 	insert_league_odd("cro-1-hnl",				"2021-2022")
-	# insert_league_odd("hun-nb-i",				"2021-2022")
-	# insert_league_odd("srb-super-liga",			"2021-2022")
+	insert_league_odd("hun-nb-i",				"2021-2022")
+	insert_league_odd("srb-super-liga",			"2021-2022")
 
 	print(f" ------------ not found match count in API : {NotFoundMatch_count} -----------")
 

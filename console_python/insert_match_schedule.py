@@ -9,7 +9,7 @@ http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
 ################################################################
 # This is the sample instructions to insert the match plan and match-player info.
-# insert_match_plan("2022-2023", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
+# insert_match_plan("2021-2022", "eng-premier-league", 1, 5)  match 1~ 5 eg: England 1 ~ 380
 # direct write the info for inserting..... for saving time.
 #################################################################
 
@@ -860,26 +860,26 @@ def fn_Get_TeamId(team_name):
 #################################################################################################
 
 def main():
-	# doing_scraping_match_plan("2022-2023", "aut-bundesliga")
-	# doing_scraping_match_plan("2022-2023", "bul-parva-liga")
-	# doing_scraping_match_plan("2022-2023", "cze-1-fotbalova-liga")
-	# doing_scraping_match_plan("2022-2023", "den-superligaen")
-	# doing_scraping_match_plan("2022-2023", "eng-premier-league")
-	# doing_scraping_match_plan("2022-2023", "fra-ligue-1")
-	# doing_scraping_match_plan("2022-2023", "bundesliga")
-	# doing_scraping_match_plan("2022-2023", "gre-super-league")
-	# doing_scraping_match_plan("2022-2023", "ita-serie-a")
-	# doing_scraping_match_plan("2022-2023", "ned-eredivisie")
-	# doing_scraping_match_plan("2022-2023", "por-primeira-liga")
-	# doing_scraping_match_plan("2022-2023", "srb-super-liga")
-	# doing_scraping_match_plan("2022-2023", "esp-primera-division")
-	# doing_scraping_match_plan("2022-2023", "sui-super-league")
-	# doing_scraping_match_plan("2022-2023", "tur-sueperlig")
-	# doing_scraping_match_plan("2022-2023", "ukr-premyer-liga")
+	doing_scraping_match_plan("2021-2022", "aut-bundesliga")
+	doing_scraping_match_plan("2021-2022", "bul-parva-liga")
+	doing_scraping_match_plan("2021-2022", "cze-1-fotbalova-liga")
+	doing_scraping_match_plan("2021-2022", "den-superligaen")
+	doing_scraping_match_plan("2021-2022", "eng-premier-league")
+	doing_scraping_match_plan("2021-2022", "fra-ligue-1")
+	doing_scraping_match_plan("2021-2022", "bundesliga")
+	doing_scraping_match_plan("2021-2022", "gre-super-league")
+	doing_scraping_match_plan("2021-2022", "ita-serie-a")
+	doing_scraping_match_plan("2021-2022", "ned-eredivisie")
+	doing_scraping_match_plan("2021-2022", "por-primeira-liga")
+	doing_scraping_match_plan("2021-2022", "srb-super-liga")
+	doing_scraping_match_plan("2021-2022", "esp-primera-division")
+	doing_scraping_match_plan("2021-2022", "sui-super-league")
+	doing_scraping_match_plan("2021-2022", "tur-sueperlig")
+	doing_scraping_match_plan("2021-2022", "ukr-premyer-liga")
 	doing_scraping_match_plan("2022", "swe-allsvenskan")
 	doing_scraping_match_plan("2022", "nor-eliteserien")
-	# doing_scraping_match_plan("2022-2023", "cro-1-hnl")
-	# doing_scraping_match_plan("2022-2023", "hun-nb-i")
+	doing_scraping_match_plan("2021-2022", "cro-1-hnl")
+	doing_scraping_match_plan("2021-2022", "hun-nb-i")
  
 	# doing_scraping_match_plan("", "", firstMatch = None, lastMatch = None, newInsertFlag = True)
 	
