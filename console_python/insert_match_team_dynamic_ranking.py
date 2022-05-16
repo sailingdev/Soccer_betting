@@ -605,7 +605,7 @@ def main():
     insert_match_team_dynamic_ranking_6("swe-allsvenskan",          "2022",      "LIVE")
     insert_match_team_dynamic_ranking_6("sui-super-league",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("den-superligaen",          "2021-2022", "LIVE")
-    insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2021-2022", "LIVE")
+    # insert_match_team_dynamic_ranking_6("ukr-premyer-liga",         "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("bul-a-grupa",              "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("cze-1-fotbalova-liga",     "2021-2022", "LIVE")
     insert_match_team_dynamic_ranking_6("cro-1-hnl",                "2021-2022", "LIVE")
