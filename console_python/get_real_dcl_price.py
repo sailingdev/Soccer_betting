@@ -270,8 +270,8 @@ def matching_realpriceid_toSeasonMatchPlanColumn(weeknumber):
 	update_real_price_id_toSeasonMatchPlanTable(weeknumber)  				#  param shoulb be current continuous week.
 
 def main():
-    get_realprice_toRealPriceTable_perweek(647)
-    matching_realpriceid_toSeasonMatchPlanColumn(647)
+    get_realprice_toRealPriceTable_perweek(649)
+    matching_realpriceid_toSeasonMatchPlanColumn(649)
     
 	
 if __name__ == "__main__":
